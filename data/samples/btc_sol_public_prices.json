@@ -1,0 +1,172 @@
+{
+  "label": "REAL_PUBLIC_FETCH",
+  "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
+  "sample_is_subset": true,
+  "note": "Each row was read from the SQLite prices table after collection. fetched_at is when sollab received the HTTP body. source_timestamp is the venue timestamp: candle open time for interval 1h, ticker time or last_updated_at for spot. These values were not entered by hand.",
+  "generated_at": "2026-10-25T16:18:11.830816Z",
+  "full_price_group_counts": [
+    {
+      "symbol": "BTC",
+      "interval": "1h",
+      "source_name": "coinbase_exchange",
+      "n": 349
+    },
+    {
+      "symbol": "BTC",
+      "interval": "spot",
+      "source_name": "coinbase_exchange",
+      "n": 1
+    },
+    {
+      "symbol": "BTC",
+      "interval": "spot",
+      "source_name": "coingecko",
+      "n": 1
+    },
+    {
+      "symbol": "SOL",
+      "interval": "1h",
+      "source_name": "coinbase_exchange",
+      "n": 349
+    },
+    {
+      "symbol": "SOL",
+      "interval": "spot",
+      "source_name": "coinbase_exchange",
+      "n": 1
+    },
+    {
+      "symbol": "SOL",
+      "interval": "spot",
+      "source_name": "coingecko",
+      "n": 1
+    }
+  ],
+  "full_table_counts": {
+    "prices": 702,
+    "strategy_versions": 1,
+    "simulation_runs": 1,
+    "decisions": 698,
+    "orders": 33,
+    "fills": 33,
+    "positions": 17,
+    "ledger": 34,
+    "equity": 699,
+    "errors": 0
+  },
+  "row_count": 8,
+  "rows": [
+    {
+      "symbol": "BTC",
+      "pair": "BTC-USD",
+      "interval": "1h",
+      "open": "80266.06",
+      "high": "80549.99",
+      "low": "80179.66",
+      "close": "80547.36",
+      "volume": "96.90264937",
+      "source_name": "coinbase_exchange",
+      "endpoint": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600",
+      "fetched_at": "2026-10-25T16:17:33.832869Z",
+      "source_timestamp": "2026-10-25T14:00:00Z"
+    },
+    {
+      "symbol": "BTC",
+      "pair": "BTC-USD",
+      "interval": "1h",
+      "open": "80547.37",
+      "high": "80695.69",
+      "low": "80418.78",
+      "close": "80527.74",
+      "volume": "78.84300246",
+      "source_name": "coinbase_exchange",
+      "endpoint": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600",
+      "fetched_at": "2026-10-25T16:17:33.832869Z",
+      "source_timestamp": "2026-10-25T15:00:00Z"
+    },
+    {
+      "symbol": "BTC",
+      "pair": "BTC-USD",
+      "interval": "spot",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": "80509.93",
+      "volume": "2054.30642836",
+      "source_name": "coinbase_exchange",
+      "endpoint": "https://api.exchange.coinbase.com/products/BTC-USD/ticker",
+      "fetched_at": "2026-10-25T16:17:33.565244Z",
+      "source_timestamp": "2026-10-25T16:17:32.255427Z"
+    },
+    {
+      "symbol": "BTC",
+      "pair": "bitcoin/usd",
+      "interval": "spot",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": "80525",
+      "volume": null,
+      "source_name": "coingecko",
+      "endpoint": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana&vs_currencies=usd&include_last_updated_at=true",
+      "fetched_at": "2026-10-25T16:17:34.690833Z",
+      "source_timestamp": "2026-10-25T16:16:29Z"
+    },
+    {
+      "symbol": "SOL",
+      "pair": "SOL-USD",
+      "interval": "1h",
+      "open": "100.61",
+      "high": "101.26",
+      "low": "100.49",
+      "close": "101.25",
+      "volume": "14509.54475034",
+      "source_name": "coinbase_exchange",
+      "endpoint": "https://api.exchange.coinbase.com/products/SOL-USD/candles?granularity=3600",
+      "fetched_at": "2026-10-25T16:17:34.377609Z",
+      "source_timestamp": "2026-10-25T14:00:00Z"
+    },
+    {
+      "symbol": "SOL",
+      "pair": "SOL-USD",
+      "interval": "1h",
+      "open": "101.26",
+      "high": "101.75",
+      "low": "101.05",
+      "close": "101.51",
+      "volume": "12870.03754186",
+      "source_name": "coinbase_exchange",
+      "endpoint": "https://api.exchange.coinbase.com/products/SOL-USD/candles?granularity=3600",
+      "fetched_at": "2026-10-25T16:17:34.377609Z",
+      "source_timestamp": "2026-10-25T15:00:00Z"
+    },
+    {
+      "symbol": "SOL",
+      "pair": "SOL-USD",
+      "interval": "spot",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": "101.4",
+      "volume": "234223.89740531",
+      "source_name": "coinbase_exchange",
+      "endpoint": "https://api.exchange.coinbase.com/products/SOL-USD/ticker",
+      "fetched_at": "2026-10-25T16:17:34.106808Z",
+      "source_timestamp": "2026-10-25T16:17:31.748474Z"
+    },
+    {
+      "symbol": "SOL",
+      "pair": "solana/usd",
+      "interval": "spot",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": "101.41",
+      "volume": null,
+      "source_name": "coingecko",
+      "endpoint": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana&vs_currencies=usd&include_last_updated_at=true",
+      "fetched_at": "2026-10-25T16:17:34.690833Z",
+      "source_timestamp": "2026-10-25T16:16:20Z"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+label,symbol,pair,interval,open,high,low,close,volume,source_name,endpoint,fetched_at,source_timestamp
+REAL_PUBLIC_FETCH,BTC,BTC-USD,1h,80266.06,80549.99,80179.66,80547.36,96.90264937,coinbase_exchange,https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600,2026-10-25T16:17:33.832869Z,2026-10-25T14:00:00Z
+REAL_PUBLIC_FETCH,BTC,BTC-USD,1h,80547.37,80695.69,80418.78,80527.74,78.84300246,coinbase_exchange,https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600,2026-10-25T16:17:33.832869Z,2026-10-25T15:00:00Z
+REAL_PUBLIC_FETCH,BTC,BTC-USD,spot,,,,80509.93,2054.30642836,coinbase_exchange,https://api.exchange.coinbase.com/products/BTC-USD/ticker,2026-10-25T16:17:33.565244Z,2026-10-25T16:17:32.255427Z
+REAL_PUBLIC_FETCH,BTC,bitcoin/usd,spot,,,,80525,,coingecko,"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana&vs_currencies=usd&include_last_updated_at=true",2026-10-25T16:17:34.690833Z,2026-10-25T16:16:29Z
+REAL_PUBLIC_FETCH,SOL,SOL-USD,1h,100.61,101.26,100.49,101.25,14509.54475034,coinbase_exchange,https://api.exchange.coinbase.com/products/SOL-USD/candles?granularity=3600,2026-10-25T16:17:34.377609Z,2026-10-25T14:00:00Z
+REAL_PUBLIC_FETCH,SOL,SOL-USD,1h,101.26,101.75,101.05,101.51,12870.03754186,coinbase_exchange,https://api.exchange.coinbase.com/products/SOL-USD/candles?granularity=3600,2026-10-25T16:17:34.377609Z,2026-10-25T15:00:00Z
+REAL_PUBLIC_FETCH,SOL,SOL-USD,spot,,,,101.4,234223.89740531,coinbase_exchange,https://api.exchange.coinbase.com/products/SOL-USD/ticker,2026-10-25T16:17:34.106808Z,2026-10-25T16:17:31.748474Z
+REAL_PUBLIC_FETCH,SOL,solana/usd,spot,,,,101.41,,coingecko,"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana&vs_currencies=usd&include_last_updated_at=true",2026-10-25T16:17:34.690833Z,2026-10-25T16:16:20Z

@@ -1,0 +1,30 @@
+# Read-only public price collection. Dispatch only; a cron schedule is later work.
+name: collect
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Collect public BTC and SOL prices
+        run: python -m sollab collect --db data/sollab.db
+      - name: Report
+        run: python -m sollab report --db data/sollab.db --export-dir data/exports
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sollab-public-prices
+          path: |
+            data/sollab.db
+            data/exports
