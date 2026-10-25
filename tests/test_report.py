@@ -87,9 +87,10 @@ def test_status_json_splits_backtest_and_forward(conn, tmp_path):
     )
     recorded = datetime(2026, 10, 25, 13, tzinfo=timezone.utc)
     status = build_status(conn, recorded_at=recorded)
-    assert status["account_rules"]["version"] == "3.0.0"
+    assert status["account_rules"]["version"] == "4.0.0"
     assert status["account_rules"]["parameters"]["shared_cash"] == "5000"
     assert status["account_rules"]["parameters"]["max_notional_per_position"] == "10"
+    assert "metals" in status["account_rules"]["parameters"]["markets"]
     assert {run["period"] for run in status["backtest"]} >= {"train", "validation"}
     assert all(run["cash_era"] == "5000" for run in status["backtest"])
     assert [run["period"] for run in status["forward"]] == ["forward"]

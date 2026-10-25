@@ -109,10 +109,11 @@ def rules_text(params: StrategyParams) -> str:
             f"- Fewer than {params.slow_window + 1} closes: rejection {INSUFFICIENT_HISTORY}.",
             f"- No new cross: rejection {NO_CROSSOVER}. A trend that is already in place does not re-enter.",
             "",
-            "Position rules. Account rule 3.0.0 allows one open position per market "
-            "(crypto_spot, pumpfun, stocks) on a 5000 USD paper account. "
+            "Position rules. Account rule 4.0.0 allows one open position per market "
+            "(crypto_spot, pumpfun, stocks, metals) on a 5000 USD paper account. "
             "The per-position cap stays 10 USD. This strategy only trades market crypto_spot, so BTC and SOL "
-            "still share one slot. Stocks is reserved: no stock candles and no stock orders. "
+            "still share one slot. Metals is a separate slot traded by the metals baselines. "
+            "Stocks is reserved: no stock candles and no stock orders. "
             "Rows tagged cash_era 300 keep the earlier 300 USD account and are not rewritten. "
             "Within one signal timestamp, every symbol is judged against the crypto_spot position already open. "
             "A close is filled on the next candle and does not free the slot for another symbol on that same "

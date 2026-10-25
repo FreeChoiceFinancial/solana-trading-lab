@@ -76,6 +76,8 @@ jobs:
         run: |
           set -euo pipefail
           python -m sollab run-strategy --db data/sollab.db
+          python -m sollab metals-collect --db data/sollab.db || echo "::warning::metals collect failed"
+          python -m sollab metals-run --db data/sollab.db || echo "::warning::metals replay failed"
           python -m sollab report --db data/sollab.db --export-dir data/exports
       - name: Publish durable state
         if: always()

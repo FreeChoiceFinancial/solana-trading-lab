@@ -686,6 +686,31 @@ def ensure_account_rules(conn: sqlite3.Connection, recorded_at: datetime) -> Non
             "historical_open_positions_cash_era_300": preserved,
         },
     )
+    _insert_config(
+        conn,
+        version="4.0.0",
+        recorded_at=iso_z(recorded_at),
+        summary=(
+            "Shared paper cash stays 5000 USD and the per-position cap stays 10 USD. "
+            "One open position per market now includes metals. Long and short are allowed. "
+            "A metals short accrues a paper borrow rate; earlier books are not rewritten."
+        ),
+        parameters={
+            "max_open_positions_per_market": 1,
+            "markets": ["crypto_spot", "pumpfun", "stocks", "metals"],
+            "stocks": "reserved_no_data_no_orders",
+            "metals": "one_slot_long_or_short",
+            "max_notional_per_position": "10",
+            "shared_cash": "5000",
+            "cash_era": "5000",
+            "previous_version": "3.0.0",
+            "metals_short_borrow_apr": "0.005",
+            "metals_short_borrow_note": (
+                "Research assumption, actual/365 on entry notional. Not a live borrow quote. "
+                "Crypto and pump.fun books keep borrow_apr at 0."
+            ),
+        },
+    )
 
 
 def _insert_config(

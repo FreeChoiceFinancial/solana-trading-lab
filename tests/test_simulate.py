@@ -231,7 +231,7 @@ def test_prior_version_and_open_short_are_kept(conn):
             "SELECT version, parameters_json FROM config_journal WHERE config_id = 'account_rules'"
         ).fetchall()
     }
-    assert set(rules) == {"1.0.0", "2.0.0", "3.0.0"}
+    assert set(rules) == {"1.0.0", "2.0.0", "3.0.0", "4.0.0"}
     kept = __import__("json").loads(rules["2.0.0"])["grandfathered_open_positions"]
     assert kept[0]["symbol"] == "BTC"
     assert kept[0]["direction"] == "short"
@@ -240,6 +240,11 @@ def test_prior_version_and_open_short_are_kept(conn):
     assert current_rules["shared_cash"] == "5000"
     assert current_rules["max_notional_per_position"] == "10"
     assert current_rules["previous_shared_cash"] == "300"
+    metals_rules = __import__("json").loads(rules["4.0.0"])
+    assert metals_rules["shared_cash"] == "5000"
+    assert metals_rules["max_notional_per_position"] == "10"
+    assert "metals" in metals_rules["markets"]
+    assert metals_rules["previous_version"] == "3.0.0"
     assert __import__("json").loads(rules["2.0.0"])["shared_cash"] == "300"
     era = conn.execute(
         """

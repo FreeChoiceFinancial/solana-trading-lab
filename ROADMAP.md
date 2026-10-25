@@ -4,7 +4,11 @@ This file is a research list. None of it is permission to trade live, sign a wal
 
 ## pump.fun research
 
-`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. `.github/workflows/paper-hourly.yml` runs a short pump.fun burst every six hours and commits state to the `data` branch. A five-minute cron still does not fit the free private minute quota or this market's speed. Do not install `pump-fun-skills`.
+`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. `.github/workflows/paper-hourly.yml` runs a short pump.fun burst every six hours and commits state to the `data` branch. The repository is public, so standard runner minutes are not billed. The six-hour gap stays: each run grows the `data` branch by about the size of `sollab.db` and polls public APIs. A shorter burst is a proposal only. Do not install `pump-fun-skills`.
+
+## Precious metals
+
+`docs/precious_metals.md` records how a long or a short would be held in spot quotes, ETFs, futures, and tokenized gold, and which keyless sources answered on 2026-10-25. `python -m sollab metals-collect` stores those prices. `python -m sollab metals-run` replays three 1.0.0 books on train, validation, and forward: buy-and-hold PAXG, a 5/20 daily SMA, and a one-leg gold/silver ratio. The ratio lost to buy-and-hold on every split. SMA realized P&L was negative on every split. Coinbase PAXG daily history in that collect starts 2025-05-08. Futures are stored and not traded. Contango is not charged. The 0.50% short borrow is a labeled assumption. Platinum and palladium wait on that single metals slot.
 
 ## Stocks and penny stocks
 
@@ -12,7 +16,7 @@ Add a separate data adapter only if a delayed or end-of-day source can be used w
 
 ## Shorts and perpetuals
 
-The current short locks cash as collateral and has no funding, borrow fee, or liquidation. A later paper model can add those as explicit ledger events. Perpetual prices, if used, must come from a public mark or candle endpoint and must stay inside the same notional cap. No exchange account.
+Crypto and pump.fun shorts lock cash as collateral. Their borrow rate stays at 0. The metals book uses the same collateral lock and adds a 0.50% annualized borrow on shorts, actual/365, subtracted from unrealized P&L and from cash at the close. There is still no funding payment, no liquidation, and no live borrow quote. A perpetual, if one is added later, has to come from a public mark or candle endpoint that this environment can actually read, and it has to stay inside the same notional cap. Binance returned HTTP 451 for PAXG on 2026-10-25. No exchange account.
 
 ## Backtesting splits
 
@@ -20,7 +24,7 @@ The current short locks cash as collateral and has no funding, borrow fee, or li
 
 ## Scheduled collector
 
-`.github/workflows/paper-hourly.yml` collects BTC and SOL hourly, replays the paper strategy, writes the report, and commits `sollab.db` plus the status files to the `data` branch. The job is labeled simulated and does not use a secret. `.github/workflows/collect.yml` remains manual.
+`.github/workflows/paper-hourly.yml` collects BTC and SOL hourly, collects metals, replays the paper strategies, writes the report, and commits `sollab.db` plus the status files to the `data` branch. A metals failure is a warning and does not fail the BTC job. The job is labeled simulated and does not use a secret. `.github/workflows/collect.yml` remains manual.
 
 ## Dashboard
 

@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from json import JSONDecodeError, loads
 from typing import Callable
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import httpx
 
@@ -31,6 +31,21 @@ ALLOWED_HOSTS = frozenset(
         "api.mainnet-beta.solana.com",
         "api.pump.fun",
         "frontend-api-v3.pump.fun",
+        "query1.finance.yahoo.com",
+    }
+)
+
+# Daily chart symbols. Futures use the Yahoo "=F" suffix. No other path is fetched.
+YAHOO_CHART_SYMBOLS = frozenset(
+    {
+        "GLD",
+        "SLV",
+        "PPLT",
+        "PALL",
+        "GC=F",
+        "SI=F",
+        "PL=F",
+        "PA=F",
     }
 )
 
@@ -141,6 +156,14 @@ def assert_allowed_url(url: str) -> None:
     if parsed.hostname == "frontend-api-v3.pump.fun":
         if path != "/coins":
             raise ValueError(f"refusing pump.fun frontend path: {path}")
+        return
+    if parsed.hostname == "query1.finance.yahoo.com":
+        prefix = "/v8/finance/chart/"
+        if not path.startswith(prefix):
+            raise ValueError(f"refusing Yahoo path: {path}")
+        symbol = unquote(path[len(prefix) :])
+        if symbol not in YAHOO_CHART_SYMBOLS or "/" in symbol:
+            raise ValueError(f"refusing Yahoo symbol: {symbol}")
         return
     raise ValueError(f"refusing URL: {url}")
 

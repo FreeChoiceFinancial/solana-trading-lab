@@ -132,9 +132,9 @@ Every fill row is labeled `SIMULATED_PUMPFUN_NOT_A_LIVE_TRADE`.
 
 Hourly collection is too slow for this market. Coins move through the first page of new pools in minutes, and the paper rule needs two snapshots at least 30 seconds apart before it will fill.
 
-This repository is private. GitHub's free plan includes 2,000 Actions minutes per month for private repositories. The shortest cron interval GitHub accepts is 5 minutes, and scheduled workflows can be delayed or disabled after 60 days without repository activity. A 5-minute schedule is about 8,640 runs a month. Even a one-minute job would spend more than the free private quota. An hourly job of about two minutes is inside the quota (roughly 1,500 minutes) and still misses the launches this strategy is about.
+The repository is public, so standard GitHub-hosted minutes are not billed. The binding limits are the `data` branch, which grows by about the size of `sollab.db` on every commit, and the public APIs. GitHub's shortest cron interval is 5 minutes, and scheduled workflows can be delayed. A 5-minute schedule is about 8,640 runs a month. That volume would multiply the database history and the request load. It would still miss launches that finish in under a minute.
 
-`.github/workflows/paper-hourly.yml` runs a two-poll burst every six hours (`--polls 2 --interval 35`) and commits the database to the `data` branch. That is about 120 runs a month. At roughly two to two and a half minutes each, it is about 240–300 minutes, on top of the hourly BTC/SOL job. Together they stay inside the 2,000-minute private free tier if the jobs stay near those durations. It is still not a sub-second tape. The manual workflow remains `workflow_dispatch` with one poll. A local `python -m sollab pumpfun-collect --polls 2 --interval 35` is the same burst.
+`.github/workflows/paper-hourly.yml` runs a two-poll burst every six hours (`--polls 2 --interval 35`) and commits the database to the `data` branch. That is about 120 runs a month, roughly 240–300 minutes, on top of the hourly BTC/SOL and metals job. The six-hour gap is unchanged. A two-hour burst (`15 */2 * * *`, about 360 runs a month) is a proposal and is not in the workflow. The manual workflow remains `workflow_dispatch`. A local `python -m sollab pumpfun-collect --polls 2 --interval 35` is the same burst.
 
 ## Collection on 2026-10-25
 

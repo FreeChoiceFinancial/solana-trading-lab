@@ -1,0 +1,177 @@
+{
+  "label": "SIMULATED_REPLAY_NOT_LIVE_TRADES",
+  "recorded_at": "2026-10-25T22:13:10.238644Z",
+  "traded_symbol": "PAXG",
+  "traded_source": "coinbase_exchange",
+  "silver_signal": "SI yahoo_chart",
+  "paxg_daily_bars": 535,
+  "silver_daily_bars": 1257,
+  "account_rules": "4.0.0",
+  "starting_cash": "5000",
+  "max_notional": "10",
+  "borrow_apr": "0.005",
+  "runs": [
+    {
+      "strategy_id": "metals_buy_hold",
+      "period": "train",
+      "ending_equity": "5003.31218774",
+      "realized_pnl": "3.31218774",
+      "unrealized_pnl": "0",
+      "note": "Paper metals period=train. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 5003.31218774. Strategy minus buy-and-hold is 0E-8. Not live orders.",
+      "window": {
+        "fill_end": "2026-03-25T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "train",
+        "signal_end": "2026-03-24T00:00:00Z",
+        "signal_start": "2025-05-08T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_sma_trend",
+      "period": "train",
+      "ending_equity": "4999.36640130",
+      "realized_pnl": "-1.85916153",
+      "unrealized_pnl": "1.22556283",
+      "note": "Paper metals period=train. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 5003.31218774. Strategy minus buy-and-hold is -3.94578644. Not live orders.",
+      "window": {
+        "fill_end": "2026-03-25T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "train",
+        "signal_end": "2026-03-24T00:00:00Z",
+        "signal_start": "2025-05-08T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_gold_silver_ratio",
+      "period": "train",
+      "ending_equity": "4996.33334652",
+      "realized_pnl": "-3.61379183",
+      "unrealized_pnl": "-0.05286165",
+      "note": "Paper metals period=train. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 5003.31218774. Strategy minus buy-and-hold is -6.97884122. Not live orders.",
+      "window": {
+        "fill_end": "2026-03-25T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "train",
+        "signal_end": "2026-03-24T00:00:00Z",
+        "signal_start": "2025-05-08T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_buy_hold",
+      "period": "validation",
+      "ending_equity": "4998.97360881",
+      "realized_pnl": "-1.02639119",
+      "unrealized_pnl": "0",
+      "note": "Paper metals period=validation. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 4998.97360881. Strategy minus buy-and-hold is 0E-8. Not live orders.",
+      "window": {
+        "fill_end": "2026-07-11T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "validation",
+        "signal_end": "2026-07-10T00:00:00Z",
+        "signal_start": "2026-03-26T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_sma_trend",
+      "period": "validation",
+      "ending_equity": "4999.22542280",
+      "realized_pnl": "-0.54418768",
+      "unrealized_pnl": "-0.23038952",
+      "note": "Paper metals period=validation. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 4998.97360881. Strategy minus buy-and-hold is 0.25181399. Not live orders.",
+      "window": {
+        "fill_end": "2026-07-11T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "validation",
+        "signal_end": "2026-07-10T00:00:00Z",
+        "signal_start": "2026-03-26T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_gold_silver_ratio",
+      "period": "validation",
+      "ending_equity": "4998.20525886",
+      "realized_pnl": "-1.79474114",
+      "unrealized_pnl": "0",
+      "note": "Paper metals period=validation. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 4998.97360881. Strategy minus buy-and-hold is -0.76834995. Not live orders.",
+      "window": {
+        "fill_end": "2026-07-11T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "validation",
+        "signal_end": "2026-07-10T00:00:00Z",
+        "signal_start": "2026-03-26T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_buy_hold",
+      "period": "forward",
+      "ending_equity": "4999.62819179",
+      "realized_pnl": "-0.37180821",
+      "unrealized_pnl": "0",
+      "note": "Paper metals period=forward. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 4999.62819179. Strategy minus buy-and-hold is 0E-8. Not live orders.",
+      "window": {
+        "fill_end": "2026-10-24T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "forward",
+        "signal_end": "2026-10-24T00:00:00Z",
+        "signal_start": "2026-07-12T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_sma_trend",
+      "period": "forward",
+      "ending_equity": "5000.78809956",
+      "realized_pnl": "-0.14972192",
+      "unrealized_pnl": "0.93782148",
+      "note": "Paper metals period=forward. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 4999.62819179. Strategy minus buy-and-hold is 1.15990777. Not live orders.",
+      "window": {
+        "fill_end": "2026-10-24T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "forward",
+        "signal_end": "2026-10-24T00:00:00Z",
+        "signal_start": "2026-07-12T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    },
+    {
+      "strategy_id": "metals_gold_silver_ratio",
+      "period": "forward",
+      "ending_equity": "4998.27311994",
+      "realized_pnl": "-1.72688006",
+      "unrealized_pnl": "0",
+      "note": "Paper metals period=forward. Next daily open fills. Cash era 5000. Buy-and-hold ending equity on this window is 4999.62819179. Strategy minus buy-and-hold is -1.35507185. Not live orders.",
+      "window": {
+        "fill_end": "2026-10-24T00:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "forward",
+        "signal_end": "2026-10-24T00:00:00Z",
+        "signal_start": "2026-07-12T00:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      }
+    }
+  ]
+}

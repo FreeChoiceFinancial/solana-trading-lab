@@ -2,16 +2,19 @@
 
 Long and short both lock the position notional in cash and pay the open fee
 immediately. A short sale does not increase spendable cash. This is not a
-broker borrow, a margin loan, or a perpetual swap: there is no funding
-payment and no liquidation engine.
+margin loan or a liquidation engine. The default borrow rate is zero, so
+crypto and pump.fun books do not pay borrow. A caller can set borrow_apr
+for a short that must rent the asset. That accrual is on entry notional,
+actual/365, and is not a live borrow quote.
 
-One open position is allowed in each market (crypto_spot, pumpfun, stocks).
-Markets share one cash balance. Stocks is reserved: the slot exists, and no
-strategy in this repo sends stock orders.
+One open position is allowed in each market (crypto_spot, pumpfun, stocks,
+metals). Markets share one cash balance. Stocks is reserved: the slot
+exists, and no strategy in this repo sends stock orders.
 
-Realized P&L is booked only on a full close and subtracts the open fee and
-the close fee. Unrealized P&L is the open position's price result at the
-mark minus the open fee. Equity is starting cash plus realized plus unrealized.
+Realized P&L is booked only on a full close and subtracts the open fee,
+the close fee, and any accrued short borrow. Unrealized P&L is the open
+position's price result at the mark minus the open fee and accrued borrow.
+Equity is starting cash plus realized plus unrealized.
 """
 
 from dataclasses import dataclass
@@ -58,6 +61,7 @@ class Position:
     holding_seconds: int | None = None
     status: str = "open"
     market: str = MARKET_CRYPTO
+    borrow_fee: Decimal = Decimal("0")
 
 
 @dataclass(frozen=True)
@@ -111,6 +115,7 @@ class PaperLedger:
         min_notional: Decimal = Decimal("1"),
         fee_rate: Decimal = Decimal("0.006"),
         slippage_bps: Decimal = Decimal("5"),
+        borrow_apr: Decimal = Decimal("0"),
     ) -> None:
         for name, value in (
             ("starting_cash", starting_cash),
@@ -118,18 +123,20 @@ class PaperLedger:
             ("min_notional", min_notional),
             ("fee_rate", fee_rate),
             ("slippage_bps", slippage_bps),
+            ("borrow_apr", borrow_apr),
         ):
             if not isinstance(value, Decimal):
                 raise TypeError(f"{name} must be Decimal")
         if starting_cash < 0 or max_notional <= 0 or min_notional <= 0:
             raise ValueError("cash and notionals must be positive")
-        if min_notional > max_notional or fee_rate < 0 or slippage_bps < 0:
+        if min_notional > max_notional or fee_rate < 0 or slippage_bps < 0 or borrow_apr < 0:
             raise ValueError("invalid cost or size parameters")
         self.starting_cash = q(starting_cash)
         self.max_notional = q(max_notional)
         self.min_notional = q(min_notional)
         self.fee_rate = fee_rate
         self.slippage_bps = slippage_bps
+        self.borrow_apr = borrow_apr
         self.cash_free = self.starting_cash
         self.locked_notional = Decimal("0")
         self.realized_pnl = Decimal("0")
@@ -275,13 +282,14 @@ class PaperLedger:
         fill_price = self._slip(mark_price, direction, "close")
         exit_notional = q(position.quantity * fill_price)
         exit_fee = q(exit_notional * self.fee_rate)
+        borrow = self.accrued_borrow(position, ts)
         if direction == "long":
             price_pnl = (fill_price - position.entry_fill) * position.quantity
         else:
             price_pnl = (position.entry_fill - fill_price) * position.quantity
         price_pnl = q(price_pnl)
-        realized = q(price_pnl - position.entry_fee - exit_fee)
-        cash_delta = q(position.entry_notional + price_pnl - exit_fee)
+        realized = q(price_pnl - position.entry_fee - exit_fee - borrow)
+        cash_delta = q(position.entry_notional + price_pnl - exit_fee - borrow)
         holding = int((ts - position.opened_at).total_seconds())
         if holding < 0:
             return self._reject(symbol, direction, "close", None, mark_price, ts, TIME_GOES_BACKWARDS)
@@ -295,6 +303,7 @@ class PaperLedger:
         position.exit_notional = exit_notional
         position.exit_fee = exit_fee
         position.realized_pnl = realized
+        position.borrow_fee = borrow
         position.holding_seconds = holding
         position.status = "closed"
         self.closed_positions.append(position)
@@ -304,8 +313,19 @@ class PaperLedger:
         self.last_ts = ts
         self._invariant()
         unrealized, equity = self.snapshot(None)
+        close_note = "close_position" if borrow == 0 else f"close_position borrow_fee={borrow}"
         self.events.append(
-            self._event(ts, "close", symbol, direction, cash_delta, exit_fee, "close_position", position.id, unrealized)
+            self._event(
+                ts,
+                "close",
+                symbol,
+                direction,
+                cash_delta,
+                q(exit_fee + borrow),
+                close_note,
+                position.id,
+                unrealized,
+            )
         )
         return self._filled(
             symbol,
@@ -322,6 +342,7 @@ class PaperLedger:
             unrealized,
             equity,
             realized,
+            close_note,
         )
 
     def snapshot(
@@ -372,8 +393,29 @@ class PaperLedger:
             total += self._position_unrealized(position, mark)
         return q(total)
 
+    def accrued_borrow(self, position: Position, as_of: datetime) -> Decimal:
+        """Short borrow on entry notional, actual/365. Longs and a zero APR pay nothing."""
+        if self.borrow_apr <= 0 or position.direction != "short":
+            return Decimal("0")
+        seconds = int((as_of - position.opened_at).total_seconds())
+        if seconds <= 0:
+            return Decimal("0")
+        year = Decimal(365 * 24 * 60 * 60)
+        return q(position.entry_notional * self.borrow_apr * Decimal(seconds) / year)
+
+    def mark(self, market: str, mark: Decimal, ts: datetime) -> tuple[Decimal, Decimal]:
+        """Advance the clock and the open mark. Does not trade."""
+        if self.last_ts is not None and ts < self.last_ts:
+            raise ValueError("mark time goes backwards")
+        if market in self.positions:
+            self.last_marks[market] = mark
+            self.last_mark = mark
+        self.last_ts = ts
+        return self.snapshot(mark if market in self.positions else None)
+
     def _position_unrealized(self, position: Position, mark: Decimal) -> Decimal:
-        return q(self._gross(position, mark) - position.entry_fee)
+        as_of = self.last_ts or position.opened_at
+        return q(self._gross(position, mark) - position.entry_fee - self.accrued_borrow(position, as_of))
 
     def _gross(self, position: Position, mark: Decimal) -> Decimal:
         if position.direction == "long":
@@ -392,7 +434,12 @@ class PaperLedger:
             if current is None:
                 raise RuntimeError(f"open {market} position has no mark")
             price_pnl += self._gross(position, current)
-        return q(self.cash_free + self.locked_notional + price_pnl)
+        as_of = self.last_ts
+        borrow = Decimal("0")
+        if as_of is not None:
+            for position in self.positions.values():
+                borrow += self.accrued_borrow(position, as_of)
+        return q(self.cash_free + self.locked_notional + price_pnl - borrow)
 
     def _slip(self, mark: Decimal, direction: str, intent: str) -> Decimal:
         slip = self.slippage_bps / Decimal(10000)
@@ -490,6 +537,7 @@ class PaperLedger:
         unrealized: Decimal,
         equity: Decimal,
         trade_realized: Decimal | None,
+        note: str | None = None,
     ) -> FillResult:
         return FillResult(
             status="filled",
@@ -513,5 +561,5 @@ class PaperLedger:
             equity=equity,
             position_id=position_id,
             holding_seconds=holding_seconds,
-            note=None,
+            note=note,
         )

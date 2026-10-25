@@ -8,6 +8,8 @@ import time
 
 from sollab.collect import collect
 from sollab.constants import DISCLAIMER
+from sollab.metalscollect import collect_metals
+from sollab.metalsstrategy import NoMetalsData, run_metals
 from sollab.pumpcollect import collect_pumpfun
 from sollab.pumpstrategy import NoPumpData, run_pump_strategy
 from sollab.reporting import (
@@ -68,6 +70,18 @@ def build_parser() -> argparse.ArgumentParser:
         "pumpfun-run",
         parents=[parent],
         help="Paper-trade bonding_curve_momentum on stored pump.fun snapshots",
+    )
+
+    metals_collect = sub.add_parser(
+        "metals-collect",
+        parents=[parent],
+        help="Fetch public PAXG, XAUT, ETF, and futures bars. No orders.",
+    )
+    metals_collect.add_argument("--pause", type=float, default=0.25, help="Seconds between read-only calls")
+    sub.add_parser(
+        "metals-run",
+        parents=[parent],
+        help="Paper-trade the metals baselines on stored daily bars",
     )
 
     report_parser = sub.add_parser("report", parents=[parent], help="Show stored prices and the paper ledger")
@@ -173,6 +187,39 @@ def main(argv: list[str] | None = None) -> int:
             print(f"note={summary.note}")
             for reason, count in sorted(summary.rejection_counts.items()):
                 print(f"rejection {reason}={count}")
+            return 0
+        if args.command == "metals-collect":
+            summary = collect_metals(conn, pause_seconds=args.pause)
+            print(DISCLAIMER)
+            print("read-only metals collection; no orders were sent")
+            print(
+                f"inserted={summary.inserted} skipped_duplicates={summary.skipped} "
+                f"sources={','.join(summary.sources_used) or 'none'}"
+            )
+            for symbol, count in sorted(summary.fetched_by_symbol.items()):
+                print(f"fetched {symbol} points={count}")
+            for error in summary.errors:
+                print(f"error {error}")
+            return 0 if summary.ok() else 1
+        if args.command == "metals-run":
+            try:
+                summary = run_metals(conn)
+            except NoMetalsData as exc:
+                print(str(exc))
+                return 1
+            print(DISCLAIMER)
+            print("simulated metals paper replay only; no orders were sent")
+            print(f"recorded_at={summary.recorded_at.isoformat()}")
+            print(f"paxg_bars={summary.paxg_bars} silver_bars={summary.silver_bars}")
+            for period in summary.periods:
+                print(
+                    f"strategy={period.strategy_id} period={period.period} "
+                    f"ending_equity={period.ending_equity} realized_pnl={period.realized_pnl} "
+                    f"unrealized_pnl={period.unrealized_pnl} benchmark_equity={period.benchmark_equity} "
+                    f"open_position={period.open_position} opens={period.opens} closes={period.closes}"
+                )
+            for warning in summary.warnings:
+                print(f"warning {warning}")
             return 0
         status = build_status(conn)
         status_path = write_status(conn, args.export_dir, status=status)
