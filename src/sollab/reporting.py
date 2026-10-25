@@ -281,5 +281,147 @@ def render_report(conn: sqlite3.Connection) -> str:
     lines.extend(["", f"Source errors stored: {error_count}"])
     for error in conn.execute("SELECT * FROM errors ORDER BY id DESC LIMIT 5").fetchall():
         lines.append(f"  {error['ts']} {error['component']}: {error['message']}")
+    lines.extend(_pump_lines(conn))
     lines.append("")
     return "\n".join(lines)
+
+
+def _pump_lines(conn: sqlite3.Connection) -> list[str]:
+    lines = ["", "pump.fun snapshots"]
+    count = conn.execute("SELECT COUNT(*) AS n FROM pump_snapshots").fetchone()["n"]
+    lines.append(f"  rows={count}")
+    if count:
+        latest = conn.execute(
+            """
+            SELECT mint, symbol, graduation_status, progress, price_usd, reserve_usd,
+                   buys_m5, buyers_m5, source_name, endpoint, fetched_at, created_at
+            FROM pump_snapshots
+            ORDER BY fetched_at DESC, id DESC
+            LIMIT 8
+            """
+        ).fetchall()
+        for row in latest:
+            lines.append(
+                "  {mint} symbol={symbol} status={graduation_status} progress={progress} "
+                "price_usd={price_usd} reserve_usd={reserve_usd} buys_m5={buys_m5} "
+                "buyers_m5={buyers_m5} source={source_name} fetched_at={fetched_at} "
+                "created_at={created_at}".format(**row)
+            )
+        lines.append("  flag counts:")
+        for row in conn.execute(
+            """
+            SELECT flag, status, COUNT(*) AS n
+            FROM pump_flags
+            GROUP BY flag, status
+            ORDER BY flag, status
+            """
+        ).fetchall():
+            lines.append(f"    {row['flag']} {row['status']}={row['n']}")
+    run = conn.execute("SELECT * FROM pump_simulation_runs ORDER BY id DESC LIMIT 1").fetchone()
+    lines.extend(["", "pump.fun paper replay"])
+    if run is None:
+        lines.append("  no pump.fun simulation stored. Run: python -m sollab pumpfun-run")
+        return lines
+    version = conn.execute(
+        "SELECT * FROM strategy_versions WHERE id = ?",
+        (run["strategy_version_id"],),
+    ).fetchone()
+    lines.append(f"  id={version['strategy_id']} version={version['version']} market=pump.fun")
+    lines.append(f"  recorded_at={run['recorded_at']}")
+    lines.append(
+        f"  starting_spendable_cash={run['starting_cash']} pump_ending_equity={run['ending_equity']} "
+        f"realized_pnl={run['realized_pnl']} unrealized_pnl={run['unrealized_pnl']}"
+    )
+    lines.append(f"  note={run['note']}")
+    lines.append("  rules:")
+    for rule_line in version["rules_text"].splitlines():
+        lines.append(f"    {rule_line}")
+    fills = conn.execute(
+        """
+        SELECT pump_fills.* FROM pump_fills
+        JOIN pump_orders ON pump_orders.id = pump_fills.order_id
+        WHERE pump_orders.simulation_run_id = ?
+        ORDER BY pump_fills.id
+        """,
+        (run["id"],),
+    ).fetchall()
+    lines.append(f"  simulated fills: {len(fills)}")
+    for fill in fills:
+        lines.append(
+            "    SIMULATED {intent} {mint} notional_usd={notional_usd} "
+            "effective_price_usd={effective_price_usd} network_fee_usd={network_fee_usd} "
+            "fill_time={fill_time} label={simulated_label}".format(**fill)
+        )
+    lines.append("  rejection reasons:")
+    reasons = conn.execute(
+        """
+        SELECT rejection_reason, COUNT(*) AS n
+        FROM pump_decisions
+        WHERE simulation_run_id = ? AND rejection_reason IS NOT NULL
+        GROUP BY rejection_reason
+        ORDER BY n DESC, rejection_reason
+        """,
+        (run["id"],),
+    ).fetchall()
+    if not reasons:
+        lines.append("    none")
+    for reason in reasons:
+        lines.append(f"    {reason['rejection_reason']}: {reason['n']}")
+    return lines
+
+
+def write_pump_sample(conn: sqlite3.Connection, path: str | Path) -> None:
+    """Write a small labeled subset of stored pump.fun snapshots. Does not fetch."""
+    columns = """
+        mint, symbol, name, creator, pool_address, dex_id, quote_mint, quote_symbol,
+        created_at, graduation_status, price_usd, market_cap_usd, fdv_usd, reserve_usd,
+        volume_m5_usd, buys_m5, sells_m5, buyers_m5, sellers_m5,
+        virtual_token_reserves, virtual_quote_reserves, real_token_reserves,
+        real_quote_reserves, curve_complete, progress, decimals, mint_authority,
+        freeze_authority, quote_is_sol, global_fee_basis_points, sol_usd, sol_usd_source,
+        source_name, endpoint, fetched_at, source_timestamp, field_sources_json
+    """
+    selected = []
+    for status, limit in (("on_curve", 4), ("graduated", 4)):
+        selected.extend(
+            conn.execute(
+                f"""
+                SELECT {columns}
+                FROM pump_snapshots
+                WHERE graduation_status = ?
+                ORDER BY fetched_at DESC, id DESC
+                LIMIT ?
+                """,
+                (status, limit),
+            ).fetchall()
+        )
+    rows = [dict(row) for row in selected]
+    flags = [
+        dict(row)
+        for row in conn.execute(
+            """
+            SELECT flag, status, COUNT(*) AS n
+            FROM pump_flags
+            GROUP BY flag, status
+            ORDER BY flag, status
+            """
+        ).fetchall()
+    ]
+    payload = {
+        "label": "REAL_PUBLIC_FETCH",
+        "disclaimer": DISCLAIMER,
+        "sample_is_subset": True,
+        "note": (
+            "Rows were read from pump_snapshots after pumpfun-collect. "
+            "fetched_at is when this process finished the poll. source_timestamp is null "
+            "when the public payload had no quote timestamp; created_at is the pool creation "
+            "time the indexer returned. Values were not entered by hand."
+        ),
+        "generated_at": iso_z(datetime.now(timezone.utc)),
+        "row_count": len(rows),
+        "rows": rows,
+        "flag_counts": flags,
+    }
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(payload, indent=2), encoding="utf-8")

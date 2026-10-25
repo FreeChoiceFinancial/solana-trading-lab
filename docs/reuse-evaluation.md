@@ -45,8 +45,8 @@ Nothing here is reusable for this lab. Those skills exist to sign and submit on-
 - License: GitHub reports no license, and the root listing on 2026-10-25 had no `LICENSE` file. Do not vendor the IDL or the docs.
 - What it is: public notes on pump.fun program instructions: coin creation, bonding-curve trades, PumpSwap, fee sweeps, and quote accounts.
 
-It is not a BTC or SOL candle API. It can be read in a browser later if a research question is specifically about how those programs describe reserves. Following the instructions would build transactions. This milestone does not call Solana RPC and does not sign.
+It is not a BTC or SOL candle API. `docs/pumpfun.md` records the bonding-curve and fee notes taken from it. The IDL is not vendored. Reading those notes is not permission to build a transaction. The pump.fun collector reads public account data with `getAccountInfo` and `getMultipleAccounts` only. It does not sign.
 
-## What this milestone actually uses
+## What this repository actually uses
 
-Public GET requests to Coinbase Exchange, CoinGecko, and Kraken, implemented in this repository. The paper ledger, SMA rule, and SQLite schema are local code. Related-project ideas above are notes for later reading, not dependencies.
+Public GET requests to Coinbase Exchange, CoinGecko, and Kraken for BTC and SOL. For pump.fun, public GeckoTerminal and DexScreener GETs plus Solana JSON-RPC reads listed in `docs/pumpfun.md`. The paper ledgers, both strategy rules, and the SQLite schema are local code. pump-fun-skills is not installed. Related-project ideas above are notes, not dependencies.

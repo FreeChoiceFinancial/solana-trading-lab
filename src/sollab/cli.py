@@ -8,7 +8,15 @@ import time
 
 from sollab.collect import collect
 from sollab.constants import DISCLAIMER
-from sollab.reporting import export_tables, render_report, write_price_sample, write_simulation_summary
+from sollab.pumpcollect import collect_pumpfun
+from sollab.pumpstrategy import NoPumpData, run_pump_strategy
+from sollab.reporting import (
+    export_tables,
+    render_report,
+    write_price_sample,
+    write_pump_sample,
+    write_simulation_summary,
+)
 from sollab.simulate import NoCandleData, run_strategy
 from sollab.storage import connect
 
@@ -41,6 +49,26 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("run-strategy", parents=[parent], help="Replay the hourly SMA paper strategy")
 
+    pump_collect = sub.add_parser(
+        "pumpfun-collect",
+        parents=[parent],
+        help="Fetch public pump.fun pool and account data. No wallet and no orders.",
+    )
+    pump_collect.add_argument("--pause", type=float, default=0.5, help="Seconds between read-only calls")
+    pump_collect.add_argument("--polls", type=int, default=1, help="How many read-only polls to store")
+    pump_collect.add_argument(
+        "--interval",
+        type=float,
+        default=35,
+        help="Seconds between polls when --polls is greater than 1",
+    )
+
+    sub.add_parser(
+        "pumpfun-run",
+        parents=[parent],
+        help="Paper-trade bonding_curve_momentum on stored pump.fun snapshots",
+    )
+
     report_parser = sub.add_parser("report", parents=[parent], help="Show stored prices and the paper ledger")
     report_parser.add_argument("--export-dir", default="data/exports", help="Directory for full CSV and JSON tables")
     report_parser.add_argument("--sample-json", help="Write a small labeled price sample as JSON")
@@ -54,6 +82,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--simulation-summary",
         help="Write the paper replay summary. The file is labeled as simulated.",
     )
+    report_parser.add_argument("--pump-sample-json", help="Write a small labeled pump.fun snapshot sample as JSON")
     return parser
 
 
@@ -98,6 +127,45 @@ def main(argv: list[str] | None = None) -> int:
             for warning in summary.warnings:
                 print(f"warning {warning}")
             return 0
+        if args.command == "pumpfun-collect":
+            summary = collect_pumpfun(
+                conn,
+                polls=args.polls,
+                interval_seconds=args.interval,
+                pause_seconds=args.pause,
+            )
+            print(DISCLAIMER)
+            print("read-only pump.fun collection; no wallet, no transaction, no token creation")
+            print(
+                f"polls={summary.polls} snapshots={summary.snapshots} "
+                f"sources={','.join(summary.sources_used) or 'none'}"
+            )
+            for error in summary.errors:
+                print(f"error {error}")
+            return 0 if summary.ok() else 1
+        if args.command == "pumpfun-run":
+            try:
+                summary = run_pump_strategy(conn)
+            except NoPumpData as exc:
+                print(str(exc))
+                return 1
+            print(DISCLAIMER)
+            print("simulated pump.fun paper replay only; no orders were sent")
+            print(f"recorded_at={summary.recorded_at.isoformat()}")
+            print(f"starting_spendable_cash={summary.starting_cash}")
+            print(
+                f"opens={summary.opens} closes={summary.closes} "
+                f"rejected_orders={summary.rejected_orders} decisions={summary.decisions}"
+            )
+            print(
+                f"pump_ending_equity={summary.ending_equity} realized_pnl={summary.realized_pnl} "
+                f"unrealized_pnl={summary.unrealized_pnl} open_position={summary.open_position}"
+            )
+            print(f"sma_open={summary.sma_open}")
+            print(f"note={summary.note}")
+            for reason, count in sorted(summary.rejection_counts.items()):
+                print(f"rejection {reason}={count}")
+            return 0
         export_tables(conn, args.export_dir)
         if args.sample_json or args.sample_csv:
             write_price_sample(
@@ -108,6 +176,8 @@ def main(argv: list[str] | None = None) -> int:
             )
         if args.simulation_summary:
             write_simulation_summary(conn, args.simulation_summary)
+        if args.pump_sample_json:
+            write_pump_sample(conn, args.pump_sample_json)
         print(render_report(conn))
         print(f"exported_tables={args.export_dir}")
         return 0

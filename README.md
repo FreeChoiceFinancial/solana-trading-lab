@@ -22,10 +22,12 @@ Dependencies are pinned in `pyproject.toml`: `httpx==0.28.1` and, for tests, `py
 ```bash
 python -m sollab collect
 python -m sollab run-strategy
+python -m sollab pumpfun-collect
+python -m sollab pumpfun-run
 python -m sollab report
 ```
 
-`collect` writes `data/sollab.db` (gitignored). It pauses briefly between calls. `run-strategy` replays the stored hourly candles and replaces previous simulation rows; prices stay. `report` prints provenance and the paper ledger, and writes CSV/JSON tables under `data/exports/` (also gitignored).
+`collect` writes `data/sollab.db` (gitignored). It pauses briefly between calls. `run-strategy` replays the stored hourly candles and replaces previous SMA simulation rows; prices stay. `pumpfun-collect` reads public pump.fun pool and account data into the same database. `pumpfun-run` replays `bonding_curve_momentum` on those rows and does not delete the SMA book. `report` prints provenance and both paper ledgers, and writes CSV/JSON tables under `data/exports/` (also gitignored). Curve math, fees, and the polling limit are in `docs/pumpfun.md`.
 
 A small export of stored prices:
 

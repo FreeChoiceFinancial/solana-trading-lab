@@ -4,7 +4,7 @@ This file is a research list. None of it is permission to trade live, sign a wal
 
 ## pump.fun research
 
-Read public documentation only. Questions worth answering later: which fields describe bonding-curve state, how quotes are defined, and whether any keyless public market endpoint exists for prices. Do not install `pump-fun-skills`, do not send transactions, and do not create coins. `docs/reuse-evaluation.md` records why those repositories are not dependencies of this milestone.
+`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. The collector workflow is `workflow_dispatch` only; a free private GitHub Actions cron is too coarse and too expensive in minutes for this market. Do not install `pump-fun-skills`.
 
 ## Stocks and penny stocks
 
