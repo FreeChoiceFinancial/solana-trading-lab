@@ -13,7 +13,7 @@ Preserved paper results from the 300 USD account. Not recalculated at 5000 USD.
 - open cash_era=300 crypto_spot short BTC notional=9.99974888
 
 Backtest (cash era 5000)
-- cash_era=5000 sma_crossover 1.1.0 period=train book=experiment equity=4997.68108406 realized=-2.24416309 unrealized=-0.07475285 fees=1.37954745 win_rate=0.00000000 profit_factor=0.00000000 max_drawdown=2.50339449 open=short BTC
+- cash_era=5000 sma_crossover 1.1.0 period=train book=experiment equity=4997.67552245 realized=-2.24416309 unrealized=-0.08031446 fees=1.37954745 win_rate=0.00000000 profit_factor=0.00000000 max_drawdown=2.50895610 open=short BTC
 - cash_era=5000 sma_crossover 1.1.0 period=validation book=experiment equity=4999.64037113 realized=-0.35962887 unrealized=0 fees=0.23927524 win_rate=0.00000000 profit_factor=0.00000000 max_drawdown=0.35962887 open=None
 Rollup closed=13 win_rate=0.00000000 profit_factor=0.00000000 realized=-2.60379196 by_direction={'short': {'closed_trades': 5, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-1.02997447'}, 'long': {'closed_trades': 8, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-1.57381749'}} by_market={'crypto_spot': {'closed_trades': 13, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-2.60379196'}} by_strategy={'sma_crossover 1.1.0': {'closed_trades': 13, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-2.60379196'}}
 
@@ -24,7 +24,7 @@ Rollup closed=2 win_rate=0.00000000 profit_factor=0.00000000 realized=-0.3870247
 pump.fun
 - run=2026-10-25T16:49:38.138288Z equity=287.11542881 realized=0 unrealized=0 fees=0.00000000 open=None
 
-Last price collection 2026-10-25T16:17:34.690833Z
+Last price collection 2026-10-25T19:53:13.866350Z
 Last pump.fun collection 2026-10-25T16:49:32.334254Z
 Stored errors 4
 - 2026-10-25T16:49:32.338329Z pump_frontend: HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal
