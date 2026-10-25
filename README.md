@@ -89,9 +89,9 @@ The repository is public, so standard GitHub-hosted minutes are not billed. Usag
 | Job | Cadence | Runs / month | Expected minutes | Monthly minutes |
 | --- | --- | --- | --- | --- |
 | BTC/SOL collect, metals collect, replays, report | hourly | 720 | 1.0–1.5 | 720–1,080 |
-| pump.fun burst, 2 polls, 35s apart | every 6 hours | 120 | 2.0–2.5 | 240–300 |
+| pump.fun burst, 2 polls, 35s apart | every 2 hours (`15 */2 * * *`) | 360 | 2.0–2.5 | 720–900 |
 
-Scheduled total is about 960–1,380 minutes of runner time. The pump.fun burst stays at every six hours. A shorter gap is described in the metals pull request and is not in the workflow. Each job's timeout is 8 minutes so a hung run cannot consume the default six-hour job limit. GitHub registers both the schedule and `workflow_dispatch` only after `paper-hourly.yml` is on the default branch (`main`). A dispatch from another branch is not available before that.
+Scheduled total is about 1,440–1,980 minutes of runner time. The two-hour burst, rather than a five-minute cron, is the cap that keeps the `data` branch and the public API calls from growing with every short pump.fun window. Each job's timeout is 8 minutes. GitHub registers both the schedule and `workflow_dispatch` only after `paper-hourly.yml` is on the default branch (`main`). A dispatch from another branch is not available before that.
 
 ## Tests
 

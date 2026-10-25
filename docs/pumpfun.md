@@ -134,7 +134,7 @@ Hourly collection is too slow for this market. Coins move through the first page
 
 The repository is public, so standard GitHub-hosted minutes are not billed. The binding limits are the `data` branch, which grows by about the size of `sollab.db` on every commit, and the public APIs. GitHub's shortest cron interval is 5 minutes, and scheduled workflows can be delayed. A 5-minute schedule is about 8,640 runs a month. That volume would multiply the database history and the request load. It would still miss launches that finish in under a minute.
 
-`.github/workflows/paper-hourly.yml` runs a two-poll burst every six hours (`--polls 2 --interval 35`) and commits the database to the `data` branch. That is about 120 runs a month, roughly 240–300 minutes, on top of the hourly BTC/SOL and metals job. The six-hour gap is unchanged. A two-hour burst (`15 */2 * * *`, about 360 runs a month) is a proposal and is not in the workflow. The manual workflow remains `workflow_dispatch`. A local `python -m sollab pumpfun-collect --polls 2 --interval 35` is the same burst.
+`.github/workflows/paper-hourly.yml` runs a two-poll burst every two hours (`15 */2 * * *`, `--polls 2 --interval 35`) and commits the database to the `data` branch. That is about 360 runs a month, roughly 720–900 minutes, on top of the hourly BTC/SOL and metals job. The manual workflow remains `workflow_dispatch` with one poll. A local `python -m sollab pumpfun-collect --polls 2 --interval 35` is the same burst.
 
 ## Collection on 2026-10-25
 

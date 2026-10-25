@@ -1,6 +1,6 @@
 # Manual one-poll pump.fun collection.
-# paper-hourly.yml runs a two-poll burst every six hours and commits the data branch.
-# A five-minute cron does not fit the private free minute quota. See docs/pumpfun.md.
+# paper-hourly.yml runs a two-poll burst every two hours and commits the data branch.
+# See docs/pumpfun.md. This manual workflow stays one poll.
 name: pumpfun-collect
 
 on:

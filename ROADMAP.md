@@ -4,7 +4,7 @@ This file is a research list. None of it is permission to trade live, sign a wal
 
 ## pump.fun research
 
-`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. `.github/workflows/paper-hourly.yml` runs a short pump.fun burst every six hours and commits state to the `data` branch. The repository is public, so standard runner minutes are not billed. The six-hour gap stays: each run grows the `data` branch by about the size of `sollab.db` and polls public APIs. A shorter burst is a proposal only. Do not install `pump-fun-skills`.
+`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. `.github/workflows/paper-hourly.yml` runs a short pump.fun burst every two hours (`15 */2 * * *`) and commits state to the `data` branch. The repository is public, so standard runner minutes are not billed. Each run still grows the `data` branch by about the size of `sollab.db` and polls public APIs, which is why the burst is two hours and not five minutes. Do not install `pump-fun-skills`.
 
 ## Precious metals
 

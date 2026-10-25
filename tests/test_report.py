@@ -114,6 +114,9 @@ def test_status_json_splits_backtest_and_forward(conn, tmp_path):
     assert "Backtest" in text
     assert "Forward paper" in text
     assert "crypto_spot" in text
+    assert status["schedule"]["hourly_cron"] == "0 * * * *"
+    assert status["schedule"]["pumpfun_cron"] == "15 */2 * * *"
+    assert "pump.fun burst 15 */2 * * *" in text
     path = write_status(conn, tmp_path, status=status)
     loaded = json.loads(path.read_text(encoding="utf-8"))
     assert loaded["historical_300"]["runs"][0]["cash_era"] == "300"

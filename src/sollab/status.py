@@ -82,6 +82,7 @@ def build_status(conn: sqlite3.Connection, *, recorded_at: datetime | None = Non
             ),
         },
         "errors": _errors(conn),
+        "schedule": _schedule(),
     }
 
 
@@ -184,6 +185,7 @@ def format_status_markdown(status: dict[str, object]) -> str:
     lines.extend(
         [
             "",
+            _schedule_line(status),
             f"Last price collection {collected.get('prices_fetched_at')}",
             f"Last pump.fun collection {collected.get('pumpfun_fetched_at')}",
             f"Last metals collection {collected.get('metals_fetched_at')}",
@@ -497,6 +499,29 @@ def _open_positions(
             (cash_era,),
         ).fetchall()
     ]
+
+
+def _schedule() -> dict[str, str]:
+    return {
+        "timezone": "UTC",
+        "hourly_cron": "0 * * * *",
+        "pumpfun_cron": "15 */2 * * *",
+        "pumpfun_burst": "2 polls, 35 seconds apart",
+        "note": (
+            "Hourly job collects BTC/SOL and metals, then replays. "
+            "Pump.fun burst runs every two hours. Paper only."
+        ),
+    }
+
+
+def _schedule_line(status: dict[str, object]) -> str:
+    schedule = status.get("schedule")
+    if not isinstance(schedule, dict):
+        schedule = _schedule()
+    return (
+        f"Schedule {schedule.get('timezone')}: hourly {schedule.get('hourly_cron')}; "
+        f"pump.fun burst {schedule.get('pumpfun_cron')}"
+    )
 
 
 def _pump_status(conn: sqlite3.Connection) -> dict[str, object]:

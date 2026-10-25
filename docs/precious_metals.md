@@ -128,6 +128,6 @@ Coinbase history starts on 2025-05-08, so this is about seventeen months, not th
 
 ## Scheduled run
 
-`.github/workflows/paper-hourly.yml` still fires hourly (`0 * * * *`) and the pump.fun burst every six hours (`15 */6 * * *`). The hourly job runs `metals-collect` and `metals-run` after the BTC/SOL replay. A metals failure is a warning. It does not fail the BTC job. `report` then includes a Metals section in `status.md` and a `metals` object in `status.json`.
+`.github/workflows/paper-hourly.yml` fires hourly (`0 * * * *`) and the pump.fun burst every two hours (`15 */2 * * *`). The hourly job runs `metals-collect` and `metals-run` after the BTC/SOL replay. A metals failure is a warning. It does not fail the BTC job. `report` then includes a Metals section in `status.md` and a `metals` object in `status.json`, plus the two cron strings under `schedule`.
 
-The repository is public, so standard GitHub-hosted minutes are not billed. The cadence stays. Each successful job commits `sollab.db` to `data`, and that history grows by about the database size every time. The job also calls public APIs. Those two limits are why the pump.fun burst was not shortened in this change.
+The repository is public, so standard GitHub-hosted minutes are not billed. Each successful job commits `sollab.db` to `data`, and that history grows by about the database size every time. The job also calls public APIs. The pump.fun burst is every two hours for that reason. A five-minute cron is not used.
