@@ -5,6 +5,10 @@ immediately. A short sale does not increase spendable cash. This is not a
 broker borrow, a margin loan, or a perpetual swap: there is no funding
 payment and no liquidation engine.
 
+One open position is allowed in each market (crypto_spot, pumpfun, stocks).
+Markets share one cash balance. Stocks is reserved: the slot exists, and no
+strategy in this repo sends stock orders.
+
 Realized P&L is booked only on a full close and subtracts the open fee and
 the close fee. Unrealized P&L is the open position's price result at the
 mark minus the open fee. Equity is starting cash plus realized plus unrealized.
@@ -13,6 +17,8 @@ mark minus the open fee. Equity is starting cash plus realized plus unrealized.
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP
+
+from sollab.constants import MARKET_CRYPTO, MARKETS, STARTING_CASH
 
 MONEY = Decimal("0.00000001")
 QTY = Decimal("0.00000001")
@@ -25,6 +31,7 @@ SYMBOL_MISMATCH = "symbol_mismatch"
 DIRECTION_MISMATCH = "direction_mismatch"
 TIME_GOES_BACKWARDS = "time_goes_backwards"
 INVALID_DIRECTION = "invalid_direction"
+INVALID_MARKET = "invalid_market"
 
 
 def q(value: Decimal) -> Decimal:
@@ -50,6 +57,7 @@ class Position:
     realized_pnl: Decimal | None = None
     holding_seconds: int | None = None
     status: str = "open"
+    market: str = MARKET_CRYPTO
 
 
 @dataclass(frozen=True)
@@ -98,7 +106,7 @@ class FillResult:
 class PaperLedger:
     def __init__(
         self,
-        starting_cash: Decimal = Decimal("300"),
+        starting_cash: Decimal = STARTING_CASH,
         max_notional: Decimal = Decimal("10"),
         min_notional: Decimal = Decimal("1"),
         fee_rate: Decimal = Decimal("0.006"),
@@ -125,12 +133,25 @@ class PaperLedger:
         self.cash_free = self.starting_cash
         self.locked_notional = Decimal("0")
         self.realized_pnl = Decimal("0")
-        self.position: Position | None = None
+        self.positions: dict[str, Position] = {}
         self.closed_positions: list[Position] = []
         self.events: list[LedgerEvent] = []
+        self.last_marks: dict[str, Decimal] = {}
         self.last_mark: Decimal | None = None
         self.last_ts: datetime | None = None
         self._next_position_id = 1
+
+    @property
+    def position(self) -> Position | None:
+        """The only open position, or the crypto_spot position when several markets are open."""
+        if not self.positions:
+            return None
+        if len(self.positions) == 1:
+            return next(iter(self.positions.values()))
+        for market in MARKETS:
+            if market in self.positions:
+                return self.positions[market]
+        return next(iter(self.positions.values()))
 
     def seed(self, ts: datetime) -> LedgerEvent:
         if self.events:
@@ -147,10 +168,15 @@ class PaperLedger:
         mark_price: Decimal,
         ts: datetime,
         requested_notional: Decimal,
+        market: str = MARKET_CRYPTO,
     ) -> FillResult:
+        if market not in MARKETS:
+            return self._reject(
+                symbol, direction, "open", requested_notional, mark_price, ts, INVALID_MARKET
+            )
         if direction not in {"long", "short"}:
             return self._reject(symbol, direction, "open", requested_notional, mark_price, ts, INVALID_DIRECTION)
-        if self.position is not None:
+        if market in self.positions:
             return self._reject(
                 symbol, direction, "open", requested_notional, mark_price, ts, POSITION_ALREADY_OPEN
             )
@@ -195,11 +221,13 @@ class PaperLedger:
             entry_notional=notional,
             entry_fee=fee,
             opened_at=ts,
+            market=market,
         )
         self._next_position_id += 1
-        self.position = position
+        self.positions[market] = position
         self.cash_free = q(self.cash_free + cash_delta)
         self.locked_notional = q(self.locked_notional + notional)
+        self.last_marks[market] = mark_price
         self.last_mark = mark_price
         self.last_ts = ts
         self._invariant()
@@ -224,17 +252,26 @@ class PaperLedger:
             None,
         )
 
-    def close_position(self, symbol: str, direction: str, mark_price: Decimal, ts: datetime) -> FillResult:
-        if self.position is None:
+    def close_position(
+        self,
+        symbol: str,
+        direction: str,
+        mark_price: Decimal,
+        ts: datetime,
+        market: str = MARKET_CRYPTO,
+    ) -> FillResult:
+        if market not in MARKETS:
+            return self._reject(symbol, direction, "close", None, mark_price, ts, INVALID_MARKET)
+        position = self.positions.get(market)
+        if position is None:
             return self._reject(symbol, direction, "close", None, mark_price, ts, NO_OPEN_POSITION)
-        if self.position.symbol != symbol:
+        if position.symbol != symbol:
             return self._reject(symbol, direction, "close", None, mark_price, ts, SYMBOL_MISMATCH)
-        if self.position.direction != direction:
+        if position.direction != direction:
             return self._reject(symbol, direction, "close", None, mark_price, ts, DIRECTION_MISMATCH)
         if self.last_ts is not None and ts < self.last_ts:
             return self._reject(symbol, direction, "close", None, mark_price, ts, TIME_GOES_BACKWARDS)
 
-        position = self.position
         fill_price = self._slip(mark_price, direction, "close")
         exit_notional = q(position.quantity * fill_price)
         exit_fee = q(exit_notional * self.fee_rate)
@@ -244,13 +281,13 @@ class PaperLedger:
             price_pnl = (position.entry_fill - fill_price) * position.quantity
         price_pnl = q(price_pnl)
         realized = q(price_pnl - position.entry_fee - exit_fee)
-        cash_delta = q(self.locked_notional + price_pnl - exit_fee)
+        cash_delta = q(position.entry_notional + price_pnl - exit_fee)
         holding = int((ts - position.opened_at).total_seconds())
         if holding < 0:
             return self._reject(symbol, direction, "close", None, mark_price, ts, TIME_GOES_BACKWARDS)
 
         self.cash_free = q(self.cash_free + cash_delta)
-        self.locked_notional = Decimal("0")
+        self.locked_notional = q(self.locked_notional - position.entry_notional)
         self.realized_pnl = q(self.realized_pnl + realized)
         position.closed_at = ts
         position.exit_mark = mark_price
@@ -261,8 +298,9 @@ class PaperLedger:
         position.holding_seconds = holding
         position.status = "closed"
         self.closed_positions.append(position)
-        self.position = None
-        self.last_mark = None
+        del self.positions[market]
+        self.last_marks.pop(market, None)
+        self.last_mark = self.last_marks.get(self.position.market) if self.position is not None else None
         self.last_ts = ts
         self._invariant()
         unrealized, equity = self.snapshot(None)
@@ -286,41 +324,74 @@ class PaperLedger:
             realized,
         )
 
-    def snapshot(self, mark_for_position: Decimal | None) -> tuple[Decimal, Decimal]:
-        """Return unrealized P&L and equity. A mark updates the open position's last mark."""
-        if self.position is None:
+    def snapshot(
+        self,
+        mark_for_position: Decimal | None,
+        marks: dict[str, Decimal] | None = None,
+    ) -> tuple[Decimal, Decimal]:
+        """Return unrealized P&L and equity. A mark updates that position's last mark."""
+        if marks:
+            for market, mark in marks.items():
+                if market in self.positions:
+                    self.last_marks[market] = mark
+            if self.position is not None and self.position.market in self.last_marks:
+                self.last_mark = self.last_marks[self.position.market]
+        elif mark_for_position is not None and self.position is not None:
+            self.last_marks[self.position.market] = mark_for_position
+            self.last_mark = mark_for_position
+        if not self.positions:
             equity = q(self.starting_cash + self.realized_pnl)
             return Decimal("0"), equity
-        mark = self.last_mark if mark_for_position is None else mark_for_position
-        if mark is None:
-            raise RuntimeError("open position has no mark")
-        if mark_for_position is not None:
-            self.last_mark = mark_for_position
-        unrealized = self.unrealized(mark)
+        if mark_for_position is not None and not marks:
+            unrealized = self.unrealized(mark_for_position)
+        else:
+            unrealized = self._unrealized_all()
         equity = q(self.starting_cash + self.realized_pnl + unrealized)
         return unrealized, equity
 
     def unrealized(self, mark: Decimal) -> Decimal:
-        if self.position is None:
+        if not self.positions:
             return Decimal("0")
-        if self.position.direction == "long":
-            gross = (mark - self.position.entry_fill) * self.position.quantity
-        else:
-            gross = (self.position.entry_fill - mark) * self.position.quantity
-        return q(gross - self.position.entry_fee)
+        focus = self.position
+        total = Decimal("0")
+        for market, position in self.positions.items():
+            if focus is not None and position.id == focus.id:
+                total += self._position_unrealized(position, mark)
+            else:
+                total += self._position_unrealized(position, self.last_marks[market])
+        return q(total)
+
+    def _unrealized_all(self) -> Decimal:
+        if not self.positions:
+            return Decimal("0")
+        total = Decimal("0")
+        for market, position in self.positions.items():
+            mark = self.last_marks.get(market)
+            if mark is None:
+                raise RuntimeError(f"open {market} position has no mark")
+            total += self._position_unrealized(position, mark)
+        return q(total)
+
+    def _position_unrealized(self, position: Position, mark: Decimal) -> Decimal:
+        return q(self._gross(position, mark) - position.entry_fee)
+
+    def _gross(self, position: Position, mark: Decimal) -> Decimal:
+        if position.direction == "long":
+            return (mark - position.entry_fill) * position.quantity
+        return (position.entry_fill - mark) * position.quantity
 
     def balance_equity(self, mark: Decimal | None) -> Decimal:
         """Equity reconstructed from cash, locked collateral, and price P&L."""
-        if self.position is None:
+        if not self.positions:
             return q(self.cash_free)
-        if mark is None:
-            mark = self.last_mark
-        if mark is None:
-            raise RuntimeError("open position has no mark")
-        if self.position.direction == "long":
-            price_pnl = (mark - self.position.entry_fill) * self.position.quantity
-        else:
-            price_pnl = (self.position.entry_fill - mark) * self.position.quantity
+        if mark is not None and self.position is not None:
+            self.last_marks[self.position.market] = mark
+        price_pnl = Decimal("0")
+        for market, position in self.positions.items():
+            current = self.last_marks.get(market)
+            if current is None:
+                raise RuntimeError(f"open {market} position has no mark")
+            price_pnl += self._gross(position, current)
         return q(self.cash_free + self.locked_notional + price_pnl)
 
     def _slip(self, mark: Decimal, direction: str, intent: str) -> Decimal:
@@ -376,7 +447,7 @@ class PaperLedger:
     ) -> FillResult:
         del ts
         unrealized, equity = (Decimal("0"), q(self.starting_cash + self.realized_pnl))
-        if self.position is not None and self.last_mark is not None:
+        if self.positions and all(market in self.last_marks for market in self.positions):
             unrealized, equity = self.snapshot(None)
         return FillResult(
             status="rejected",

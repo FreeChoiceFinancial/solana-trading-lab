@@ -17,6 +17,7 @@ from sollab.reporting import (
     write_pump_sample,
     write_simulation_summary,
 )
+from sollab.status import build_status, write_status
 from sollab.simulate import NoCandleData, run_strategy
 from sollab.storage import connect
 
@@ -119,9 +120,16 @@ def main(argv: list[str] | None = None) -> int:
                 f"rejected_orders={summary.rejected_orders} decisions={summary.decisions}"
             )
             print(
-                f"ending_equity={summary.ending_equity} realized_pnl={summary.realized_pnl} "
+                f"period={summary.period} ending_equity={summary.ending_equity} "
+                f"realized_pnl={summary.realized_pnl} "
                 f"unrealized_pnl={summary.unrealized_pnl} open_position={summary.open_position}"
             )
+            for period in summary.periods:
+                print(
+                    f"period={period.period} opens={period.opens} closes={period.closes} "
+                    f"ending_equity={period.ending_equity} realized_pnl={period.realized_pnl} "
+                    f"unrealized_pnl={period.unrealized_pnl} open_position={period.open_position}"
+                )
             for reason, count in sorted(summary.rejection_counts.items()):
                 print(f"rejection {reason}={count}")
             for warning in summary.warnings:
@@ -166,6 +174,8 @@ def main(argv: list[str] | None = None) -> int:
             for reason, count in sorted(summary.rejection_counts.items()):
                 print(f"rejection {reason}={count}")
             return 0
+        status = build_status(conn)
+        status_path = write_status(conn, args.export_dir, status=status)
         export_tables(conn, args.export_dir)
         if args.sample_json or args.sample_csv:
             write_price_sample(
@@ -178,7 +188,8 @@ def main(argv: list[str] | None = None) -> int:
             write_simulation_summary(conn, args.simulation_summary)
         if args.pump_sample_json:
             write_pump_sample(conn, args.pump_sample_json)
-        print(render_report(conn))
+        print(render_report(conn, status))
+        print(f"status_json={status_path}")
         print(f"exported_tables={args.export_dir}")
         return 0
     finally:

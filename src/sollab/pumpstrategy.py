@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal, ROUND_DOWN
 
-from sollab.constants import MAX_NOTIONAL, MIN_NOTIONAL, STARTING_CASH
+from sollab.constants import CASH_ERA_CURRENT, MAX_NOTIONAL, MIN_NOTIONAL, STARTING_CASH
 from sollab.ledger import q
 from sollab.pumpconst import (
     ASSUMED_SWAP_COMPUTE_UNITS,
@@ -84,7 +84,14 @@ def parameters_json() -> str:
         "max_hold_seconds": MAX_HOLD_SECONDS,
         "max_notional": format(MAX_NOTIONAL, "f"),
         "min_notional": format(MIN_NOTIONAL, "f"),
-        "starting_cash_rule": "latest SMA ledger cash_free when that book exists, else 300",
+        "starting_cash_rule": (
+            "current cash-era 5000 ledger cash_free when that book exists, else 5000; "
+            "cash_era 300 books are historical and do not fund or block this market"
+        ),
+        "cash_era": "5000",
+        "max_notional_unchanged": "10",
+        "market": "pumpfun",
+        "max_open_positions_in_market": 1,
         "sell_model": "paper_sell_v1",
         "buy_model": "idl_buy_exact_sol_in",
         "blocking_flags": list(BLOCKING_FLAGS),
@@ -100,8 +107,9 @@ def parameters_json() -> str:
 def rules_text() -> str:
     return "\n".join(
         [
-            "bonding_curve_momentum 1.0.0. Long only, market pump.fun, max one open position.",
-            "The position lock includes an open milestone-1 position in the positions table.",
+            "bonding_curve_momentum 1.0.0. Long only, market pumpfun, one open position in that market.",
+            "An open crypto_spot position does not block this market. An open pumpfun position does.",
+            "Stocks is reserved and this strategy does not trade it.",
             "Entry requires a stored on-curve SOL-quoted snapshot with decoded virtual reserves,",
             f"progress in [{format(MIN_PROGRESS, 'f')}, {format(MAX_PROGRESS, 'f')}),",
             f"m5 buys >= {MIN_BUYS_M5}, m5 buyers >= {MIN_BUYERS_M5}, and buys_m5 > sells_m5.",
@@ -164,6 +172,7 @@ def run_pump_strategy(conn: sqlite3.Connection, *, clock: datetime | None = None
     }
     starting_cash, inherited = _inherited_spendable(conn)
     sma_open = inherited.get("sma_open")
+    pump_open = inherited.get("pump_open")
     version_id = upsert_strategy(
         conn,
         strategy_id=PUMP_STRATEGY_ID,
@@ -185,6 +194,7 @@ def run_pump_strategy(conn: sqlite3.Connection, *, clock: datetime | None = None
             run_id=run_id,
             starting_cash=starting_cash,
             sma_open=sma_open,
+            pump_open=pump_open if isinstance(pump_open, dict) else None,
             recorded_at=recorded_at,
         )
         conn.execute(
@@ -215,6 +225,7 @@ def _replay(
     run_id: int,
     starting_cash: Decimal,
     sma_open: dict[str, object] | None,
+    pump_open: dict[str, object] | None,
     recorded_at: datetime,
 ) -> PumpRunSummary:
     cash = starting_cash
@@ -299,7 +310,7 @@ def _replay(
                 batch,
                 flags,
                 fees,
-                sma_open,
+                pump_open,
                 version_id,
                 run_id,
                 recorded_at,
@@ -343,7 +354,7 @@ def _replay(
         )
         rejected_orders += 1
 
-    note = _run_note(sma_open, position, opens)
+    note = _run_note(sma_open, pump_open, position, opens)
     return PumpRunSummary(
         recorded_at=recorded_at,
         starting_cash=starting_cash,
@@ -366,7 +377,7 @@ def _consider_entries(
     batch: list[sqlite3.Row],
     flags: dict[int, dict[str, str]],
     fees: dict[str, sqlite3.Row],
-    sma_open: dict[str, object] | None,
+    pump_open: dict[str, object] | None,
     version_id: int,
     run_id: int,
     recorded_at: datetime,
@@ -387,9 +398,12 @@ def _consider_entries(
     passed.sort(key=lambda item: (-item[0], item[1]))
     _progress, mint, winner = passed[0]
     signal_time = parse_timestamp(winner["fetched_at"])
-    if sma_open is not None:
+    if pump_open is not None:
         reason = "blocked_by_open_position"
-        note = f"filters_passed milestone1_open {sma_open.get('direction')} {sma_open.get('symbol')}"
+        note = (
+            "filters_passed pumpfun_open "
+            f"{pump_open.get('direction')} {pump_open.get('symbol') or pump_open.get('mint')}"
+        )
         decisions += 1
         reasons[reason] = reasons.get(reason, 0) + 1
         _decision(conn, version_id, run_id, mint, winner["id"], signal_time, "enter", reason, note, recorded_at)
@@ -817,35 +831,74 @@ def _mark(
     return unrealized, equity
 
 
-def _inherited_spendable(conn: sqlite3.Connection) -> tuple[Decimal, dict[str, object]]:
-    ledger = conn.execute("SELECT * FROM ledger ORDER BY id DESC LIMIT 1").fetchone()
-    open_row = conn.execute(
+def _book_opens(conn: sqlite3.Connection, market: str) -> sqlite3.Row | None:
+    return conn.execute(
         """
-        SELECT symbol, direction, status, entry_notional, opened_at
-        FROM positions WHERE status = 'open' ORDER BY id LIMIT 1
+        SELECT positions.symbol, positions.direction, positions.status, positions.entry_notional,
+               positions.opened_at, COALESCE(positions.market, 'crypto_spot') AS market
+        FROM positions
+        JOIN simulation_runs ON simulation_runs.id = positions.simulation_run_id
+        WHERE positions.status = 'open'
+          AND COALESCE(positions.market, 'crypto_spot') = ?
+          AND COALESCE(simulation_runs.book, 'preserved') = 'preserved'
+          AND COALESCE(simulation_runs.cash_era, '5000') != '300'
+        ORDER BY positions.id
+        LIMIT 1
+        """,
+        (market,),
+    ).fetchone()
+
+
+def _inherited_spendable(conn: sqlite3.Connection) -> tuple[Decimal, dict[str, object]]:
+    from sollab.storage import label_cash_eras
+
+    label_cash_eras(conn)
+    ledger = conn.execute(
+        """
+        SELECT ledger.*
+        FROM ledger
+        JOIN simulation_runs ON simulation_runs.id = ledger.simulation_run_id
+        WHERE COALESCE(simulation_runs.book, 'preserved') = 'preserved'
+          AND COALESCE(simulation_runs.cash_era, '5000') != '300'
+        ORDER BY ledger.id DESC
+        LIMIT 1
         """
     ).fetchone()
-    sma_open = None if open_row is None else dict(open_row)
+    crypto_open = _book_opens(conn, "crypto_spot")
+    pump_open = _book_opens(conn, "pumpfun")
+    sma_open = None if crypto_open is None else dict(crypto_open)
+    pump_view = None if pump_open is None else dict(pump_open)
     if ledger is None:
-        return STARTING_CASH, {"source": "starting_cash", "sma_open": sma_open}
+        return STARTING_CASH, {"source": "starting_cash", "sma_open": sma_open, "pump_open": pump_view}
     return Decimal(ledger["cash_free"]), {
-        "source": "sma_ledger.cash_free",
+        "source": "preserved_ledger.cash_free",
         "ledger_id": ledger["id"],
         "cash_free": ledger["cash_free"],
         "locked_notional": ledger["locked_notional"],
         "equity": ledger["equity"],
         "sma_open": sma_open,
+        "pump_open": pump_view,
     }
 
 
-def _run_note(sma_open: dict[str, object] | None, position: _Position | None, opens: int) -> str:
+def _run_note(
+    sma_open: dict[str, object] | None,
+    pump_open: dict[str, object] | None,
+    position: _Position | None,
+    opens: int,
+) -> str:
     parts = [SIMULATED_LABEL]
-    if sma_open:
+    if pump_open:
         parts.append(
-            "milestone-1 position is open "
-            f"({sma_open.get('direction')} {sma_open.get('symbol')}); "
-            "pump entries that pass filters are rejected blocked_by_open_position. "
-            "Pump spendable cash is the SMA ledger cash_free and is not combined account equity."
+            "pumpfun already has an open position "
+            f"({pump_open.get('direction')} {pump_open.get('symbol')}); "
+            "new pump entries are rejected blocked_by_open_position."
+        )
+    elif sma_open:
+        parts.append(
+            "crypto_spot position stays open "
+            f"({sma_open.get('direction')} {sma_open.get('symbol')}) and does not block pumpfun. "
+            "Spendable cash is that preserved book's cash_free."
         )
     elif opens == 0:
         parts.append("no pump.fun fill. Spendable cash is unchanged.")
@@ -866,8 +919,9 @@ def _insert_run(conn: sqlite3.Connection, version_id: int, recorded_at: datetime
         """
         INSERT INTO pump_simulation_runs (
             strategy_version_id, recorded_at, parameters_json, starting_cash,
-            ending_equity, realized_pnl, unrealized_pnl, note, sma_open_json, inherited_cash_json
-        ) VALUES (?, ?, ?, ?, NULL, NULL, NULL, ?, ?, ?)
+            ending_equity, realized_pnl, unrealized_pnl, note, sma_open_json, inherited_cash_json,
+            cash_era
+        ) VALUES (?, ?, ?, ?, NULL, NULL, NULL, ?, ?, ?, ?)
         """,
         (
             version_id,
@@ -877,6 +931,7 @@ def _insert_run(conn: sqlite3.Connection, version_id: int, recorded_at: datetime
             "pending",
             json.dumps(inherited.get("sma_open")),
             json.dumps({key: value for key, value in inherited.items() if key != "sma_open"}),
+            CASH_ERA_CURRENT,
         ),
     )
     return int(conn.execute("SELECT last_insert_rowid() AS id").fetchone()["id"])

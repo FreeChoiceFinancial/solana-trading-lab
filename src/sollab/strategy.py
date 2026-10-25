@@ -10,8 +10,11 @@ from dataclasses import dataclass
 from decimal import Decimal, ROUND_HALF_UP
 
 from sollab.constants import (
+    ACCOUNT_RULES_VERSION,
     FAST_WINDOW,
     FEE_RATE,
+    FILL_MODEL,
+    MARKET_CRYPTO,
     MAX_NOTIONAL,
     MIN_NOTIONAL,
     SLIPPAGE_BPS,
@@ -76,9 +79,12 @@ def parameters_json(params: StrategyParams) -> str:
         "fee_rate": format(params.fee_rate, "f"),
         "slippage_bps": format(params.slippage_bps, "f"),
         "timeframe": "1h",
-        "fill_assumption": "same_bar_close",
+        "fill_assumption": FILL_MODEL,
         "same_bar_reversal": False,
-        "position_mode": "one_position_cash_collateral",
+        "position_mode": "one_position_per_market",
+        "market": MARKET_CRYPTO,
+        "account_rules_version": ACCOUNT_RULES_VERSION,
+        "preserves_strategy_version": "1.0.0",
     }
     return json.dumps(payload, indent=2, sort_keys=True)
 
@@ -103,9 +109,14 @@ def rules_text(params: StrategyParams) -> str:
             f"- Fewer than {params.slow_window + 1} closes: rejection {INSUFFICIENT_HISTORY}.",
             f"- No new cross: rejection {NO_CROSSOVER}. A trend that is already in place does not re-enter.",
             "",
-            "Position rules. One open position for the whole portfolio. Within one candle timestamp, "
-            "every symbol is judged against the position that was already open at the start of that timestamp. "
-            "A close does not free the slot for another symbol until a later timestamp. Symbol priority is "
+            "Position rules. Account rule 3.0.0 allows one open position per market "
+            "(crypto_spot, pumpfun, stocks) on a 5000 USD paper account. "
+            "The per-position cap stays 10 USD. This strategy only trades market crypto_spot, so BTC and SOL "
+            "still share one slot. Stocks is reserved: no stock candles and no stock orders. "
+            "Rows tagged cash_era 300 keep the earlier 300 USD account and are not rewritten. "
+            "Within one signal timestamp, every symbol is judged against the crypto_spot position already open. "
+            "A close is filled on the next candle and does not free the slot for another symbol on that same "
+            "signal. Symbol priority is "
             + ", ".join(params.symbols)
             + ".",
             "- Flat and bullish: open a long.",
@@ -123,10 +134,13 @@ def rules_text(params: StrategyParams) -> str:
             "- Both long and short lock that notional as cash collateral. A short does not increase cash.",
             f"- Taker fee is {fee_pct}% of fill notional on the open and again on the close.",
             f"- Slippage is {params.slippage_bps} bps and is applied against the paper account.",
-            "- The fill price is that same candle's close after slippage. This is a same-bar close fill.",
+            "- The signal is still the close of candle t. The fill price is candle t+1's open after slippage.",
+            "- Version 1.0.0 filled the same bar's close. Those stored rows are kept. This version does not delete them.",
+            "- If the next candle has no open, the order is rejected missing_open. Nothing is invented.",
+            "- If no later candle exists inside the period's fill window, the order is rejected no_next_candle.",
             "- Realized P&L is recorded only when the position closes and subtracts both fees.",
-            "- Unrealized P&L while the position is open is the mark-to-close price result minus the open fee.",
-            "- Holding period is the exit candle timestamp minus the entry candle timestamp, in seconds.",
+            "- Unrealized P&L while the position is open is the mark minus the open fee.",
+            "- Holding period is the exit fill timestamp minus the entry fill timestamp, in seconds.",
             "",
             "Ledger rejection reasons, when a signal wants a trade and the account cannot take it:",
             "notional_exceeds_limit, insufficient_cash, position_already_open, no_open_position,",

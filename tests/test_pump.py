@@ -368,11 +368,18 @@ def test_stop_time_limit_graduation_priority_and_sma_lock(conn):
         (run_id,),
     )
     conn.commit()
-    locked = run_pump_strategy(conn, clock=datetime(2026, 10, 25, 18, tzinfo=timezone.utc))
-    assert locked.opens == 0
-    assert locked.rejection_counts["blocked_by_open_position"] == 1
-    assert locked.starting_cash == Decimal("287.11000000")
-    assert locked.sma_open == "short BTC"
+    shared = run_pump_strategy(conn, clock=datetime(2026, 10, 25, 18, tzinfo=timezone.utc))
+    assert shared.opens == 0
+    assert "blocked_by_open_position" not in shared.rejection_counts
+    assert shared.rejection_counts["no_fill_after_delay"] == 1
+    assert shared.starting_cash == Decimal("5000")
+    assert shared.sma_open is None
+    conn.execute("UPDATE simulation_runs SET cash_era = '5000', starting_cash = '5000'")
+    conn.execute("UPDATE positions SET market = 'pumpfun'")
+    conn.commit()
+    blocked = run_pump_strategy(conn, clock=datetime(2026, 10, 25, 19, tzinfo=timezone.utc))
+    assert blocked.opens == 0
+    assert blocked.rejection_counts["blocked_by_open_position"] == 1
     reset_simulation(conn)
     assert conn.execute("SELECT COUNT(*) AS n FROM pump_snapshots").fetchone()["n"] == 2
     assert conn.execute("SELECT COUNT(*) AS n FROM positions").fetchone()["n"] == 0

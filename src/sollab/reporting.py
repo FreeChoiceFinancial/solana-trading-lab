@@ -178,10 +178,11 @@ def write_simulation_summary(conn: sqlite3.Connection, path: str | Path) -> None
     destination.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
-def render_report(conn: sqlite3.Connection) -> str:
-    lines = [
-        "sollab report",
-        DISCLAIMER,
+def render_report(conn: sqlite3.Connection, status: dict[str, object] | None = None) -> str:
+    from sollab.status import build_status, format_status_markdown
+
+    summary = format_status_markdown(status or build_status(conn)).splitlines()
+    lines = summary + [
         "",
         "Latest stored price in each symbol, interval, and source.",
         "fetched_at is local receipt time. source_timestamp is the venue time.",

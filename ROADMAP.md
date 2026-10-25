@@ -4,7 +4,7 @@ This file is a research list. None of it is permission to trade live, sign a wal
 
 ## pump.fun research
 
-`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. The collector workflow is `workflow_dispatch` only; a free private GitHub Actions cron is too coarse and too expensive in minutes for this market. Do not install `pump-fun-skills`.
+`docs/pumpfun.md` records the bonding-curve quote, the fee disagreement between the old Global JSON and the 17 October 2026 fees page, and the keyless sources that actually returned data. `python -m sollab pumpfun-collect` stores those reads. `python -m sollab pumpfun-run` replays `bonding_curve_momentum` 1.0.0 on the stored rows. Still no wallet, no token creation, and no keyed pump.fun API. `.github/workflows/paper-hourly.yml` runs a short pump.fun burst every six hours and commits state to the `data` branch. A five-minute cron still does not fit the free private minute quota or this market's speed. Do not install `pump-fun-skills`.
 
 ## Stocks and penny stocks
 
@@ -16,11 +16,11 @@ The current short locks cash as collateral and has no funding, borrow fee, or li
 
 ## Backtesting splits
 
-The milestone replays the whole stored window. A later evaluator should split candles into train, validation, and forward segments by time, with a gap between them, and should score only the forward segment. Parameters chosen on the train window must be written down before the forward run. Same-bar close fills should be replaced by a next-bar fill before any performance claim.
+`sma_crossover` 1.1.0 fills at the next candle open. `run-strategy` stores train, validation, and forward as separate experiment books with a one-bar gap. The 5/20 parameters are fixed before the forward window and are not fit on it. Version 1.0.0 same-bar results stay labeled `cash_era` 300.
 
 ## Scheduled collector
 
-`.github/workflows/collect.yml` is `workflow_dispatch` only. A later schedule can run the same read-only `collect` command and upload the SQLite artifact. It should not run `run-strategy` unattended until the replay is idempotent in CI artifacts and clearly labeled as simulated. No secrets are required for the public endpoints.
+`.github/workflows/paper-hourly.yml` collects BTC and SOL hourly, replays the paper strategy, writes the report, and commits `sollab.db` plus the status files to the `data` branch. The job is labeled simulated and does not use a secret. `.github/workflows/collect.yml` remains manual.
 
 ## Dashboard
 

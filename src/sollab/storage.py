@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from datetime import datetime
 from decimal import Decimal
@@ -52,6 +53,11 @@ CREATE TABLE IF NOT EXISTS simulation_runs (
     realized_pnl TEXT NOT NULL,
     unrealized_pnl TEXT NOT NULL,
     note TEXT NOT NULL,
+    period TEXT,
+    fill_model TEXT,
+    book TEXT,
+    window_json TEXT,
+    cash_era TEXT,
     FOREIGN KEY(strategy_version_id) REFERENCES strategy_versions(id)
 );
 
@@ -133,6 +139,7 @@ CREATE TABLE IF NOT EXISTS positions (
     holding_seconds INTEGER,
     status TEXT NOT NULL,
     recorded_at TEXT NOT NULL,
+    market TEXT DEFAULT 'crypto_spot',
     FOREIGN KEY(strategy_version_id) REFERENCES strategy_versions(id)
 );
 
@@ -282,6 +289,7 @@ CREATE TABLE IF NOT EXISTS pump_simulation_runs (
     note TEXT NOT NULL,
     sma_open_json TEXT,
     inherited_cash_json TEXT,
+    cash_era TEXT,
     FOREIGN KEY(strategy_version_id) REFERENCES strategy_versions(id)
 );
 
@@ -394,6 +402,16 @@ CREATE TABLE IF NOT EXISTS pump_ledger (
 
 CREATE INDEX IF NOT EXISTS idx_pump_snapshots_mint
 ON pump_snapshots(mint, fetched_at);
+
+CREATE TABLE IF NOT EXISTS config_journal (
+    id INTEGER PRIMARY KEY,
+    config_id TEXT NOT NULL,
+    version TEXT NOT NULL,
+    recorded_at TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    parameters_json TEXT NOT NULL,
+    UNIQUE(config_id, version)
+);
 """
 
 TABLES = (
@@ -416,6 +434,7 @@ TABLES = (
     "pump_fills",
     "pump_positions",
     "pump_ledger",
+    "config_journal",
 )
 
 
@@ -426,8 +445,40 @@ def connect(path: str | Path) -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA)
+    _migrate(conn)
     conn.commit()
     return conn
+
+
+def _column_names(conn: sqlite3.Connection, table: str) -> set[str]:
+    return {str(row["name"]) for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+
+
+def _add_column(conn: sqlite3.Connection, table: str, name: str, declaration: str) -> None:
+    if name not in _column_names(conn, table):
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {name} {declaration}")
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    """Add milestone-3 columns on databases created by earlier milestones."""
+    _add_column(conn, "simulation_runs", "period", "TEXT")
+    _add_column(conn, "simulation_runs", "fill_model", "TEXT")
+    _add_column(conn, "simulation_runs", "book", "TEXT")
+    _add_column(conn, "simulation_runs", "window_json", "TEXT")
+    _add_column(conn, "positions", "market", "TEXT DEFAULT 'crypto_spot'")
+    conn.execute("UPDATE positions SET market = 'crypto_spot' WHERE market IS NULL")
+    conn.execute(
+        """
+        UPDATE simulation_runs
+        SET period = 'full_window',
+            fill_model = 'same_bar_close',
+            book = 'preserved'
+        WHERE period IS NULL AND fill_model IS NULL AND book IS NULL
+        """
+    )
+    _add_column(conn, "simulation_runs", "cash_era", "TEXT")
+    _add_column(conn, "pump_simulation_runs", "cash_era", "TEXT")
+    label_cash_eras(conn)
 
 
 def dec_text(value: Decimal | None) -> str | None:
@@ -498,16 +549,192 @@ def record_error(
     )
 
 
+def label_cash_eras(conn: sqlite3.Connection) -> None:
+    """Tag stored paper books that used the 300 USD account. Newer rows set cash_era themselves."""
+    conn.execute(
+        """
+        UPDATE simulation_runs
+        SET cash_era = '300'
+        WHERE cash_era IS NULL
+          AND (starting_cash = '300' OR starting_cash LIKE '300.%')
+        """
+    )
+    conn.execute(
+        """
+        UPDATE pump_simulation_runs
+        SET cash_era = '300'
+        WHERE cash_era IS NULL
+          AND starting_cash NOT LIKE '5000%'
+        """
+    )
+
+
 def reset_simulation(conn: sqlite3.Connection) -> None:
     """Delete SMA paper-trading rows. Prices, pump snapshots, and source errors stay."""
     for table in ("fills", "orders", "decisions", "positions", "ledger", "equity", "simulation_runs"):
         conn.execute(f"DELETE FROM {table}")
 
 
+def reset_strategy_version(conn: sqlite3.Connection, strategy_id: str, version: str) -> None:
+    """Delete one strategy version's paper rows. Other versions, prices, and pump rows stay."""
+    rows = conn.execute(
+        """
+        SELECT simulation_runs.id
+        FROM simulation_runs
+        JOIN strategy_versions ON strategy_versions.id = simulation_runs.strategy_version_id
+        WHERE strategy_versions.strategy_id = ? AND strategy_versions.version = ?
+          AND COALESCE(simulation_runs.cash_era, '') != '300'
+        """,
+        (strategy_id, version),
+    ).fetchall()
+    run_ids = [int(row["id"]) for row in rows]
+    if not run_ids:
+        return
+    placeholders = ",".join("?" for _ in run_ids)
+    conn.execute(
+        f"""
+        DELETE FROM fills
+        WHERE order_id IN (SELECT id FROM orders WHERE simulation_run_id IN ({placeholders}))
+        """,
+        run_ids,
+    )
+    for table in ("orders", "decisions", "positions", "ledger", "equity"):
+        conn.execute(f"DELETE FROM {table} WHERE simulation_run_id IN ({placeholders})", run_ids)
+    conn.execute(f"DELETE FROM simulation_runs WHERE id IN ({placeholders})", run_ids)
+
+
+def ensure_account_rules(conn: sqlite3.Connection, recorded_at: datetime) -> None:
+    """Record account rule versions. Existing journal rows are not rewritten."""
+    label_cash_eras(conn)
+    prior = conn.execute(
+        """
+        SELECT created_at FROM strategy_versions
+        WHERE strategy_id = 'sma_crossover' AND version = '1.0.0'
+        """
+    ).fetchone()
+    previous_time = prior["created_at"] if prior is not None else iso_z(recorded_at)
+    preserved = [
+        {
+            "symbol": row["symbol"],
+            "direction": row["direction"],
+            "market": row["market"],
+            "opened_at": row["opened_at"],
+        }
+        for row in conn.execute(
+            """
+            SELECT positions.symbol, positions.direction, positions.opened_at,
+                   COALESCE(positions.market, 'crypto_spot') AS market
+            FROM positions
+            JOIN simulation_runs ON simulation_runs.id = positions.simulation_run_id
+            WHERE positions.status = 'open'
+              AND COALESCE(simulation_runs.book, 'preserved') = 'preserved'
+            ORDER BY positions.id
+            """
+        ).fetchall()
+    ]
+    _insert_config(
+        conn,
+        version="1.0.0",
+        recorded_at=previous_time,
+        summary="One open position for the whole paper portfolio, max 10 USD notional, 300 USD cash.",
+        parameters={
+            "max_open_positions": 1,
+            "scope": "whole_portfolio",
+            "max_notional_per_position": "10",
+            "shared_cash": "300",
+        },
+    )
+    _insert_config(
+        conn,
+        version="2.0.0",
+        recorded_at=iso_z(recorded_at),
+        summary=(
+            "One open position per market (crypto_spot, pumpfun, stocks). "
+            "Shared 300 USD cash. Each position max 10 USD notional. "
+            "Existing open positions stay in their market."
+        ),
+        parameters={
+            "max_open_positions_per_market": 1,
+            "markets": ["crypto_spot", "pumpfun", "stocks"],
+            "stocks": "reserved_no_data_no_orders",
+            "max_notional_per_position": "10",
+            "shared_cash": "300",
+            "previous_version": "1.0.0",
+            "grandfathered_open_positions": preserved,
+            "cash_era": "300",
+        },
+    )
+    _insert_config(
+        conn,
+        version="3.0.0",
+        recorded_at=iso_z(recorded_at),
+        summary=(
+            "Shared paper cash is 5000 USD. One open position per market still holds, "
+            "and the per-position cap stays 10 USD. "
+            "Earlier 300 USD books stay stored with cash_era 300 and are not recalculated."
+        ),
+        parameters={
+            "max_open_positions_per_market": 1,
+            "markets": ["crypto_spot", "pumpfun", "stocks"],
+            "stocks": "reserved_no_data_no_orders",
+            "max_notional_per_position": "10",
+            "shared_cash": "5000",
+            "cash_era": "5000",
+            "previous_version": "2.0.0",
+            "previous_shared_cash": "300",
+            "preserved_cash_era": "300",
+            "historical_open_positions_cash_era_300": preserved,
+        },
+    )
+
+
+def _insert_config(
+    conn: sqlite3.Connection,
+    *,
+    version: str,
+    recorded_at: str,
+    summary: str,
+    parameters: dict[str, object],
+) -> None:
+    conn.execute(
+        """
+        INSERT OR IGNORE INTO config_journal (
+            config_id, version, recorded_at, summary, parameters_json
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            "account_rules",
+            version,
+            recorded_at,
+            summary,
+            json.dumps(parameters, sort_keys=True),
+        ),
+    )
+
+
 def reset_pump_simulation(conn: sqlite3.Connection) -> None:
-    """Delete pump.fun paper rows. Snapshots, flags, prices, and the SMA book stay."""
-    for table in ("pump_fills", "pump_orders", "pump_decisions", "pump_positions", "pump_ledger", "pump_simulation_runs"):
-        conn.execute(f"DELETE FROM {table}")
+    """Delete current-era pump.fun paper rows. cash_era 300 rows, snapshots, and the SMA book stay."""
+    label_cash_eras(conn)
+    rows = conn.execute(
+        """
+        SELECT id FROM pump_simulation_runs
+        WHERE COALESCE(cash_era, '5000') != '300'
+        """
+    ).fetchall()
+    run_ids = [int(row["id"]) for row in rows]
+    if not run_ids:
+        return
+    placeholders = ",".join("?" for _ in run_ids)
+    conn.execute(
+        f"""
+        DELETE FROM pump_fills
+        WHERE order_id IN (SELECT id FROM pump_orders WHERE simulation_run_id IN ({placeholders}))
+        """,
+        run_ids,
+    )
+    for table in ("pump_orders", "pump_decisions", "pump_positions", "pump_ledger"):
+        conn.execute(f"DELETE FROM {table} WHERE simulation_run_id IN ({placeholders})", run_ids)
+    conn.execute(f"DELETE FROM pump_simulation_runs WHERE id IN ({placeholders})", run_ids)
 
 
 def upsert_strategy(

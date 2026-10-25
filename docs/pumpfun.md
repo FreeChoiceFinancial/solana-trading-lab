@@ -122,7 +122,7 @@ What the stored rows cannot support:
 
 Enter when a stored snapshot is on the SOL bonding curve, progress is at least 0.20 and below 0.90, the m5 window has at least 8 buys and 4 buyers, buys exceed sells, and every blocking flag is the stored value `false`. Blocking flags: `very_young` (under 120 seconds), `wash_trade_like` (at most 2 buyers and at least 15 buys in m5), `thin_liquidity` (a $10 buy moves the curve price more than 15% from spot, or indexed reserve USD is under 10 when the curve quote cannot be computed), `mint_authority_active`, and `freeze_authority_active`. A true flag rejects as `red_flag:<name>`. An unknown blocking flag rejects as `flag_unknown:<name>`. The three holder/creator flags above are informational and do not block, because the input is absent rather than safe.
 
-One open position. An open milestone-1 row in `positions` rejects a pump entry that otherwise passes, with `blocked_by_open_position`. Spendable cash starts at the latest SMA ledger `cash_free` when that book exists, otherwise 300 USD. Maximum notional is 10 USD and minimum is 1 USD. Pump cash is not a second 300 USD account, and it is not restated as combined equity while the SMA position is still open.
+One open position in market `pumpfun`. An open `crypto_spot` position does not take that slot. A current-era open `pumpfun` position rejects a new entry with `blocked_by_open_position`. Spendable cash starts at the cash_era 5000 book's free cash when that book exists, otherwise 5000 USD. The maximum notional stays 10 USD and the minimum stays 1 USD. `cash_era` 300 rows, including the preserved BTC short, stay stored and do not fund or block this market.
 
 The fill is the first later snapshot of that mint at least 30 seconds after the signal. Price impact is the buy formula on that later snapshot. Exit signals are take profit at +40% of curve proceeds versus entry notional, stop at -20%, 1,200 seconds after the fill, or graduation. The exit fill uses `paper_sell_v1` on a later on-curve snapshot. Graduation does not invent a PumpSwap exit price; the close is rejected as `graduated_no_curve_quote` and the position stays open with an unknown mark if the curve can no longer be quoted.
 
@@ -134,7 +134,7 @@ Hourly collection is too slow for this market. Coins move through the first page
 
 This repository is private. GitHub's free plan includes 2,000 Actions minutes per month for private repositories. The shortest cron interval GitHub accepts is 5 minutes, and scheduled workflows can be delayed or disabled after 60 days without repository activity. A 5-minute schedule is about 8,640 runs a month. Even a one-minute job would spend more than the free private quota. An hourly job of about two minutes is inside the quota (roughly 1,500 minutes) and still misses the launches this strategy is about.
 
-No schedule is enabled. `.github/workflows/pumpfun-collect.yml` is `workflow_dispatch` only, one poll, no paid runner and no RPC key. A local `python -m sollab pumpfun-collect --polls 2 --interval 35` is the way to store a delayed fill pair. That is still not a sub-second tape.
+`.github/workflows/paper-hourly.yml` runs a two-poll burst every six hours (`--polls 2 --interval 35`) and commits the database to the `data` branch. That is about 120 runs a month. At roughly two to two and a half minutes each, it is about 240–300 minutes, on top of the hourly BTC/SOL job. Together they stay inside the 2,000-minute private free tier if the jobs stay near those durations. It is still not a sub-second tape. The manual workflow remains `workflow_dispatch` with one poll. A local `python -m sollab pumpfun-collect --polls 2 --interval 35` is the same burst.
 
 ## Collection on 2026-10-25
 
@@ -142,7 +142,7 @@ No schedule is enabled. `.github/workflows/pumpfun-collect.yml` is `workflow_dis
 
 The keyless developer API returned HTTP 401 `API_KEY_REQUIRED` at `2026-10-25T16:48:49.678Z` and again at `2026-10-25T16:49:31.745Z`. The frontend coins URL returned HTTP 403 with a Cloudflare "Just a moment..." page both times. Those bodies were not parsed into rows.
 
-`pumpfun-run` at `2026-10-25T16:49:38.138288Z` produced no simulated fills. Of 80 decisions, 52 were `already_graduated`, 10 `progress_below_threshold`, 8 `buy_flow_below_threshold`, 8 `non_sol_quote`, and 2 `red_flag:wash_trade_like` (BRAVE, 77 buys and 1 buyer). None passed the entry filters. The milestone-1 book still had an open BTC short, which would have rejected a passing mint as `blocked_by_open_position`. A small labeled subset is in `data/samples/pumpfun_public_tokens.json`.
+`pumpfun-run` at `2026-10-25T16:49:38.138288Z` produced no simulated fills. Of 80 decisions, 52 were `already_graduated`, 10 `progress_below_threshold`, 8 `buy_flow_below_threshold`, 8 `non_sol_quote`, and 2 `red_flag:wash_trade_like` (BRAVE, 77 buys and 1 buyer). None passed the entry filters. The cash_era 300 book still had an open BTC short. Under account_rules 3.0.0 that short stays in the 300 USD book and does not block a pump.fun entry. A small labeled subset is in `data/samples/pumpfun_public_tokens.json`.
 
 ## Sources
 

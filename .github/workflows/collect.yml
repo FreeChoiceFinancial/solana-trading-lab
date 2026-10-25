@@ -1,4 +1,5 @@
-# Read-only public price collection. Dispatch only; a cron schedule is later work.
+# Manual read-only price collection.
+# The hourly schedule, paper replay, and data-branch commit live in paper-hourly.yml.
 name: collect
 
 on:

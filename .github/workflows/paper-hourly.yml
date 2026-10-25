@@ -1,0 +1,193 @@
+# Hourly public BTC/SOL collection plus a paper replay, and a short pump.fun burst.
+# State is committed to the data branch. No secrets, no live orders.
+# Schedule runs only after this file is on the default branch.
+name: paper-hourly
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+    - cron: "15 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      job:
+        description: Which paper job to run
+        type: choice
+        options:
+          - hourly
+          - pumpfun
+        default: hourly
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sollab-paper-state
+  cancel-in-progress: false
+
+jobs:
+  hourly:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'hourly')
+      || (github.event_name == 'schedule' && github.event.schedule == '0 * * * *')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: repo
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: repo/pyproject.toml
+      - name: Install
+        working-directory: repo
+        run: python -m pip install -e .
+      - name: Restore paper database
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          git fetch origin data
+          mkdir -p data
+          git cat-file blob origin/data:sollab.db > data/sollab.db
+      - name: Collect BTC and SOL
+        id: collect
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in 1 2 3; do
+            if python -m sollab collect --db data/sollab.db; then
+              ok=1
+              break
+            fi
+            echo "collect attempt ${attempt} failed"
+            sleep 20
+          done
+          if [ "$ok" != 1 ]; then
+            echo "::error::BTC/SOL collect failed after 3 attempts"
+            exit 1
+          fi
+      - name: Replay and report
+        if: success()
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          python -m sollab run-strategy --db data/sollab.db
+          python -m sollab report --db data/sollab.db --export-dir data/exports
+      - name: Publish durable state
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: state
+          fetch-depth: 1
+      - name: Commit paper state
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -f repo/data/sollab.db ]; then
+            echo "no database to publish"
+            exit 0
+          fi
+          cp repo/data/sollab.db state/sollab.db
+          if [ -f repo/data/exports/status.json ]; then
+            cp repo/data/exports/status.json state/status.json
+            cp repo/data/exports/status.md state/status.md
+          fi
+          cd state
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add -f sollab.db
+          if [ -f status.json ]; then
+            git add -f status.json status.md
+          fi
+          if git diff --cached --quiet; then
+            echo "state unchanged"
+            exit 0
+          fi
+          git commit -m "Update paper state"
+          git push origin HEAD:data
+
+  pumpfun:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'pumpfun')
+      || (github.event_name == 'schedule' && github.event.schedule == '15 */6 * * *')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: repo
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: repo/pyproject.toml
+      - name: Install
+        working-directory: repo
+        run: python -m pip install -e .
+      - name: Restore paper database
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          git fetch origin data
+          mkdir -p data
+          git cat-file blob origin/data:sollab.db > data/sollab.db
+      - name: Collect pump.fun burst
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in 1 2 3; do
+            if python -m sollab pumpfun-collect --db data/sollab.db --polls 2 --interval 35; then
+              ok=1
+              break
+            fi
+            echo "pumpfun-collect attempt ${attempt} failed"
+            sleep 20
+          done
+          if [ "$ok" != 1 ]; then
+            echo "::error::pump.fun collect failed after 3 attempts"
+            exit 1
+          fi
+      - name: Replay pump.fun and report
+        if: success()
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          python -m sollab pumpfun-run --db data/sollab.db
+          python -m sollab report --db data/sollab.db --export-dir data/exports
+      - name: Publish durable state
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: state
+          fetch-depth: 1
+      - name: Commit paper state
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -f repo/data/sollab.db ]; then
+            echo "no database to publish"
+            exit 0
+          fi
+          cp repo/data/sollab.db state/sollab.db
+          if [ -f repo/data/exports/status.json ]; then
+            cp repo/data/exports/status.json state/status.json
+            cp repo/data/exports/status.md state/status.md
+          fi
+          cd state
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add -f sollab.db
+          if [ -f status.json ]; then
+            git add -f status.json status.md
+          fi
+          if git diff --cached --quiet; then
+            echo "state unchanged"
+            exit 0
+          fi
+          git commit -m "Update paper state"
+          git push origin HEAD:data
