@@ -1,6 +1,8 @@
 # Hourly public BTC/SOL collection plus a paper replay, and a short pump.fun burst.
 # State is committed to the data branch. No secrets, no live orders.
-# Schedule runs only after this file is on the default branch.
+# GitHub registers the schedule and workflow_dispatch only after this
+# file is on the default branch. A ref other than the default branch
+# cannot dispatch this workflow until then.
 name: paper-hourly
 
 on:

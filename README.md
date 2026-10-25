@@ -84,7 +84,7 @@ Private repositories get 2,000 Actions minutes per month. `.github/workflows/pap
 | BTC/SOL collect, replay, report | hourly | 720 | 1.0–1.5 | 720–1,080 |
 | pump.fun burst, 2 polls, 35s apart | every 6 hours | 120 | 2.0–2.5 | 240–300 |
 
-Scheduled total is about 960–1,380 minutes, leaving a few hundred minutes for tests and manual runs. Each job's timeout is 8 minutes so a hung run cannot consume the default six-hour job limit. The schedule starts once this workflow file is on the repository's default branch. `workflow_dispatch` can run it from `dev` before that.
+Scheduled total is about 960–1,380 minutes, leaving a few hundred minutes for tests and manual runs. Each job's timeout is 8 minutes so a hung run cannot consume the default six-hour job limit. GitHub registers both the schedule and `workflow_dispatch` only after `paper-hourly.yml` is on the default branch (`main`). A dispatch from `dev` is not available before that.
 
 ## Tests
 
