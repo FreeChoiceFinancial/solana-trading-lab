@@ -22,12 +22,13 @@ Forward paper
 Rollup closed=2 win_rate=0.00000000 profit_factor=0.00000000 realized=-0.38702477 by_direction={'long': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38702477'}} by_market={'crypto_spot': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38702477'}} by_strategy={'sma_crossover 1.1.0': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38702477'}}
 
 pump.fun
-- run=2026-10-25T16:49:38.138288Z equity=287.11542881 realized=0 unrealized=0 fees=0.00000000 open=None
+- run=2026-10-25T20:52:47.478364Z equity=5000.00000000 realized=0 unrealized=0 fees=0.00000000 open=None
 
 Last price collection 2026-10-25T20:20:08.802339Z
-Last pump.fun collection 2026-10-25T16:49:32.334254Z
-Stored errors 4
+Last pump.fun collection 2026-10-25T20:52:47.323916Z
+Stored errors 8
+- 2026-10-25T20:52:47.331339Z pump_frontend: unexpected HTTP 200; body not ingested
+- 2026-10-25T20:52:47.331339Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-25T20:52:46.783Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
+- 2026-10-25T20:52:04.846004Z pump_frontend: unexpected HTTP 200; body not ingested
+- 2026-10-25T20:52:04.846004Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-25T20:52:04.273Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
 - 2026-10-25T16:49:32.338329Z pump_frontend: HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal
-- 2026-10-25T16:49:32.338329Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-25T16:49:31.745Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
-- 2026-10-25T16:48:50.250134Z pump_frontend: HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal
-- 2026-10-25T16:48:50.250134Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-25T16:48:49.678Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}

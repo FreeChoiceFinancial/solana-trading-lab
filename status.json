@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-25T20:20:09.017385Z",
+  "generated_at": "2026-10-25T20:52:47.612187Z",
   "account_rules": {
     "version": "3.0.0",
     "recorded_at": "2026-10-25T17:15:08.218215Z",
@@ -413,9 +413,9 @@
     "market": "pumpfun",
     "period": "forward",
     "book": "live",
-    "cash_era": "300",
-    "recorded_at": "2026-10-25T16:49:38.138288Z",
-    "equity": "287.11542881",
+    "cash_era": "5000",
+    "recorded_at": "2026-10-25T20:52:47.478364Z",
+    "equity": "5000.00000000",
     "realized_pnl": "0",
     "unrealized_pnl": "0",
     "fees": "0.00000000",
@@ -427,11 +427,31 @@
   },
   "last_successful_collection": {
     "prices_fetched_at": "2026-10-25T20:20:08.802339Z",
-    "pumpfun_fetched_at": "2026-10-25T16:49:32.334254Z"
+    "pumpfun_fetched_at": "2026-10-25T20:52:47.323916Z"
   },
   "errors": {
-    "count": 4,
+    "count": 8,
     "latest": [
+      {
+        "ts": "2026-10-25T20:52:47.331339Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-25T20:52:47.331339Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T20:52:46.783Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
+      {
+        "ts": "2026-10-25T20:52:04.846004Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-25T20:52:04.846004Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T20:52:04.273Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
       {
         "ts": "2026-10-25T16:49:32.338329Z",
         "component": "pump_frontend",
