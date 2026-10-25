@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sollab"
+version = "0.1.0"
+description = "Research-only paper trading lab for public BTC and SOL prices. No live orders."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "httpx==0.28.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.3.5",
+]
+
+[project.scripts]
+sollab = "sollab.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+  "network: calls allowlisted public market-data APIs; skip with -m 'not network' or SOLLAB_SKIP_NETWORK=1",
+]
