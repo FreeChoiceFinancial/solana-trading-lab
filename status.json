@@ -1,0 +1,449 @@
+{
+  "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
+  "generated_at": "2026-10-25T17:15:08.340554Z",
+  "account_rules": {
+    "version": "3.0.0",
+    "recorded_at": "2026-10-25T17:15:08.218215Z",
+    "summary": "Shared paper cash is 5000 USD. One open position per market still holds, and the per-position cap stays 10 USD. Earlier 300 USD books stay stored with cash_era 300 and are not recalculated.",
+    "parameters": {
+      "cash_era": "5000",
+      "historical_open_positions_cash_era_300": [
+        {
+          "direction": "short",
+          "market": "crypto_spot",
+          "opened_at": "2026-10-25T09:00:00Z",
+          "symbol": "BTC"
+        }
+      ],
+      "markets": [
+        "crypto_spot",
+        "pumpfun",
+        "stocks"
+      ],
+      "max_notional_per_position": "10",
+      "max_open_positions_per_market": 1,
+      "preserved_cash_era": "300",
+      "previous_shared_cash": "300",
+      "previous_version": "2.0.0",
+      "shared_cash": "5000",
+      "stocks": "reserved_no_data_no_orders"
+    }
+  },
+  "shared_account": {
+    "account_rules_version": "3.0.0",
+    "cash_era": "5000",
+    "starting_cash": "5000",
+    "cash_free": "5000",
+    "locked_notional": "0",
+    "equity": "5000",
+    "realized_pnl": "0",
+    "unrealized_pnl": "0",
+    "fees": "0",
+    "max_notional_per_position": "10",
+    "open_positions": [],
+    "historical_300": {
+      "cash_era": "300",
+      "open_positions": [
+        {
+          "market": "crypto_spot",
+          "book": "preserved",
+          "cash_era": "300",
+          "strategy_id": "sma_crossover",
+          "strategy_version": "1.0.0",
+          "direction": "short",
+          "symbol": "BTC",
+          "entry_notional": "9.99974888",
+          "opened_at": "2026-10-25T09:00:00Z"
+        }
+      ],
+      "run_count": 1
+    },
+    "note": "Current paper account starts at 5000 USD under account_rules 3.0.0. The cap is still 10 USD notional per market. cash_era 300 results are preserved and are not part of this cash balance."
+  },
+  "historical_300": {
+    "cash_era": "300",
+    "label": "300_usd_starting_cash",
+    "note": "Preserved paper results from the 300 USD account. Not recalculated at 5000 USD.",
+    "runs": [
+      {
+        "strategy_id": "sma_crossover",
+        "strategy_version": "1.0.0",
+        "strategy_name": "Hourly SMA crossover",
+        "period": "full_window",
+        "book": "preserved",
+        "fill_model": "same_bar_close",
+        "cash_era": "300",
+        "starting_cash": "300",
+        "recorded_at": "2026-10-25T16:18:11.670919Z",
+        "window": null,
+        "equity": "297.07231211",
+        "realized_pnl": "-2.82482382",
+        "unrealized_pnl": "-0.10286407",
+        "fees": "1.97912452",
+        "win_rate": "0.06250000",
+        "profit_factor": "0.02007722",
+        "max_drawdown": "3.11461325",
+        "max_drawdown_fraction": "0.01037566",
+        "closed_trades": 16,
+        "open_position": "short BTC",
+        "open_positions": [
+          {
+            "market": "crypto_spot",
+            "symbol": "BTC",
+            "direction": "short",
+            "entry_notional": "9.99974888",
+            "opened_at": "2026-10-25T09:00:00Z"
+          }
+        ],
+        "by_direction": {
+          "short": {
+            "closed_trades": 9,
+            "wins": 1,
+            "losses": 8,
+            "win_rate": "0.11111111",
+            "profit_factor": "0.03798996",
+            "realized_pnl": "-1.46559451",
+            "gross_profit": "0.05787661",
+            "gross_loss": "1.52347112"
+          },
+          "long": {
+            "closed_trades": 7,
+            "wins": 0,
+            "losses": 7,
+            "win_rate": "0.00000000",
+            "profit_factor": "0.00000000",
+            "realized_pnl": "-1.35922931",
+            "gross_profit": "0.00000000",
+            "gross_loss": "1.35922931"
+          }
+        },
+        "by_market": {
+          "crypto_spot": {
+            "closed_trades": 16,
+            "wins": 1,
+            "losses": 15,
+            "win_rate": "0.06250000",
+            "profit_factor": "0.02007722",
+            "realized_pnl": "-2.82482382",
+            "gross_profit": "0.05787661",
+            "gross_loss": "2.88270043"
+          }
+        }
+      }
+    ]
+  },
+  "backtest": [
+    {
+      "strategy_id": "sma_crossover",
+      "strategy_version": "1.1.0",
+      "strategy_name": "Hourly SMA crossover",
+      "period": "train",
+      "book": "experiment",
+      "fill_model": "next_candle_open",
+      "cash_era": "5000",
+      "starting_cash": "5000",
+      "recorded_at": "2026-10-25T17:15:08.218215Z",
+      "window": {
+        "fill_end": "2026-10-19T20:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "train",
+        "signal_end": "2026-10-19T19:00:00Z",
+        "signal_start": "2026-10-11T03:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      },
+      "equity": "4997.68108406",
+      "realized_pnl": "-2.24416309",
+      "unrealized_pnl": "-0.07475285",
+      "fees": "1.37954745",
+      "win_rate": "0.00000000",
+      "profit_factor": "0.00000000",
+      "max_drawdown": "2.50339449",
+      "max_drawdown_fraction": "0.00050066",
+      "closed_trades": 11,
+      "open_position": "short BTC",
+      "open_positions": [
+        {
+          "market": "crypto_spot",
+          "symbol": "BTC",
+          "direction": "short",
+          "entry_notional": "9.99964229",
+          "opened_at": "2026-10-19T16:00:00Z"
+        }
+      ],
+      "by_direction": {
+        "short": {
+          "closed_trades": 5,
+          "wins": 0,
+          "losses": 5,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-1.02997447",
+          "gross_profit": "0.00000000",
+          "gross_loss": "1.02997447"
+        },
+        "long": {
+          "closed_trades": 6,
+          "wins": 0,
+          "losses": 6,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-1.21418862",
+          "gross_profit": "0.00000000",
+          "gross_loss": "1.21418862"
+        }
+      },
+      "by_market": {
+        "crypto_spot": {
+          "closed_trades": 11,
+          "wins": 0,
+          "losses": 11,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-2.24416309",
+          "gross_profit": "0.00000000",
+          "gross_loss": "2.24416309"
+        }
+      }
+    },
+    {
+      "strategy_id": "sma_crossover",
+      "strategy_version": "1.1.0",
+      "strategy_name": "Hourly SMA crossover",
+      "period": "validation",
+      "book": "experiment",
+      "fill_model": "next_candle_open",
+      "cash_era": "5000",
+      "starting_cash": "5000",
+      "recorded_at": "2026-10-25T17:15:08.218215Z",
+      "window": {
+        "fill_end": "2026-10-22T18:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "validation",
+        "signal_end": "2026-10-22T17:00:00Z",
+        "signal_start": "2026-10-19T21:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      },
+      "equity": "4999.64037113",
+      "realized_pnl": "-0.35962887",
+      "unrealized_pnl": "0",
+      "fees": "0.23927524",
+      "win_rate": "0.00000000",
+      "profit_factor": "0.00000000",
+      "max_drawdown": "0.35962887",
+      "max_drawdown_fraction": "0.00007193",
+      "closed_trades": 2,
+      "open_position": null,
+      "open_positions": [],
+      "by_direction": {
+        "long": {
+          "closed_trades": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-0.35962887",
+          "gross_profit": "0.00000000",
+          "gross_loss": "0.35962887"
+        }
+      },
+      "by_market": {
+        "crypto_spot": {
+          "closed_trades": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-0.35962887",
+          "gross_profit": "0.00000000",
+          "gross_loss": "0.35962887"
+        }
+      }
+    }
+  ],
+  "forward": [
+    {
+      "strategy_id": "sma_crossover",
+      "strategy_version": "1.1.0",
+      "strategy_name": "Hourly SMA crossover",
+      "period": "forward",
+      "book": "experiment",
+      "fill_model": "next_candle_open",
+      "cash_era": "5000",
+      "starting_cash": "5000",
+      "recorded_at": "2026-10-25T17:15:08.218215Z",
+      "window": {
+        "fill_end": "2026-10-25T15:00:00Z",
+        "gap_bars": 1,
+        "parameters_fit_on_period": false,
+        "period": "forward",
+        "signal_end": "2026-10-25T15:00:00Z",
+        "signal_start": "2026-10-22T19:00:00Z",
+        "train_percent": 60,
+        "validation_percent": 20
+      },
+      "equity": "4999.61297523",
+      "realized_pnl": "-0.38702477",
+      "unrealized_pnl": "0",
+      "fees": "0.23910572",
+      "win_rate": "0.00000000",
+      "profit_factor": "0.00000000",
+      "max_drawdown": "0.39883804",
+      "max_drawdown_fraction": "0.00007977",
+      "closed_trades": 2,
+      "open_position": null,
+      "open_positions": [],
+      "by_direction": {
+        "long": {
+          "closed_trades": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-0.38702477",
+          "gross_profit": "0.00000000",
+          "gross_loss": "0.38702477"
+        }
+      },
+      "by_market": {
+        "crypto_spot": {
+          "closed_trades": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-0.38702477",
+          "gross_profit": "0.00000000",
+          "gross_loss": "0.38702477"
+        }
+      }
+    }
+  ],
+  "backtest_rollup": {
+    "closed_trades": 13,
+    "wins": 0,
+    "losses": 13,
+    "win_rate": "0.00000000",
+    "profit_factor": "0.00000000",
+    "realized_pnl": "-2.60379196",
+    "by_direction": {
+      "short": {
+        "closed_trades": 5,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-1.02997447"
+      },
+      "long": {
+        "closed_trades": 8,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-1.57381749"
+      }
+    },
+    "by_market": {
+      "crypto_spot": {
+        "closed_trades": 13,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-2.60379196"
+      }
+    },
+    "by_strategy": {
+      "sma_crossover 1.1.0": {
+        "closed_trades": 13,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-2.60379196"
+      }
+    }
+  },
+  "forward_rollup": {
+    "closed_trades": 2,
+    "wins": 0,
+    "losses": 2,
+    "win_rate": "0.00000000",
+    "profit_factor": "0.00000000",
+    "realized_pnl": "-0.38702477",
+    "by_direction": {
+      "long": {
+        "closed_trades": 2,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-0.38702477"
+      }
+    },
+    "by_market": {
+      "crypto_spot": {
+        "closed_trades": 2,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-0.38702477"
+      }
+    },
+    "by_strategy": {
+      "sma_crossover 1.1.0": {
+        "closed_trades": 2,
+        "wins": 0,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-0.38702477"
+      }
+    }
+  },
+  "pumpfun": {
+    "strategy_id": "bonding_curve_momentum",
+    "strategy_version": "1.0.0",
+    "market": "pumpfun",
+    "period": "forward",
+    "book": "live",
+    "cash_era": "300",
+    "recorded_at": "2026-10-25T16:49:38.138288Z",
+    "equity": "287.11542881",
+    "realized_pnl": "0",
+    "unrealized_pnl": "0",
+    "fees": "0.00000000",
+    "win_rate": null,
+    "profit_factor": null,
+    "closed_trades": 0,
+    "open_position": null,
+    "by_direction": {}
+  },
+  "last_successful_collection": {
+    "prices_fetched_at": "2026-10-25T16:17:34.690833Z",
+    "pumpfun_fetched_at": "2026-10-25T16:49:32.334254Z"
+  },
+  "errors": {
+    "count": 4,
+    "latest": [
+      {
+        "ts": "2026-10-25T16:49:32.338329Z",
+        "component": "pump_frontend",
+        "message": "HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
+      },
+      {
+        "ts": "2026-10-25T16:49:32.338329Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T16:49:31.745Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
+      {
+        "ts": "2026-10-25T16:48:50.250134Z",
+        "component": "pump_frontend",
+        "message": "HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
+      },
+      {
+        "ts": "2026-10-25T16:48:50.250134Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T16:48:49.678Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      }
+    ]
+  }
+}
