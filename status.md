@@ -18,13 +18,13 @@ Backtest (cash era 5000)
 Rollup closed=13 win_rate=0.00000000 profit_factor=0.00000000 realized=-2.60379196 by_direction={'short': {'closed_trades': 5, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-1.02997447'}, 'long': {'closed_trades': 8, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-1.57381749'}} by_market={'crypto_spot': {'closed_trades': 13, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-2.60379196'}} by_strategy={'sma_crossover 1.1.0': {'closed_trades': 13, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-2.60379196'}}
 
 Forward paper
-- cash_era=5000 sma_crossover 1.1.0 period=forward book=experiment equity=4999.61297523 realized=-0.38702477 unrealized=0 fees=0.23910572 win_rate=0.00000000 profit_factor=0.00000000 max_drawdown=0.39883804 open=None
+- cash_era=5000 sma_crossover 1.1.0 period=forward book=experiment equity=4999.53592599 realized=-0.38702477 unrealized=-0.07704924 fees=0.29910558 win_rate=0.00000000 profit_factor=0.00000000 max_drawdown=0.47588728 open=long BTC
 Rollup closed=2 win_rate=0.00000000 profit_factor=0.00000000 realized=-0.38702477 by_direction={'long': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38702477'}} by_market={'crypto_spot': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38702477'}} by_strategy={'sma_crossover 1.1.0': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38702477'}}
 
 pump.fun
 - run=2026-10-25T16:49:38.138288Z equity=287.11542881 realized=0 unrealized=0 fees=0.00000000 open=None
 
-Last price collection 2026-10-25T19:53:13.866350Z
+Last price collection 2026-10-25T20:20:08.802339Z
 Last pump.fun collection 2026-10-25T16:49:32.334254Z
 Stored errors 4
 - 2026-10-25T16:49:32.338329Z pump_frontend: HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scal

@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-25T19:53:15.177365Z",
+  "generated_at": "2026-10-25T20:20:09.017385Z",
   "account_rules": {
     "version": "3.0.0",
     "recorded_at": "2026-10-25T17:15:08.218215Z",
@@ -142,7 +142,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-25T19:53:14.349084Z",
+      "recorded_at": "2026-10-25T20:20:08.907110Z",
       "window": {
         "fill_end": "2026-10-19T22:00:00Z",
         "gap_bars": 1,
@@ -216,7 +216,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-25T19:53:14.349084Z",
+      "recorded_at": "2026-10-25T20:20:08.907110Z",
       "window": {
         "fill_end": "2026-10-22T21:00:00Z",
         "gap_bars": 1,
@@ -274,28 +274,36 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-25T19:53:14.349084Z",
+      "recorded_at": "2026-10-25T20:20:08.907110Z",
       "window": {
-        "fill_end": "2026-10-25T18:00:00Z",
+        "fill_end": "2026-10-25T19:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-25T18:00:00Z",
+        "signal_end": "2026-10-25T19:00:00Z",
         "signal_start": "2026-10-22T22:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.61297523",
+      "equity": "4999.53592599",
       "realized_pnl": "-0.38702477",
-      "unrealized_pnl": "0",
-      "fees": "0.23910572",
+      "unrealized_pnl": "-0.07704924",
+      "fees": "0.29910558",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
-      "max_drawdown": "0.39883804",
-      "max_drawdown_fraction": "0.00007977",
+      "max_drawdown": "0.47588728",
+      "max_drawdown_fraction": "0.00009518",
       "closed_trades": 2,
-      "open_position": null,
-      "open_positions": [],
+      "open_position": "long BTC",
+      "open_positions": [
+        {
+          "market": "crypto_spot",
+          "symbol": "BTC",
+          "direction": "long",
+          "entry_notional": "9.99997651",
+          "opened_at": "2026-10-25T19:00:00Z"
+        }
+      ],
       "by_direction": {
         "long": {
           "closed_trades": 2,
@@ -418,7 +426,7 @@
     "by_direction": {}
   },
   "last_successful_collection": {
-    "prices_fetched_at": "2026-10-25T19:53:13.866350Z",
+    "prices_fetched_at": "2026-10-25T20:20:08.802339Z",
     "pumpfun_fetched_at": "2026-10-25T16:49:32.334254Z"
   },
   "errors": {
