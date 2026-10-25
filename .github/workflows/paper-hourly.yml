@@ -1,4 +1,4 @@
-# Hourly public BTC/SOL collection plus a paper replay, and a short pump.fun burst.
+# Hourly public BTC/SOL and metals collection plus a paper replay, and a pump.fun burst every two hours.
 # State is committed to the data branch. No secrets, no live orders.
 # GitHub registers the schedule and workflow_dispatch only after this
 # file is on the default branch. A ref other than the default branch
@@ -8,7 +8,7 @@ name: paper-hourly
 on:
   schedule:
     - cron: "0 * * * *"
-    - cron: "15 */6 * * *"
+    - cron: "15 */2 * * *"
   workflow_dispatch:
     inputs:
       job:
@@ -76,6 +76,8 @@ jobs:
         run: |
           set -euo pipefail
           python -m sollab run-strategy --db data/sollab.db
+          python -m sollab metals-collect --db data/sollab.db || echo "::warning::metals collect failed"
+          python -m sollab metals-run --db data/sollab.db || echo "::warning::metals replay failed"
           python -m sollab report --db data/sollab.db --export-dir data/exports
       - name: Publish durable state
         if: always()
@@ -114,7 +116,7 @@ jobs:
   pumpfun:
     if: >-
       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'pumpfun')
-      || (github.event_name == 'schedule' && github.event.schedule == '15 */6 * * *')
+      || (github.event_name == 'schedule' && github.event.schedule == '15 */2 * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:

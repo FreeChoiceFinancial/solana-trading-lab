@@ -1,9 +1,9 @@
 """Machine-readable paper-account status.
 
-Current books use account_rules 3.0.0: 5000 USD shared cash, one open position
-per market, 10 USD notional cap. cash_era 300 rows are the earlier account.
-They stay in historical_300 and are not mixed into the current backtest or
-forward rollups. Experiment replays do not close the historical book.
+Current books use account_rules 4.0.0: 5000 USD shared cash, one open position
+per market including metals, 10 USD notional cap. cash_era 300 rows are the
+earlier account. They stay in historical_300 and are not mixed into the
+current backtest or forward rollups.
 """
 
 from __future__ import annotations
@@ -14,7 +14,13 @@ from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
-from sollab.constants import CASH_ERA_CURRENT, CASH_ERA_PRIOR, DISCLAIMER, STARTING_CASH
+from sollab.constants import (
+    ACCOUNT_RULES_VERSION,
+    CASH_ERA_CURRENT,
+    CASH_ERA_PRIOR,
+    DISCLAIMER,
+    STARTING_CASH,
+)
 from sollab.storage import ensure_account_rules
 from sollab.timeutil import iso_z
 
@@ -41,6 +47,7 @@ def build_status(conn: sqlite3.Connection, *, recorded_at: datetime | None = Non
     current = [run for run in runs if run["cash_era"] != CASH_ERA_PRIOR]
     backtest = [run for run in current if run["period"] != "forward"]
     forward = [run for run in current if run["period"] == "forward"]
+    metals = [run for run in current if str(run["strategy_id"]).startswith("metals_")]
     return {
         "disclaimer": DISCLAIMER,
         "generated_at": iso_z(recorded_at),
@@ -57,11 +64,25 @@ def build_status(conn: sqlite3.Connection, *, recorded_at: datetime | None = Non
         "backtest_rollup": _rollup(backtest),
         "forward_rollup": _rollup(forward),
         "pumpfun": _pump_status(conn),
+        "metals": {
+            "market": "metals",
+            "max_notional_per_position": "10",
+            "note": "One metals slot on the shared 5000 USD account. Runs below are also inside backtest and forward.",
+            "runs": metals,
+        },
         "last_successful_collection": {
             "prices_fetched_at": _max_text(conn, "SELECT MAX(fetched_at) AS ts FROM prices"),
             "pumpfun_fetched_at": _max_text(conn, "SELECT MAX(fetched_at) AS ts FROM pump_snapshots"),
+            "metals_fetched_at": _max_text(
+                conn,
+                """
+                SELECT MAX(fetched_at) AS ts FROM prices
+                WHERE symbol IN ('PAXG', 'XAUT', 'GLD', 'SLV', 'PPLT', 'PALL', 'GC', 'SI', 'PL', 'PA')
+                """,
+            ),
         },
         "errors": _errors(conn),
+        "schedule": _schedule(),
     }
 
 
@@ -145,6 +166,18 @@ def format_status_markdown(status: dict[str, object]) -> str:
             f"fees={pump.get('fees')} open={pump.get('open_position')}",
         ]
     )
+    metals_status = status.get("metals")
+    lines.extend(["", "Metals"])
+    if not isinstance(metals_status, dict) or not metals_status.get("runs"):
+        lines.append("- none")
+    else:
+        lines.append(str(metals_status.get("note")))
+        for run in metals_status["runs"]:
+            assert isinstance(run, dict)
+            lines.append(
+                "- {strategy_id} {strategy_version} period={period} equity={equity} "
+                "realized={realized_pnl} unrealized={unrealized_pnl} open={open_position}".format(**run)
+            )
     collected = status["last_successful_collection"]
     assert isinstance(collected, dict)
     errors = status["errors"]
@@ -152,8 +185,10 @@ def format_status_markdown(status: dict[str, object]) -> str:
     lines.extend(
         [
             "",
+            _schedule_line(status),
             f"Last price collection {collected.get('prices_fetched_at')}",
             f"Last pump.fun collection {collected.get('pumpfun_fetched_at')}",
+            f"Last metals collection {collected.get('metals_fetched_at')}",
             f"Stored errors {errors.get('count')}",
         ]
     )
@@ -367,7 +402,7 @@ def _shared_account(conn: sqlite3.Connection, historical_runs: list[dict[str, ob
     starting = format(STARTING_CASH, "f")
     if run is None:
         account = {
-            "account_rules_version": "3.0.0",
+            "account_rules_version": ACCOUNT_RULES_VERSION,
             "cash_era": CASH_ERA_CURRENT,
             "starting_cash": starting,
             "cash_free": starting,
@@ -401,7 +436,7 @@ def _shared_account(conn: sqlite3.Connection, historical_runs: list[dict[str, ob
             int(run["id"]),
         )
         account = {
-            "account_rules_version": "3.0.0",
+            "account_rules_version": ACCOUNT_RULES_VERSION,
             "cash_era": CASH_ERA_CURRENT,
             "starting_cash": run["starting_cash"],
             "cash_free": ledger["cash_free"] if ledger is not None else run["starting_cash"],
@@ -421,8 +456,8 @@ def _shared_account(conn: sqlite3.Connection, historical_runs: list[dict[str, ob
         "run_count": len(historical_runs),
     }
     account["note"] = (
-        "Current paper account starts at 5000 USD under account_rules 3.0.0. "
-        "The cap is still 10 USD notional per market. "
+        "Current paper account starts at 5000 USD under account_rules 4.0.0. "
+        "The cap is still 10 USD notional per market, including metals. "
         "cash_era 300 results are preserved and are not part of this cash balance."
     )
     return account
@@ -464,6 +499,29 @@ def _open_positions(
             (cash_era,),
         ).fetchall()
     ]
+
+
+def _schedule() -> dict[str, str]:
+    return {
+        "timezone": "UTC",
+        "hourly_cron": "0 * * * *",
+        "pumpfun_cron": "15 */2 * * *",
+        "pumpfun_burst": "2 polls, 35 seconds apart",
+        "note": (
+            "Hourly job collects BTC/SOL and metals, then replays. "
+            "Pump.fun burst runs every two hours. Paper only."
+        ),
+    }
+
+
+def _schedule_line(status: dict[str, object]) -> str:
+    schedule = status.get("schedule")
+    if not isinstance(schedule, dict):
+        schedule = _schedule()
+    return (
+        f"Schedule {schedule.get('timezone')}: hourly {schedule.get('hourly_cron')}; "
+        f"pump.fun burst {schedule.get('pumpfun_cron')}"
+    )
 
 
 def _pump_status(conn: sqlite3.Connection) -> dict[str, object]:
