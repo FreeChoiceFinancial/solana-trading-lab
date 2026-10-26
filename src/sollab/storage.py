@@ -403,6 +403,12 @@ CREATE TABLE IF NOT EXISTS pump_ledger (
 CREATE INDEX IF NOT EXISTS idx_pump_snapshots_mint
 ON pump_snapshots(mint, fetched_at);
 
+CREATE TABLE IF NOT EXISTS job_runs (
+    id INTEGER PRIMARY KEY,
+    job TEXT NOT NULL,
+    recorded_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS config_journal (
     id INTEGER PRIMARY KEY,
     config_id TEXT NOT NULL,
@@ -434,6 +440,7 @@ TABLES = (
     "pump_fills",
     "pump_positions",
     "pump_ledger",
+    "job_runs",
     "config_journal",
 )
 

@@ -1,4 +1,6 @@
-# Hourly public BTC/SOL and metals collection plus a paper replay, and a pump.fun burst every two hours.
+# Off-peak redundant crons. :07/:37 collect BTC, SOL, and metals.
+# Pump.fun bursts at :23 every two hours, with a :53 backup.
+# A completed run inside the window makes the queued start a no-op.
 # State is committed to the data branch. No secrets, no live orders.
 # GitHub registers the schedule and workflow_dispatch only after this
 # file is on the default branch. A ref other than the default branch
@@ -7,8 +9,9 @@ name: paper-hourly
 
 on:
   schedule:
-    - cron: "0 * * * *"
-    - cron: "15 */2 * * *"
+    - cron: "7,37 * * * *"
+    - cron: "23 */2 * * *"
+    - cron: "53 */2 * * *"
   workflow_dispatch:
     inputs:
       job:
@@ -22,6 +25,8 @@ on:
 permissions:
   contents: write
 
+# One paper workflow at a time. The next cron waits instead of overlapping,
+# then job-gate skips it when this window already completed.
 concurrency:
   group: sollab-paper-state
   cancel-in-progress: false
@@ -30,7 +35,7 @@ jobs:
   hourly:
     if: >-
       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'hourly')
-      || (github.event_name == 'schedule' && github.event.schedule == '0 * * * *')
+      || (github.event_name == 'schedule' && github.event.schedule == '7,37 * * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -52,8 +57,17 @@ jobs:
           git fetch origin data
           mkdir -p data
           git cat-file blob origin/data:sollab.db > data/sollab.db
+      - name: Skip when this hour already completed
+        id: gate
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          decision=$(python -m sollab job-gate --job hourly --db data/sollab.db)
+          echo "decision=${decision}" >> "$GITHUB_OUTPUT"
+          echo "hourly gate: ${decision}"
       - name: Collect BTC and SOL
         id: collect
+        if: steps.gate.outputs.decision == 'run'
         working-directory: repo
         run: |
           set -euo pipefail
@@ -71,13 +85,14 @@ jobs:
             exit 1
           fi
       - name: Replay and report
-        if: success()
+        if: steps.gate.outputs.decision == 'run' && success()
         working-directory: repo
         run: |
           set -euo pipefail
           python -m sollab run-strategy --db data/sollab.db
           python -m sollab metals-collect --db data/sollab.db || echo "::warning::metals collect failed"
           python -m sollab metals-run --db data/sollab.db || echo "::warning::metals replay failed"
+          python -m sollab job-record --job hourly --db data/sollab.db
           python -m sollab report --db data/sollab.db --export-dir data/exports
       - name: Publish durable state
         if: always()
@@ -116,7 +131,8 @@ jobs:
   pumpfun:
     if: >-
       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'pumpfun')
-      || (github.event_name == 'schedule' && github.event.schedule == '15 */2 * * *')
+      || (github.event_name == 'schedule' && github.event.schedule == '23 */2 * * *')
+      || (github.event_name == 'schedule' && github.event.schedule == '53 */2 * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -138,7 +154,16 @@ jobs:
           git fetch origin data
           mkdir -p data
           git cat-file blob origin/data:sollab.db > data/sollab.db
+      - name: Skip when this pump window already completed
+        id: gate
+        working-directory: repo
+        run: |
+          set -euo pipefail
+          decision=$(python -m sollab job-gate --job pumpfun --db data/sollab.db)
+          echo "decision=${decision}" >> "$GITHUB_OUTPUT"
+          echo "pump.fun gate: ${decision}"
       - name: Collect pump.fun burst
+        if: steps.gate.outputs.decision == 'run'
         working-directory: repo
         run: |
           set -euo pipefail
@@ -156,11 +181,12 @@ jobs:
             exit 1
           fi
       - name: Replay pump.fun and report
-        if: success()
+        if: steps.gate.outputs.decision == 'run' && success()
         working-directory: repo
         run: |
           set -euo pipefail
           python -m sollab pumpfun-run --db data/sollab.db
+          python -m sollab job-record --job pumpfun --db data/sollab.db
           python -m sollab report --db data/sollab.db --export-dir data/exports
       - name: Publish durable state
         if: always()
