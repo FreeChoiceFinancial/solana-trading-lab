@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-26T01:06:06.594875Z",
+  "generated_at": "2026-10-26T04:55:07.322496Z",
   "account_rules": {
     "version": "4.0.0",
     "recorded_at": "2026-10-25T23:00:08.898034Z",
@@ -1007,15 +1007,15 @@
     "period": "forward",
     "book": "live",
     "cash_era": "5000",
-    "recorded_at": "2026-10-25T20:52:47.478364Z",
-    "equity": "5000.00000000",
+    "recorded_at": "2026-10-26T04:55:07.180556Z",
+    "equity": "4999.61689883",
     "realized_pnl": "0",
-    "unrealized_pnl": "0",
-    "fees": "0.00000000",
+    "unrealized_pnl": "-0.38310117",
+    "fees": "0.00050575",
     "win_rate": null,
     "profit_factor": null,
     "closed_trades": 0,
-    "open_position": null,
+    "open_position": "CHwssnZnBZ47sXE88GvTSBXKoF7ZfERRkcnUM7B3pump",
     "by_direction": {}
   },
   "metals": {
@@ -1563,12 +1563,32 @@
   },
   "last_successful_collection": {
     "prices_fetched_at": "2026-10-26T01:06:06.026591Z",
-    "pumpfun_fetched_at": "2026-10-25T20:52:47.323916Z",
+    "pumpfun_fetched_at": "2026-10-26T04:55:07.020163Z",
     "metals_fetched_at": "2026-10-26T01:06:06.026591Z"
   },
   "errors": {
-    "count": 8,
+    "count": 12,
     "latest": [
+      {
+        "ts": "2026-10-26T04:55:07.028047Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-26T04:55:07.028047Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T04:55:06.351Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
+      {
+        "ts": "2026-10-26T04:54:23.908626Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-26T04:54:23.908626Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T04:54:23.184Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
       {
         "ts": "2026-10-25T20:52:47.331339Z",
         "component": "pump_frontend",
@@ -1598,16 +1618,6 @@
         "ts": "2026-10-25T16:49:32.338329Z",
         "component": "pump_developer_api",
         "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T16:49:31.745Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
-      },
-      {
-        "ts": "2026-10-25T16:48:50.250134Z",
-        "component": "pump_frontend",
-        "message": "HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
-      },
-      {
-        "ts": "2026-10-25T16:48:50.250134Z",
-        "component": "pump_developer_api",
-        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T16:48:49.678Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
       }
     ]
   },
