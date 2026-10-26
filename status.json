@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-26T19:11:11.400983Z",
+  "generated_at": "2026-10-26T23:18:10.805768Z",
   "account_rules": {
     "version": "4.0.0",
     "recorded_at": "2026-10-25T23:00:08.898034Z",
@@ -27,12 +27,12 @@
     "account_rules_version": "4.0.0",
     "cash_era": "5000",
     "starting_cash": "5000",
-    "cash_free": "4976.91525922",
-    "locked_notional": "19.99996459",
-    "equity": "4997.65392868",
-    "realized_pnl": "-3.08477619",
-    "unrealized_pnl": "0.73870487",
-    "fees": "2.27881626",
+    "cash_free": "4976.73071747",
+    "locked_notional": "19.99996413",
+    "equity": "4997.60143594",
+    "realized_pnl": "-3.26931840",
+    "unrealized_pnl": "0.87075434",
+    "fees": "2.27828764",
     "max_notional_per_position": "10",
     "forward_books": 5,
     "open_positions": [
@@ -43,10 +43,10 @@
         "cash_era": "5000",
         "strategy_id": "sma_crossover",
         "strategy_version": "1.1.0",
-        "direction": "long",
+        "direction": "short",
         "symbol": "SOL",
-        "entry_notional": "9.99999987",
-        "opened_at": "2026-10-26T13:00:00Z"
+        "entry_notional": "9.99999941",
+        "opened_at": "2026-10-26T20:00:00Z"
       },
       {
         "market": "metals",
@@ -162,46 +162,38 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:04.589797Z",
+      "recorded_at": "2026-10-26T23:18:04.646011Z",
       "window": {
-        "fill_end": "2026-10-20T12:00:00Z",
+        "fill_end": "2026-10-20T15:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "train",
-        "signal_end": "2026-10-20T11:00:00Z",
+        "signal_end": "2026-10-20T14:00:00Z",
         "signal_start": "2026-10-11T03:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4997.73159822",
-      "realized_pnl": "-2.24416309",
-      "unrealized_pnl": "-0.02423869",
-      "fees": "1.37954745",
+      "equity": "4997.45988848",
+      "realized_pnl": "-2.54011152",
+      "unrealized_pnl": "0",
+      "fees": "1.44059472",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
-      "max_drawdown": "2.51822830",
-      "max_drawdown_fraction": "0.00050363",
-      "closed_trades": 11,
-      "open_position": "short BTC",
-      "open_positions": [
-        {
-          "market": "crypto_spot",
-          "symbol": "BTC",
-          "direction": "short",
-          "entry_notional": "9.99964229",
-          "opened_at": "2026-10-19T16:00:00Z"
-        }
-      ],
+      "max_drawdown": "2.72459007",
+      "max_drawdown_fraction": "0.00054490",
+      "closed_trades": 12,
+      "open_position": null,
+      "open_positions": [],
       "by_direction": {
         "short": {
-          "closed_trades": 5,
+          "closed_trades": 6,
           "wins": 0,
-          "losses": 5,
+          "losses": 6,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-1.02997447",
+          "realized_pnl": "-1.32592290",
           "gross_profit": "0.00000000",
-          "gross_loss": "1.02997447"
+          "gross_loss": "1.32592290"
         },
         "long": {
           "closed_trades": 6,
@@ -216,14 +208,14 @@
       },
       "by_market": {
         "crypto_spot": {
-          "closed_trades": 11,
+          "closed_trades": 12,
           "wins": 0,
-          "losses": 11,
+          "losses": 12,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-2.24416309",
+          "realized_pnl": "-2.54011152",
           "gross_profit": "0.00000000",
-          "gross_loss": "2.24416309"
+          "gross_loss": "2.54011152"
         }
       }
     },
@@ -236,58 +228,68 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:04.589797Z",
+      "recorded_at": "2026-10-26T23:18:04.646011Z",
       "window": {
-        "fill_end": "2026-10-23T16:00:00Z",
+        "fill_end": "2026-10-23T20:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "validation",
-        "signal_end": "2026-10-23T15:00:00Z",
-        "signal_start": "2026-10-20T13:00:00Z",
+        "signal_end": "2026-10-23T19:00:00Z",
+        "signal_start": "2026-10-20T16:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.80733457",
-      "realized_pnl": "-0.16895372",
-      "unrealized_pnl": "-0.02371171",
-      "fees": "0.17970187",
-      "win_rate": "0.00000000",
-      "profit_factor": "0.00000000",
-      "max_drawdown": "0.38434449",
-      "max_drawdown_fraction": "0.00007687",
-      "closed_trades": 1,
-      "open_position": "long SOL",
+      "equity": "4999.62673456",
+      "realized_pnl": "-0.27635369",
+      "unrealized_pnl": "-0.09691175",
+      "fees": "0.41918510",
+      "win_rate": "0.33333333",
+      "profit_factor": "0.17550539",
+      "max_drawdown": "0.38895362",
+      "max_drawdown_fraction": "0.00007779",
+      "closed_trades": 3,
+      "open_position": "short SOL",
       "open_positions": [
         {
           "market": "crypto_spot",
           "symbol": "SOL",
-          "direction": "long",
-          "entry_notional": "9.99999973",
-          "opened_at": "2026-10-23T04:00:00Z"
+          "direction": "short",
+          "entry_notional": "9.99999914",
+          "opened_at": "2026-10-23T20:00:00Z"
         }
       ],
       "by_direction": {
+        "short": {
+          "closed_trades": 2,
+          "wins": 1,
+          "losses": 1,
+          "win_rate": "0.50000000",
+          "profit_factor": "0.31120387",
+          "realized_pnl": "-0.13020079",
+          "gross_profit": "0.05882581",
+          "gross_loss": "0.18902660"
+        },
         "long": {
           "closed_trades": 1,
           "wins": 0,
           "losses": 1,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-0.16895372",
+          "realized_pnl": "-0.14615290",
           "gross_profit": "0.00000000",
-          "gross_loss": "0.16895372"
+          "gross_loss": "0.14615290"
         }
       },
       "by_market": {
         "crypto_spot": {
-          "closed_trades": 1,
-          "wins": 0,
-          "losses": 1,
-          "win_rate": "0.00000000",
-          "profit_factor": "0.00000000",
-          "realized_pnl": "-0.16895372",
-          "gross_profit": "0.00000000",
-          "gross_loss": "0.16895372"
+          "closed_trades": 3,
+          "wins": 1,
+          "losses": 2,
+          "win_rate": "0.33333333",
+          "profit_factor": "0.17550539",
+          "realized_pnl": "-0.27635369",
+          "gross_profit": "0.05882581",
+          "gross_loss": "0.33517950"
         }
       }
     },
@@ -300,7 +302,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-03-25T00:00:00Z",
         "gap_bars": 1,
@@ -356,7 +358,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-03-25T00:00:00Z",
         "gap_bars": 1,
@@ -420,7 +422,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-03-25T00:00:00Z",
         "gap_bars": 1,
@@ -484,7 +486,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-07-11T00:00:00Z",
         "gap_bars": 1,
@@ -540,7 +542,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-07-11T00:00:00Z",
         "gap_bars": 1,
@@ -604,7 +606,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-07-11T00:00:00Z",
         "gap_bars": 1,
@@ -662,46 +664,56 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:04.589797Z",
+      "recorded_at": "2026-10-26T23:18:04.646011Z",
       "window": {
-        "fill_end": "2026-10-26T18:00:00Z",
+        "fill_end": "2026-10-26T22:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-26T18:00:00Z",
-        "signal_start": "2026-10-23T17:00:00Z",
+        "signal_end": "2026-10-26T22:00:00Z",
+        "signal_start": "2026-10-23T21:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.43563673",
-      "realized_pnl": "-0.37728339",
-      "unrealized_pnl": "-0.18707988",
-      "fees": "0.42009434",
+      "equity": "4999.38314399",
+      "realized_pnl": "-0.56182560",
+      "unrealized_pnl": "-0.05503041",
+      "fees": "0.41956572",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
-      "max_drawdown": "0.70186615",
-      "max_drawdown_fraction": "0.00014037",
+      "max_drawdown": "0.63081694",
+      "max_drawdown_fraction": "0.00012616",
       "closed_trades": 3,
-      "open_position": "long SOL",
+      "open_position": "short SOL",
       "open_positions": [
         {
           "market": "crypto_spot",
           "symbol": "SOL",
-          "direction": "long",
-          "entry_notional": "9.99999987",
-          "opened_at": "2026-10-26T13:00:00Z"
+          "direction": "short",
+          "entry_notional": "9.99999941",
+          "opened_at": "2026-10-26T20:00:00Z"
         }
       ],
       "by_direction": {
-        "short": {
-          "closed_trades": 3,
+        "long": {
+          "closed_trades": 2,
           "wins": 0,
-          "losses": 3,
+          "losses": 2,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-0.37728339",
+          "realized_pnl": "-0.37590444",
           "gross_profit": "0.00000000",
-          "gross_loss": "0.37728339"
+          "gross_loss": "0.37590444"
+        },
+        "short": {
+          "closed_trades": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate": "0.00000000",
+          "profit_factor": "0.00000000",
+          "realized_pnl": "-0.18592116",
+          "gross_profit": "0.00000000",
+          "gross_loss": "0.18592116"
         }
       },
       "by_market": {
@@ -711,9 +723,9 @@
           "losses": 3,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-0.37728339",
+          "realized_pnl": "-0.56182560",
           "gross_profit": "0.00000000",
-          "gross_loss": "0.37728339"
+          "gross_loss": "0.56182560"
         }
       }
     },
@@ -726,7 +738,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-10-25T00:00:00Z",
         "gap_bars": 1,
@@ -782,7 +794,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-10-25T00:00:00Z",
         "gap_bars": 1,
@@ -846,7 +858,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T19:11:11.111240Z",
+      "recorded_at": "2026-10-26T23:18:10.327806Z",
       "window": {
         "fill_end": "2026-10-25T00:00:00Z",
         "gap_bars": 1,
@@ -895,35 +907,35 @@
     }
   ],
   "backtest_rollup": {
-    "closed_trades": 63,
-    "wins": 10,
-    "losses": 53,
-    "win_rate": "0.15873016",
-    "profit_factor": "0.37887172",
-    "realized_pnl": "-7.93920244",
+    "closed_trades": 66,
+    "wins": 11,
+    "losses": 55,
+    "win_rate": "0.16666667",
+    "profit_factor": "0.37009203",
+    "realized_pnl": "-8.34255084",
     "by_direction": {
       "short": {
-        "closed_trades": 40,
-        "wins": 6,
-        "win_rate": "0.15000000",
-        "profit_factor": "0.14380272",
-        "realized_pnl": "-6.50292783"
+        "closed_trades": 43,
+        "wins": 7,
+        "win_rate": "0.16279070",
+        "profit_factor": "0.14245189",
+        "realized_pnl": "-6.92907705"
       },
       "long": {
         "closed_trades": 23,
         "wins": 4,
         "win_rate": "0.17391304",
-        "profit_factor": "0.72308918",
-        "realized_pnl": "-1.43627461"
+        "profit_factor": "0.72628188",
+        "realized_pnl": "-1.41347379"
       }
     },
     "by_market": {
       "crypto_spot": {
-        "closed_trades": 12,
-        "wins": 0,
-        "win_rate": "0.00000000",
-        "profit_factor": "0.00000000",
-        "realized_pnl": "-2.41311681"
+        "closed_trades": 15,
+        "wins": 1,
+        "win_rate": "0.06666667",
+        "profit_factor": "0.02045908",
+        "realized_pnl": "-2.81646521"
       },
       "metals": {
         "closed_trades": 51,
@@ -935,11 +947,11 @@
     },
     "by_strategy": {
       "sma_crossover 1.1.0": {
-        "closed_trades": 12,
-        "wins": 0,
-        "win_rate": "0.00000000",
-        "profit_factor": "0.00000000",
-        "realized_pnl": "-2.41311681"
+        "closed_trades": 15,
+        "wins": 1,
+        "win_rate": "0.06666667",
+        "profit_factor": "0.02045908",
+        "realized_pnl": "-2.81646521"
       },
       "metals_buy_hold 1.0.0": {
         "closed_trades": 2,
@@ -969,22 +981,22 @@
     "wins": 2,
     "losses": 16,
     "win_rate": "0.11111111",
-    "profit_factor": "0.11004297",
-    "realized_pnl": "-2.61287667",
+    "profit_factor": "0.10353518",
+    "realized_pnl": "-2.79741888",
     "by_direction": {
+      "long": {
+        "closed_trades": 16,
+        "wins": 2,
+        "win_rate": "0.12500000",
+        "profit_factor": "0.11601369",
+        "realized_pnl": "-2.46177580"
+      },
       "short": {
-        "closed_trades": 4,
+        "closed_trades": 2,
         "wins": 0,
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
-        "realized_pnl": "-0.52700531"
-      },
-      "long": {
-        "closed_trades": 14,
-        "wins": 2,
-        "win_rate": "0.14285714",
-        "profit_factor": "0.13411702",
-        "realized_pnl": "-2.08587136"
+        "realized_pnl": "-0.33564308"
       }
     },
     "by_market": {
@@ -993,7 +1005,7 @@
         "wins": 0,
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
-        "realized_pnl": "-0.37728339"
+        "realized_pnl": "-0.56182560"
       },
       "metals": {
         "closed_trades": 15,
@@ -1009,7 +1021,7 @@
         "wins": 0,
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
-        "realized_pnl": "-0.37728339"
+        "realized_pnl": "-0.56182560"
       },
       "metals_buy_hold 1.0.0": {
         "closed_trades": 1,
@@ -1077,7 +1089,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-03-25T00:00:00Z",
           "gap_bars": 1,
@@ -1133,7 +1145,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-03-25T00:00:00Z",
           "gap_bars": 1,
@@ -1197,7 +1209,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-03-25T00:00:00Z",
           "gap_bars": 1,
@@ -1261,7 +1273,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-07-11T00:00:00Z",
           "gap_bars": 1,
@@ -1317,7 +1329,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-07-11T00:00:00Z",
           "gap_bars": 1,
@@ -1381,7 +1393,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-07-11T00:00:00Z",
           "gap_bars": 1,
@@ -1437,7 +1449,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-10-25T00:00:00Z",
           "gap_bars": 1,
@@ -1493,7 +1505,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-10-25T00:00:00Z",
           "gap_bars": 1,
@@ -1557,7 +1569,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T19:11:11.111240Z",
+        "recorded_at": "2026-10-26T23:18:10.327806Z",
         "window": {
           "fill_end": "2026-10-25T00:00:00Z",
           "gap_bars": 1,
@@ -1607,9 +1619,9 @@
     ]
   },
   "last_successful_collection": {
-    "prices_fetched_at": "2026-10-26T19:11:11.007258Z",
+    "prices_fetched_at": "2026-10-26T23:18:10.172699Z",
     "pumpfun_fetched_at": "2026-10-26T18:57:04.418078Z",
-    "metals_fetched_at": "2026-10-26T19:11:11.007258Z"
+    "metals_fetched_at": "2026-10-26T23:18:10.172699Z"
   },
   "errors": {
     "count": 16,
@@ -1685,20 +1697,36 @@
     {
       "job": "hourly",
       "recorded_at": "2026-10-26T19:11:11.312644Z"
+    },
+    {
+      "job": "hourly",
+      "recorded_at": "2026-10-26T23:18:10.681200Z"
     }
   ],
   "gaps": [
     {
       "job": "hourly",
-      "from": "2026-10-25T19:11:11.400983Z",
+      "from": "2026-10-25T23:18:10.805768Z",
       "to": "2026-10-26T19:11:11.312644Z",
-      "hours": "24.00"
+      "hours": "19.88"
+    },
+    {
+      "job": "hourly",
+      "from": "2026-10-26T19:11:11.312644Z",
+      "to": "2026-10-26T23:18:10.681200Z",
+      "hours": "4.12"
     },
     {
       "job": "pumpfun",
-      "from": "2026-10-25T19:11:11.400983Z",
+      "from": "2026-10-25T23:18:10.805768Z",
       "to": "2026-10-26T18:57:04.716289Z",
-      "hours": "23.76"
+      "hours": "19.65"
+    },
+    {
+      "job": "pumpfun",
+      "from": "2026-10-26T18:57:04.716289Z",
+      "to": "2026-10-26T23:18:10.805768Z",
+      "hours": "4.35"
     }
   ]
 }
