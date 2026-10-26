@@ -21,6 +21,7 @@ from sollab.constants import (
     DISCLAIMER,
     STARTING_CASH,
 )
+from sollab.jobs import HOURLY_JOB, PUMP_JOB, gaps_for_connection, recent_job_runs
 from sollab.storage import ensure_account_rules
 from sollab.timeutil import iso_z
 
@@ -83,6 +84,8 @@ def build_status(conn: sqlite3.Connection, *, recorded_at: datetime | None = Non
         },
         "errors": _errors(conn),
         "schedule": _schedule(),
+        "job_runs": recent_job_runs(conn, recorded_at),
+        "gaps": gaps_for_connection(conn, recorded_at),
     }
 
 
@@ -186,6 +189,8 @@ def format_status_markdown(status: dict[str, object]) -> str:
         [
             "",
             _schedule_line(status),
+            _job_run_line(status),
+            _gaps_line(status),
             f"Last price collection {collected.get('prices_fetched_at')}",
             f"Last pump.fun collection {collected.get('pumpfun_fetched_at')}",
             f"Last metals collection {collected.get('metals_fetched_at')}",
@@ -386,70 +391,41 @@ def _fold_runs(runs: list[dict[str, object]], field_name: str) -> dict[str, obje
 
 
 def _shared_account(conn: sqlite3.Connection, historical_runs: list[dict[str, object]]) -> dict[str, object]:
-    opens = _open_positions(conn, CASH_ERA_CURRENT, include_experiments=False)
+    """One 5000 USD view of every current forward book.
+
+    Train, validation, and cash_era 300 stay out. Each forward book was
+    simulated from its own 5000, so the totals here are the sum of those
+    books' open positions and P&L added onto a single 5000 starting cash.
+    """
     historical_opens = _open_positions(conn, CASH_ERA_PRIOR, include_experiments=True)
-    run = conn.execute(
-        """
-        SELECT simulation_runs.*, strategy_versions.strategy_id, strategy_versions.version
-        FROM simulation_runs
-        JOIN strategy_versions ON strategy_versions.id = simulation_runs.strategy_version_id
-        WHERE COALESCE(simulation_runs.cash_era, '5000') = '5000'
-          AND COALESCE(simulation_runs.book, 'live') != 'experiment'
-        ORDER BY simulation_runs.id DESC
-        LIMIT 1
-        """
-    ).fetchone()
-    starting = format(STARTING_CASH, "f")
-    if run is None:
-        account = {
-            "account_rules_version": ACCOUNT_RULES_VERSION,
-            "cash_era": CASH_ERA_CURRENT,
-            "starting_cash": starting,
-            "cash_free": starting,
-            "locked_notional": "0",
-            "equity": starting,
-            "realized_pnl": "0",
-            "unrealized_pnl": "0",
-            "fees": "0",
-            "max_notional_per_position": "10",
-            "open_positions": opens,
-        }
-    else:
-        ledger = conn.execute(
-            """
-            SELECT cash_free, locked_notional
-            FROM ledger
-            WHERE simulation_run_id = ?
-            ORDER BY id DESC
-            LIMIT 1
-            """,
-            (int(run["id"]),),
-        ).fetchone()
-        fee_total = _sum_column(
-            conn,
-            """
-            SELECT fills.fee AS value
-            FROM fills
-            JOIN orders ON orders.id = fills.order_id
-            WHERE orders.simulation_run_id = ?
-            """,
-            int(run["id"]),
-        )
-        account = {
-            "account_rules_version": ACCOUNT_RULES_VERSION,
-            "cash_era": CASH_ERA_CURRENT,
-            "starting_cash": run["starting_cash"],
-            "cash_free": ledger["cash_free"] if ledger is not None else run["starting_cash"],
-            "locked_notional": ledger["locked_notional"] if ledger is not None else "0",
-            "equity": run["ending_equity"],
-            "realized_pnl": run["realized_pnl"],
-            "unrealized_pnl": run["unrealized_pnl"],
-            "fees": _money(fee_total),
-            "max_notional_per_position": "10",
-            "strategy_id": run["strategy_id"],
-            "strategy_version": run["version"],
-            "open_positions": opens,
-        }
+    forward_runs = _forward_runs(conn)
+    pump = _latest_pump_run(conn)
+    opens = _forward_open_positions(conn, [int(row["id"]) for row in forward_runs])
+    if pump is not None:
+        opens.extend(_pump_open_positions(conn, pump))
+    realized = sum((_decimal(row["realized_pnl"]) for row in forward_runs), Decimal(0))
+    unrealized = sum((_decimal(row["unrealized_pnl"]) for row in forward_runs), Decimal(0))
+    fees = _forward_fees(conn, [int(row["id"]) for row in forward_runs])
+    if pump is not None:
+        realized += _decimal(pump["realized_pnl"])
+        unrealized += _decimal(pump["unrealized_pnl"])
+        fees += _pump_fees(conn, int(pump["id"]))
+    locked = sum((_decimal(position["entry_notional"]) for position in opens), Decimal(0))
+    starting = STARTING_CASH
+    account = {
+        "account_rules_version": ACCOUNT_RULES_VERSION,
+        "cash_era": CASH_ERA_CURRENT,
+        "starting_cash": format(starting, "f"),
+        "cash_free": _money(starting + realized - locked),
+        "locked_notional": _money(locked),
+        "equity": _money(starting + realized + unrealized),
+        "realized_pnl": _money(realized),
+        "unrealized_pnl": _money(unrealized),
+        "fees": _money(fees),
+        "max_notional_per_position": "10",
+        "forward_books": len(forward_runs) + (0 if pump is None else 1),
+        "open_positions": opens,
+    }
     account["historical_300"] = {
         "cash_era": CASH_ERA_PRIOR,
         "open_positions": historical_opens,
@@ -457,10 +433,129 @@ def _shared_account(conn: sqlite3.Connection, historical_runs: list[dict[str, ob
     }
     account["note"] = (
         "Current paper account starts at 5000 USD under account_rules 4.0.0. "
-        "The cap is still 10 USD notional per market, including metals. "
-        "cash_era 300 results are preserved and are not part of this cash balance."
+        "Open positions, locked notional, and P&L add every cash_era 5000 forward book, "
+        "including the latest pump.fun book. "
+        "Train, validation, and cash_era 300 stay out of these totals."
     )
     return account
+
+
+def _forward_runs(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    return list(
+        conn.execute(
+            """
+            SELECT simulation_runs.id, simulation_runs.realized_pnl, simulation_runs.unrealized_pnl
+            FROM simulation_runs
+            WHERE COALESCE(simulation_runs.cash_era, '5000') = '5000'
+              AND simulation_runs.period = 'forward'
+            ORDER BY simulation_runs.id
+            """
+        ).fetchall()
+    )
+
+
+def _latest_pump_run(conn: sqlite3.Connection) -> sqlite3.Row | None:
+    return conn.execute(
+        """
+        SELECT pump_simulation_runs.*, strategy_versions.strategy_id, strategy_versions.version
+        FROM pump_simulation_runs
+        JOIN strategy_versions ON strategy_versions.id = pump_simulation_runs.strategy_version_id
+        WHERE COALESCE(pump_simulation_runs.cash_era, '5000') = '5000'
+        ORDER BY pump_simulation_runs.id DESC
+        LIMIT 1
+        """
+    ).fetchone()
+
+
+def _forward_open_positions(conn: sqlite3.Connection, run_ids: list[int]) -> list[dict[str, object]]:
+    if not run_ids:
+        return []
+    placeholders = ",".join("?" for _ in run_ids)
+    return [
+        {
+            "market": row["market"],
+            "book": row["book"],
+            "period": "forward",
+            "cash_era": CASH_ERA_CURRENT,
+            "strategy_id": row["strategy_id"],
+            "strategy_version": row["version"],
+            "direction": row["direction"],
+            "symbol": row["symbol"],
+            "entry_notional": row["entry_notional"],
+            "opened_at": row["opened_at"],
+        }
+        for row in conn.execute(
+            f"""
+            SELECT positions.symbol, positions.direction, positions.entry_notional, positions.opened_at,
+                   COALESCE(positions.market, 'crypto_spot') AS market,
+                   COALESCE(simulation_runs.book, 'experiment') AS book,
+                   strategy_versions.strategy_id, strategy_versions.version
+            FROM positions
+            JOIN simulation_runs ON simulation_runs.id = positions.simulation_run_id
+            JOIN strategy_versions ON strategy_versions.id = positions.strategy_version_id
+            WHERE positions.status = 'open'
+              AND simulation_runs.id IN ({placeholders})
+            ORDER BY positions.id
+            """,
+            run_ids,
+        ).fetchall()
+    ]
+
+
+def _pump_open_positions(conn: sqlite3.Connection, run: sqlite3.Row) -> list[dict[str, object]]:
+    return [
+        {
+            "market": "pumpfun",
+            "book": "forward",
+            "period": "forward",
+            "cash_era": CASH_ERA_CURRENT,
+            "strategy_id": run["strategy_id"],
+            "strategy_version": run["version"],
+            "direction": "long",
+            "symbol": row["mint"],
+            "entry_notional": row["entry_notional_usd"],
+            "opened_at": row["opened_at"],
+        }
+        for row in conn.execute(
+            """
+            SELECT mint, entry_notional_usd, opened_at
+            FROM pump_positions
+            WHERE simulation_run_id = ? AND status = 'open'
+            ORDER BY id
+            """,
+            (int(run["id"]),),
+        ).fetchall()
+    ]
+
+
+def _forward_fees(conn: sqlite3.Connection, run_ids: list[int]) -> Decimal:
+    if not run_ids:
+        return Decimal(0)
+    placeholders = ",".join("?" for _ in run_ids)
+    return _sum_column(
+        conn,
+        f"""
+        SELECT fills.fee AS value
+        FROM fills
+        JOIN orders ON orders.id = fills.order_id
+        WHERE orders.simulation_run_id IN ({placeholders})
+        """,
+        *run_ids,
+    )
+
+
+def _pump_fees(conn: sqlite3.Connection, run_id: int) -> Decimal:
+    return _sum_column(
+        conn,
+        """
+        SELECT entry_network_fee_usd AS value FROM pump_positions WHERE simulation_run_id = ?
+        UNION ALL
+        SELECT exit_network_fee_usd AS value FROM pump_positions
+        WHERE simulation_run_id = ? AND exit_network_fee_usd IS NOT NULL
+        """,
+        run_id,
+        run_id,
+    )
 
 
 def _open_positions(
@@ -504,12 +599,17 @@ def _open_positions(
 def _schedule() -> dict[str, str]:
     return {
         "timezone": "UTC",
-        "hourly_cron": "0 * * * *",
-        "pumpfun_cron": "15 */2 * * *",
+        "hourly_cron": "7,37 * * * *",
+        "pumpfun_cron": "23 */2 * * *",
+        "pumpfun_backup_cron": "53 */2 * * *",
+        "hourly_window_minutes": "50",
+        "pumpfun_window_minutes": "90",
+        "concurrency": "sollab-paper-state",
         "pumpfun_burst": "2 polls, 35 seconds apart",
         "note": (
-            "Hourly job collects BTC/SOL and metals, then replays. "
-            "Pump.fun burst runs every two hours. Paper only."
+            "Off-peak redundant crons. Hourly tries at :07 and :37. "
+            "Pump.fun tries at :23 and backs up at :53 on even hours. "
+            "A completed run inside the window makes the next start a no-op. Paper only."
         ),
     }
 
@@ -520,8 +620,35 @@ def _schedule_line(status: dict[str, object]) -> str:
         schedule = _schedule()
     return (
         f"Schedule {schedule.get('timezone')}: hourly {schedule.get('hourly_cron')}; "
-        f"pump.fun burst {schedule.get('pumpfun_cron')}"
+        f"pump.fun burst {schedule.get('pumpfun_cron')}; "
+        f"pump.fun backup {schedule.get('pumpfun_backup_cron')}"
     )
+
+
+def _job_run_line(status: dict[str, object]) -> str:
+    runs = status.get("job_runs")
+    if not isinstance(runs, list):
+        return "Completed runs in the last 24 hours: none"
+    hourly = [item["recorded_at"] for item in runs if isinstance(item, dict) and item.get("job") == HOURLY_JOB]
+    pump = [item["recorded_at"] for item in runs if isinstance(item, dict) and item.get("job") == PUMP_JOB]
+    last_hourly = hourly[-1] if hourly else "none"
+    last_pump = pump[-1] if pump else "none"
+    return (
+        f"Completed runs in the last 24 hours: hourly {len(hourly)} last {last_hourly}; "
+        f"pump.fun {len(pump)} last {last_pump}"
+    )
+
+
+def _gaps_line(status: dict[str, object]) -> str:
+    gaps = status.get("gaps")
+    if not isinstance(gaps, list) or not gaps:
+        return "Gaps over 2 hours in the last 24 hours: none"
+    lines = ["Gaps over 2 hours in the last 24 hours:"]
+    for gap in gaps:
+        if not isinstance(gap, dict):
+            continue
+        lines.append(f"- {gap.get('job')} {gap.get('from')} to {gap.get('to')} ({gap.get('hours')} hours)")
+    return "\n".join(lines)
 
 
 def _pump_status(conn: sqlite3.Connection) -> dict[str, object]:
@@ -682,9 +809,9 @@ def _drawdown(conn: sqlite3.Connection, run_id: int) -> tuple[str | None, str | 
     return _money(max_dd), format(max_fraction.quantize(MONEY, rounding=ROUND_HALF_UP), "f")
 
 
-def _sum_column(conn: sqlite3.Connection, sql: str, run_id: int) -> Decimal:
+def _sum_column(conn: sqlite3.Connection, sql: str, *params: object) -> Decimal:
     total = Decimal(0)
-    for row in conn.execute(sql, (run_id,)).fetchall():
+    for row in conn.execute(sql, params).fetchall():
         total += _decimal(row["value"])
     return total
 

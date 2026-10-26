@@ -100,7 +100,8 @@ def test_status_json_splits_backtest_and_forward(conn, tmp_path):
     assert shared["starting_cash"] == "5000"
     assert shared["cash_era"] == "5000"
     assert shared["max_notional_per_position"] == "10"
-    assert shared["open_positions"] == []
+    assert all(item["cash_era"] == "5000" and item["period"] == "forward" for item in shared["open_positions"])
+    assert all(item["strategy_version"] != "1.0.0" for item in shared["open_positions"])
     historical = status["historical_300"]["runs"]
     assert historical[0]["strategy_version"] == "1.0.0"
     assert historical[0]["cash_era"] == "300"
@@ -114,9 +115,11 @@ def test_status_json_splits_backtest_and_forward(conn, tmp_path):
     assert "Backtest" in text
     assert "Forward paper" in text
     assert "crypto_spot" in text
-    assert status["schedule"]["hourly_cron"] == "0 * * * *"
-    assert status["schedule"]["pumpfun_cron"] == "15 */2 * * *"
-    assert "pump.fun burst 15 */2 * * *" in text
+    assert status["schedule"]["hourly_cron"] == "7,37 * * * *"
+    assert status["schedule"]["pumpfun_cron"] == "23 */2 * * *"
+    assert status["schedule"]["pumpfun_backup_cron"] == "53 */2 * * *"
+    assert "pump.fun backup 53 */2 * * *" in text
+    assert "gaps" in status
     path = write_status(conn, tmp_path, status=status)
     loaded = json.loads(path.read_text(encoding="utf-8"))
     assert loaded["historical_300"]["runs"][0]["cash_era"] == "300"

@@ -5,9 +5,11 @@ from __future__ import annotations
 import argparse
 import logging
 import time
+from datetime import datetime, timezone
 
 from sollab.collect import collect
 from sollab.constants import DISCLAIMER
+from sollab.jobs import decide, record_job_run
 from sollab.metalscollect import collect_metals
 from sollab.metalsstrategy import NoMetalsData, run_metals
 from sollab.pumpcollect import collect_pumpfun
@@ -83,6 +85,12 @@ def build_parser() -> argparse.ArgumentParser:
         parents=[parent],
         help="Paper-trade the metals baselines on stored daily bars",
     )
+    for name, help_text in (
+        ("job-gate", "Print run or skip. Skip means this job already completed inside its window."),
+        ("job-record", "Record one completed paper run so the backup cron does not trade again."),
+    ):
+        parser_for_job = sub.add_parser(name, parents=[parent], help=help_text)
+        parser_for_job.add_argument("--job", required=True, choices=("hourly", "pumpfun"))
 
     report_parser = sub.add_parser("report", parents=[parent], help="Show stored prices and the paper ledger")
     report_parser.add_argument("--export-dir", default="data/exports", help="Directory for full CSV and JSON tables")
@@ -220,6 +228,14 @@ def main(argv: list[str] | None = None) -> int:
                 )
             for warning in summary.warnings:
                 print(f"warning {warning}")
+            return 0
+        if args.command == "job-gate":
+            print(decide(conn, args.job, datetime.now(timezone.utc)))
+            return 0
+        if args.command == "job-record":
+            recorded_at = datetime.now(timezone.utc)
+            record_job_run(conn, args.job, recorded_at)
+            print(recorded_at.isoformat().replace("+00:00", "Z"))
             return 0
         status = build_status(conn)
         status_path = write_status(conn, args.export_dir, status=status)

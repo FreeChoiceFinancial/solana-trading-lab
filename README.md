@@ -88,10 +88,10 @@ The repository is public, so standard GitHub-hosted minutes are not billed. Usag
 
 | Job | Cadence | Runs / month | Expected minutes | Monthly minutes |
 | --- | --- | --- | --- | --- |
-| BTC/SOL collect, metals collect, replays, report | hourly | 720 | 1.0–1.5 | 720–1,080 |
-| pump.fun burst, 2 polls, 35s apart | every 2 hours (`15 */2 * * *`) | 360 | 2.0–2.5 | 720–900 |
+| BTC/SOL collect, metals collect, replays, report | `7,37 * * * *` | 720 completed | 1.0–1.5 | 720–1,080 |
+| pump.fun burst, 2 polls, 35s apart | `23 */2 * * *` and backup `53 */2 * * *` | 360 completed | 2.0–2.5 | 720–900 |
 
-Scheduled total is about 1,440–1,980 minutes of runner time. The two-hour burst, rather than a five-minute cron, is the cap that keeps the `data` branch and the public API calls from growing with every short pump.fun window. Each job's timeout is 8 minutes. GitHub registers both the schedule and `workflow_dispatch` only after `paper-hourly.yml` is on the default branch (`main`). A dispatch from another branch is not available before that.
+The :37 and :53 lines are backups for slots GitHub drops. A completed hourly run blocks another hourly run for 50 minutes, and a completed pump run blocks another for 90 minutes, so the backup does not trade twice. A skipped start still boots a runner and stops at that gate. `concurrency` group `sollab-paper-state` keeps two runs from overlapping. `status.json` lists each completed run in `job_runs` and any silence longer than 2 hours in the last 24 hours in `gaps`. Each job's timeout is 8 minutes. GitHub registers both the schedule and `workflow_dispatch` only after `paper-hourly.yml` is on the default branch (`main`). A dispatch from another branch is not available before that.
 
 ## Tests
 
