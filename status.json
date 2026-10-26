@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-26T07:22:19.706203Z",
+  "generated_at": "2026-10-26T18:57:04.820828Z",
   "account_rules": {
     "version": "4.0.0",
     "recorded_at": "2026-10-25T23:00:08.898034Z",
@@ -27,14 +27,40 @@
     "account_rules_version": "4.0.0",
     "cash_era": "5000",
     "starting_cash": "5000",
-    "cash_free": "5000",
-    "locked_notional": "0",
-    "equity": "5000",
-    "realized_pnl": "0",
-    "unrealized_pnl": "0",
-    "fees": "0",
+    "cash_free": "4977.06149457",
+    "locked_notional": "19.99996050",
+    "equity": "4997.94151081",
+    "realized_pnl": "-2.93854493",
+    "unrealized_pnl": "0.88005574",
+    "fees": "2.15865984",
     "max_notional_per_position": "10",
-    "open_positions": [],
+    "forward_books": 5,
+    "open_positions": [
+      {
+        "market": "crypto_spot",
+        "book": "experiment",
+        "period": "forward",
+        "cash_era": "5000",
+        "strategy_id": "sma_crossover",
+        "strategy_version": "1.1.0",
+        "direction": "short",
+        "symbol": "BTC",
+        "entry_notional": "9.99999578",
+        "opened_at": "2026-10-25T22:00:00Z"
+      },
+      {
+        "market": "metals",
+        "book": "experiment",
+        "period": "forward",
+        "cash_era": "5000",
+        "strategy_id": "metals_sma_trend",
+        "strategy_version": "1.0.0",
+        "direction": "short",
+        "symbol": "PAXG",
+        "entry_notional": "9.99996472",
+        "opened_at": "2026-09-01T00:00:00Z"
+      }
+    ],
     "historical_300": {
       "cash_era": "300",
       "open_positions": [
@@ -52,7 +78,7 @@
       ],
       "run_count": 1
     },
-    "note": "Current paper account starts at 5000 USD under account_rules 4.0.0. The cap is still 10 USD notional per market, including metals. cash_era 300 results are preserved and are not part of this cash balance."
+    "note": "Current paper account starts at 5000 USD under account_rules 4.0.0. Open positions, locked notional, and P&L add every cash_era 5000 forward book, including the latest pump.fun book. Train, validation, and cash_era 300 stay out of these totals."
   },
   "historical_300": {
     "cash_era": "300",
@@ -1015,16 +1041,27 @@
     "period": "forward",
     "book": "live",
     "cash_era": "5000",
-    "recorded_at": "2026-10-26T04:55:07.180556Z",
-    "equity": "4999.61689883",
-    "realized_pnl": "0",
-    "unrealized_pnl": "-0.38310117",
-    "fees": "0.00050575",
-    "win_rate": null,
-    "profit_factor": null,
-    "closed_trades": 0,
-    "open_position": "CHwssnZnBZ47sXE88GvTSBXKoF7ZfERRkcnUM7B3pump",
-    "by_direction": {}
+    "recorded_at": "2026-10-26T18:57:04.549706Z",
+    "equity": "4999.52810048",
+    "realized_pnl": "-0.47189952",
+    "unrealized_pnl": "0",
+    "fees": "0.00100780",
+    "win_rate": "0.00000000",
+    "profit_factor": "0.00000000",
+    "closed_trades": 1,
+    "open_position": null,
+    "by_direction": {
+      "long": {
+        "closed_trades": 1,
+        "wins": 0,
+        "losses": 1,
+        "win_rate": "0.00000000",
+        "profit_factor": "0.00000000",
+        "realized_pnl": "-0.47189952",
+        "gross_profit": "0.00000000",
+        "gross_loss": "0.47189952"
+      }
+    }
   },
   "metals": {
     "market": "metals",
@@ -1571,12 +1608,32 @@
   },
   "last_successful_collection": {
     "prices_fetched_at": "2026-10-26T07:22:19.192638Z",
-    "pumpfun_fetched_at": "2026-10-26T04:55:07.020163Z",
+    "pumpfun_fetched_at": "2026-10-26T18:57:04.418078Z",
     "metals_fetched_at": "2026-10-26T07:22:19.192638Z"
   },
   "errors": {
-    "count": 12,
+    "count": 16,
     "latest": [
+      {
+        "ts": "2026-10-26T18:57:04.423577Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-26T18:57:04.423577Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T18:57:03.835Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
+      {
+        "ts": "2026-10-26T18:56:21.161904Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-26T18:56:21.161904Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T18:56:20.548Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
       {
         "ts": "2026-10-26T04:55:07.028047Z",
         "component": "pump_frontend",
@@ -1606,34 +1663,38 @@
         "ts": "2026-10-25T20:52:47.331339Z",
         "component": "pump_developer_api",
         "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T20:52:46.783Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
-      },
-      {
-        "ts": "2026-10-25T20:52:04.846004Z",
-        "component": "pump_frontend",
-        "message": "unexpected HTTP 200; body not ingested"
-      },
-      {
-        "ts": "2026-10-25T20:52:04.846004Z",
-        "component": "pump_developer_api",
-        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T20:52:04.273Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
-      },
-      {
-        "ts": "2026-10-25T16:49:32.338329Z",
-        "component": "pump_frontend",
-        "message": "HTTP 403 from https://frontend-api-v3.pump.fun/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=false: <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
-      },
-      {
-        "ts": "2026-10-25T16:49:32.338329Z",
-        "component": "pump_developer_api",
-        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T16:49:31.745Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
       }
     ]
   },
   "schedule": {
     "timezone": "UTC",
-    "hourly_cron": "0 * * * *",
-    "pumpfun_cron": "15 */2 * * *",
+    "hourly_cron": "7,37 * * * *",
+    "pumpfun_cron": "23 */2 * * *",
+    "pumpfun_backup_cron": "53 */2 * * *",
+    "hourly_window_minutes": "50",
+    "pumpfun_window_minutes": "90",
+    "concurrency": "sollab-paper-state",
     "pumpfun_burst": "2 polls, 35 seconds apart",
-    "note": "Hourly job collects BTC/SOL and metals, then replays. Pump.fun burst runs every two hours. Paper only."
-  }
+    "note": "Off-peak redundant crons. Hourly tries at :07 and :37. Pump.fun tries at :23 and backs up at :53 on even hours. A completed run inside the window makes the next start a no-op. Paper only."
+  },
+  "job_runs": [
+    {
+      "job": "pumpfun",
+      "recorded_at": "2026-10-26T18:57:04.716289Z"
+    }
+  ],
+  "gaps": [
+    {
+      "job": "hourly",
+      "from": "2026-10-25T18:57:04.820828Z",
+      "to": "2026-10-26T18:57:04.820828Z",
+      "hours": "24.00"
+    },
+    {
+      "job": "pumpfun",
+      "from": "2026-10-25T18:57:04.820828Z",
+      "to": "2026-10-26T18:57:04.716289Z",
+      "hours": "24.00"
+    }
+  ]
 }

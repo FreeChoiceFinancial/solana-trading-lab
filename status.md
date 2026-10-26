@@ -2,10 +2,11 @@ sollab status
 Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.
 
 Account rules 4.0.0 — Shared paper cash stays 5000 USD and the per-position cap stays 10 USD. One open position per market now includes metals. Long and short are allowed. A metals short accrues a paper borrow rate; earlier books are not rewritten.
-Shared cash free 5000 locked 0 equity 5000 realized 0 unrealized 0 fees 0
-Current paper account starts at 5000 USD under account_rules 4.0.0. The cap is still 10 USD notional per market, including metals. cash_era 300 results are preserved and are not part of this cash balance.
+Shared cash free 4977.06149457 locked 19.99996050 equity 4997.94151081 realized -2.93854493 unrealized 0.88005574 fees 2.15865984
+Current paper account starts at 5000 USD under account_rules 4.0.0. Open positions, locked notional, and P&L add every cash_era 5000 forward book, including the latest pump.fun book. Train, validation, and cash_era 300 stay out of these totals.
 Current open positions:
-- none
+- crypto_spot experiment sma_crossover 1.1.0 short BTC notional=9.99999578 opened_at=2026-10-25T22:00:00Z
+- metals experiment metals_sma_trend 1.0.0 short PAXG notional=9.99996472 opened_at=2026-09-01T00:00:00Z
 
 Historical cash era 300
 Preserved paper results from the 300 USD account. Not recalculated at 5000 USD.
@@ -31,7 +32,7 @@ Forward paper
 Rollup closed=17 win_rate=0.11764706 profit_factor=0.11581118 realized=-2.46664541 by_direction={'short': {'closed_trades': 3, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.38077405'}, 'long': {'closed_trades': 14, 'wins': 2, 'win_rate': '0.14285714', 'profit_factor': '0.13411702', 'realized_pnl': '-2.08587136'}} by_market={'crypto_spot': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.23105213'}, 'metals': {'closed_trades': 15, 'wins': 2, 'win_rate': '0.13333333', 'profit_factor': '0.12626910', 'realized_pnl': '-2.23559328'}} by_strategy={'sma_crossover 1.1.0': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.23105213'}, 'metals_buy_hold 1.0.0': {'closed_trades': 1, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.35899130'}, 'metals_sma_trend 1.0.0': {'closed_trades': 1, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.14972192'}, 'metals_gold_silver_ratio 1.0.0': {'closed_trades': 13, 'wins': 2, 'win_rate': '0.15384615', 'profit_factor': '0.15760372', 'realized_pnl': '-1.72688006'}}
 
 pump.fun
-- run=2026-10-26T04:55:07.180556Z equity=4999.61689883 realized=0 unrealized=-0.38310117 fees=0.00050575 open=CHwssnZnBZ47sXE88GvTSBXKoF7ZfERRkcnUM7B3pump
+- run=2026-10-26T18:57:04.549706Z equity=4999.52810048 realized=-0.47189952 unrealized=0 fees=0.00100780 open=None
 
 Metals
 One metals slot on the shared 5000 USD account. Runs below are also inside backtest and forward.
@@ -45,13 +46,17 @@ One metals slot on the shared 5000 USD account. Runs below are also inside backt
 - metals_sma_trend 1.0.0 period=forward equity=5000.77606283 realized=-0.14972192 unrealized=0.92578475 open=short PAXG
 - metals_gold_silver_ratio 1.0.0 period=forward equity=4998.27311994 realized=-1.72688006 unrealized=0 open=None
 
-Schedule UTC: hourly 0 * * * *; pump.fun burst 15 */2 * * *
+Schedule UTC: hourly 7,37 * * * *; pump.fun burst 23 */2 * * *; pump.fun backup 53 */2 * * *
+Completed runs in the last 24 hours: hourly 0 last none; pump.fun 1 last 2026-10-26T18:57:04.716289Z
+Gaps over 2 hours in the last 24 hours:
+- hourly 2026-10-25T18:57:04.820828Z to 2026-10-26T18:57:04.820828Z (24.00 hours)
+- pumpfun 2026-10-25T18:57:04.820828Z to 2026-10-26T18:57:04.716289Z (24.00 hours)
 Last price collection 2026-10-26T07:22:19.192638Z
-Last pump.fun collection 2026-10-26T04:55:07.020163Z
+Last pump.fun collection 2026-10-26T18:57:04.418078Z
 Last metals collection 2026-10-26T07:22:19.192638Z
-Stored errors 12
+Stored errors 16
+- 2026-10-26T18:57:04.423577Z pump_frontend: unexpected HTTP 200; body not ingested
+- 2026-10-26T18:57:04.423577Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-26T18:57:03.835Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
+- 2026-10-26T18:56:21.161904Z pump_frontend: unexpected HTTP 200; body not ingested
+- 2026-10-26T18:56:21.161904Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-26T18:56:20.548Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
 - 2026-10-26T04:55:07.028047Z pump_frontend: unexpected HTTP 200; body not ingested
-- 2026-10-26T04:55:07.028047Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-26T04:55:06.351Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
-- 2026-10-26T04:54:23.908626Z pump_frontend: unexpected HTTP 200; body not ingested
-- 2026-10-26T04:54:23.908626Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-26T04:54:23.184Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
-- 2026-10-25T20:52:47.331339Z pump_frontend: unexpected HTTP 200; body not ingested
