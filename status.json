@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-26T23:18:10.805768Z",
+  "generated_at": "2026-10-26T23:56:58.060290Z",
   "account_rules": {
     "version": "4.0.0",
     "recorded_at": "2026-10-25T23:00:08.898034Z",
@@ -1053,7 +1053,7 @@
     "period": "forward",
     "book": "live",
     "cash_era": "5000",
-    "recorded_at": "2026-10-26T18:57:04.549706Z",
+    "recorded_at": "2026-10-26T23:56:57.765319Z",
     "equity": "4999.52810048",
     "realized_pnl": "-0.47189952",
     "unrealized_pnl": "0",
@@ -1620,12 +1620,32 @@
   },
   "last_successful_collection": {
     "prices_fetched_at": "2026-10-26T23:18:10.172699Z",
-    "pumpfun_fetched_at": "2026-10-26T18:57:04.418078Z",
+    "pumpfun_fetched_at": "2026-10-26T23:56:57.594859Z",
     "metals_fetched_at": "2026-10-26T23:18:10.172699Z"
   },
   "errors": {
-    "count": 16,
+    "count": 20,
     "latest": [
+      {
+        "ts": "2026-10-26T23:56:57.602176Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-26T23:56:57.602176Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T23:56:57.008Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
+      {
+        "ts": "2026-10-26T23:56:14.376169Z",
+        "component": "pump_frontend",
+        "message": "unexpected HTTP 200; body not ingested"
+      },
+      {
+        "ts": "2026-10-26T23:56:14.376169Z",
+        "component": "pump_developer_api",
+        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T23:56:13.767Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
+      },
       {
         "ts": "2026-10-26T18:57:04.423577Z",
         "component": "pump_frontend",
@@ -1655,26 +1675,6 @@
         "ts": "2026-10-26T04:55:07.028047Z",
         "component": "pump_developer_api",
         "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T04:55:06.351Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
-      },
-      {
-        "ts": "2026-10-26T04:54:23.908626Z",
-        "component": "pump_frontend",
-        "message": "unexpected HTTP 200; body not ingested"
-      },
-      {
-        "ts": "2026-10-26T04:54:23.908626Z",
-        "component": "pump_developer_api",
-        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-26T04:54:23.184Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
-      },
-      {
-        "ts": "2026-10-25T20:52:47.331339Z",
-        "component": "pump_frontend",
-        "message": "unexpected HTTP 200; body not ingested"
-      },
-      {
-        "ts": "2026-10-25T20:52:47.331339Z",
-        "component": "pump_developer_api",
-        "message": "HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {\"statusCode\":401,\"timestamp\":\"2026-10-25T20:52:46.783Z\",\"path\":\"/users/search-v2?q=test\",\"error\":\"API_KEY_REQUIRED\",\"message\":\"Send Authorization: Bearer <key> or x-api-key: <key>\"}"
       }
     ]
   },
@@ -1701,14 +1701,18 @@
     {
       "job": "hourly",
       "recorded_at": "2026-10-26T23:18:10.681200Z"
+    },
+    {
+      "job": "pumpfun",
+      "recorded_at": "2026-10-26T23:56:57.924266Z"
     }
   ],
   "gaps": [
     {
       "job": "hourly",
-      "from": "2026-10-25T23:18:10.805768Z",
+      "from": "2026-10-25T23:56:58.060290Z",
       "to": "2026-10-26T19:11:11.312644Z",
-      "hours": "19.88"
+      "hours": "19.24"
     },
     {
       "job": "hourly",
@@ -1718,15 +1722,15 @@
     },
     {
       "job": "pumpfun",
-      "from": "2026-10-25T23:18:10.805768Z",
+      "from": "2026-10-25T23:56:58.060290Z",
       "to": "2026-10-26T18:57:04.716289Z",
-      "hours": "19.65"
+      "hours": "19.00"
     },
     {
       "job": "pumpfun",
       "from": "2026-10-26T18:57:04.716289Z",
-      "to": "2026-10-26T23:18:10.805768Z",
-      "hours": "4.35"
+      "to": "2026-10-26T23:56:57.924266Z",
+      "hours": "5.00"
     }
   ]
 }
