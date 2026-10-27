@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-27T12:22:27.277106Z",
+  "generated_at": "2026-10-27T14:52:50.744359Z",
   "account_rules": {
     "version": "4.0.0",
     "recorded_at": "2026-10-25T23:00:08.898034Z",
@@ -29,9 +29,9 @@
     "starting_cash": "5000",
     "cash_free": "4976.79457038",
     "locked_notional": "19.99996413",
-    "equity": "4997.68370065",
+    "equity": "4997.67672019",
     "realized_pnl": "-3.20546549",
-    "unrealized_pnl": "0.88916614",
+    "unrealized_pnl": "0.88218568",
     "fees": "2.27867329",
     "max_notional_per_position": "10",
     "forward_books": 5,
@@ -162,13 +162,13 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:09.171649Z",
+      "recorded_at": "2026-10-27T14:52:44.257591Z",
       "window": {
-        "fill_end": "2026-10-20T20:00:00Z",
+        "fill_end": "2026-10-21T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "train",
-        "signal_end": "2026-10-20T19:00:00Z",
+        "signal_end": "2026-10-20T23:00:00Z",
         "signal_start": "2026-10-11T03:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
@@ -228,20 +228,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:09.171649Z",
+      "recorded_at": "2026-10-27T14:52:44.257591Z",
       "window": {
-        "fill_end": "2026-10-24T02:00:00Z",
+        "fill_end": "2026-10-24T08:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "validation",
-        "signal_end": "2026-10-24T01:00:00Z",
-        "signal_start": "2026-10-20T21:00:00Z",
+        "signal_end": "2026-10-24T07:00:00Z",
+        "signal_start": "2026-10-21T01:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.74180127",
+      "equity": "4999.81722314",
       "realized_pnl": "-0.27635369",
-      "unrealized_pnl": "0.01815496",
+      "unrealized_pnl": "0.09357683",
       "fees": "0.41918510",
       "win_rate": "0.33333333",
       "profit_factor": "0.17550539",
@@ -302,7 +302,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-03-26T00:00:00Z",
         "gap_bars": 1,
@@ -358,7 +358,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-03-26T00:00:00Z",
         "gap_bars": 1,
@@ -422,7 +422,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-03-26T00:00:00Z",
         "gap_bars": 1,
@@ -486,7 +486,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-07-12T00:00:00Z",
         "gap_bars": 1,
@@ -542,7 +542,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-07-12T00:00:00Z",
         "gap_bars": 1,
@@ -606,7 +606,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-07-12T00:00:00Z",
         "gap_bars": 1,
@@ -672,20 +672,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:09.171649Z",
+      "recorded_at": "2026-10-27T14:52:44.257591Z",
       "window": {
-        "fill_end": "2026-10-27T07:00:00Z",
+        "fill_end": "2026-10-27T13:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-27T07:00:00Z",
-        "signal_start": "2026-10-24T03:00:00Z",
+        "signal_end": "2026-10-27T13:00:00Z",
+        "signal_start": "2026-10-24T09:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.41505469",
+      "equity": "4999.40807423",
       "realized_pnl": "-0.56182560",
-      "unrealized_pnl": "-0.02311971",
+      "unrealized_pnl": "-0.03010017",
       "fees": "0.41956572",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
@@ -746,7 +746,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-10-26T00:00:00Z",
         "gap_bars": 1,
@@ -802,7 +802,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-10-26T00:00:00Z",
         "gap_bars": 1,
@@ -866,7 +866,7 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-27T08:20:14.014550Z",
+      "recorded_at": "2026-10-27T14:52:50.249575Z",
       "window": {
         "fill_end": "2026-10-26T00:00:00Z",
         "gap_bars": 1,
@@ -1097,7 +1097,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-03-26T00:00:00Z",
           "gap_bars": 1,
@@ -1153,7 +1153,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-03-26T00:00:00Z",
           "gap_bars": 1,
@@ -1217,7 +1217,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-03-26T00:00:00Z",
           "gap_bars": 1,
@@ -1281,7 +1281,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-07-12T00:00:00Z",
           "gap_bars": 1,
@@ -1337,7 +1337,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-07-12T00:00:00Z",
           "gap_bars": 1,
@@ -1401,7 +1401,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-07-12T00:00:00Z",
           "gap_bars": 1,
@@ -1465,7 +1465,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-10-26T00:00:00Z",
           "gap_bars": 1,
@@ -1521,7 +1521,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-10-26T00:00:00Z",
           "gap_bars": 1,
@@ -1585,7 +1585,7 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-27T08:20:14.014550Z",
+        "recorded_at": "2026-10-27T14:52:50.249575Z",
         "window": {
           "fill_end": "2026-10-26T00:00:00Z",
           "gap_bars": 1,
@@ -1635,9 +1635,9 @@
     ]
   },
   "last_successful_collection": {
-    "prices_fetched_at": "2026-10-27T08:20:13.849811Z",
+    "prices_fetched_at": "2026-10-27T14:52:50.088879Z",
     "pumpfun_fetched_at": "2026-10-27T12:22:26.899324Z",
-    "metals_fetched_at": "2026-10-27T08:20:13.849811Z"
+    "metals_fetched_at": "2026-10-27T14:52:50.088879Z"
   },
   "errors": {
     "count": 28,
@@ -1737,14 +1737,18 @@
     {
       "job": "pumpfun",
       "recorded_at": "2026-10-27T12:22:27.172986Z"
+    },
+    {
+      "job": "hourly",
+      "recorded_at": "2026-10-27T14:52:50.606655Z"
     }
   ],
   "gaps": [
     {
       "job": "hourly",
-      "from": "2026-10-26T12:22:27.277106Z",
+      "from": "2026-10-26T14:52:50.744359Z",
       "to": "2026-10-26T19:11:11.312644Z",
-      "hours": "6.81"
+      "hours": "4.31"
     },
     {
       "job": "hourly",
@@ -1767,14 +1771,14 @@
     {
       "job": "hourly",
       "from": "2026-10-27T08:20:14.367933Z",
-      "to": "2026-10-27T12:22:27.277106Z",
-      "hours": "4.04"
+      "to": "2026-10-27T14:52:50.606655Z",
+      "hours": "6.54"
     },
     {
       "job": "pumpfun",
-      "from": "2026-10-26T12:22:27.277106Z",
+      "from": "2026-10-26T14:52:50.744359Z",
       "to": "2026-10-26T18:57:04.716289Z",
-      "hours": "6.58"
+      "hours": "4.07"
     },
     {
       "job": "pumpfun",
@@ -1793,6 +1797,12 @@
       "from": "2026-10-27T05:14:23.916839Z",
       "to": "2026-10-27T12:22:27.172986Z",
       "hours": "7.13"
+    },
+    {
+      "job": "pumpfun",
+      "from": "2026-10-27T12:22:27.172986Z",
+      "to": "2026-10-27T14:52:50.744359Z",
+      "hours": "2.51"
     }
   ]
 }
