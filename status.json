@@ -1,6 +1,6 @@
 {
   "disclaimer": "Research and paper trading only. sollab does not place live orders, sign wallets, create tokens, or use brokerage credentials.",
-  "generated_at": "2026-10-26T23:56:58.060290Z",
+  "generated_at": "2026-10-27T02:22:56.316146Z",
   "account_rules": {
     "version": "4.0.0",
     "recorded_at": "2026-10-25T23:00:08.898034Z",
@@ -27,12 +27,12 @@
     "account_rules_version": "4.0.0",
     "cash_era": "5000",
     "starting_cash": "5000",
-    "cash_free": "4976.73071747",
+    "cash_free": "4976.79457038",
     "locked_notional": "19.99996413",
-    "equity": "4997.60143594",
-    "realized_pnl": "-3.26931840",
-    "unrealized_pnl": "0.87075434",
-    "fees": "2.27828764",
+    "equity": "4997.62985135",
+    "realized_pnl": "-3.20546549",
+    "unrealized_pnl": "0.83531684",
+    "fees": "2.27867329",
     "max_notional_per_position": "10",
     "forward_books": 5,
     "open_positions": [
@@ -162,13 +162,13 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:04.646011Z",
+      "recorded_at": "2026-10-27T02:22:50.613398Z",
       "window": {
-        "fill_end": "2026-10-20T15:00:00Z",
+        "fill_end": "2026-10-20T16:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "train",
-        "signal_end": "2026-10-20T14:00:00Z",
+        "signal_end": "2026-10-20T15:00:00Z",
         "signal_start": "2026-10-11T03:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
@@ -228,20 +228,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:04.646011Z",
+      "recorded_at": "2026-10-27T02:22:50.613398Z",
       "window": {
-        "fill_end": "2026-10-23T20:00:00Z",
+        "fill_end": "2026-10-23T21:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "validation",
-        "signal_end": "2026-10-23T19:00:00Z",
-        "signal_start": "2026-10-20T16:00:00Z",
+        "signal_end": "2026-10-23T20:00:00Z",
+        "signal_start": "2026-10-20T17:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.62673456",
+      "equity": "4999.65380908",
       "realized_pnl": "-0.27635369",
-      "unrealized_pnl": "-0.09691175",
+      "unrealized_pnl": "-0.06983723",
       "fees": "0.41918510",
       "win_rate": "0.33333333",
       "profit_factor": "0.17550539",
@@ -302,25 +302,25 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-03-25T00:00:00Z",
+        "fill_end": "2026-03-26T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "train",
-        "signal_end": "2026-03-24T00:00:00Z",
+        "signal_end": "2026-03-25T00:00:00Z",
         "signal_start": "2025-05-08T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "5003.31218774",
-      "realized_pnl": "3.31218774",
+      "equity": "5003.02399347",
+      "realized_pnl": "3.02399347",
       "unrealized_pnl": "0",
-      "fees": "0.14071733",
+      "fees": "0.13897772",
       "win_rate": "1.00000000",
       "profit_factor": null,
-      "max_drawdown": "3.24808912",
-      "max_drawdown_fraction": "0.00064878",
+      "max_drawdown": "3.45242625",
+      "max_drawdown_fraction": "0.00068959",
       "closed_trades": 1,
       "open_position": null,
       "open_positions": [],
@@ -331,8 +331,8 @@
           "losses": 0,
           "win_rate": "1.00000000",
           "profit_factor": null,
-          "realized_pnl": "3.31218774",
-          "gross_profit": "3.31218774",
+          "realized_pnl": "3.02399347",
+          "gross_profit": "3.02399347",
           "gross_loss": "0.00000000"
         }
       },
@@ -343,8 +343,8 @@
           "losses": 0,
           "win_rate": "1.00000000",
           "profit_factor": null,
-          "realized_pnl": "3.31218774",
-          "gross_profit": "3.31218774",
+          "realized_pnl": "3.02399347",
+          "gross_profit": "3.02399347",
           "gross_loss": "0.00000000"
         }
       }
@@ -358,20 +358,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-03-25T00:00:00Z",
+        "fill_end": "2026-03-26T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "train",
-        "signal_end": "2026-03-24T00:00:00Z",
+        "signal_end": "2026-03-25T00:00:00Z",
         "signal_start": "2025-05-08T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.36640130",
+      "equity": "4999.55402481",
       "realized_pnl": "-1.85916153",
-      "unrealized_pnl": "1.22556283",
+      "unrealized_pnl": "1.41318634",
       "fees": "1.02530030",
       "win_rate": "0.12500000",
       "profit_factor": "0.06633499",
@@ -422,20 +422,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-03-25T00:00:00Z",
+        "fill_end": "2026-03-26T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "train",
-        "signal_end": "2026-03-24T00:00:00Z",
+        "signal_end": "2026-03-25T00:00:00Z",
         "signal_start": "2025-05-08T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4996.33334652",
+      "equity": "4996.54856112",
       "realized_pnl": "-3.61379183",
-      "unrealized_pnl": "-0.05286165",
+      "unrealized_pnl": "0.16235295",
       "fees": "3.30215514",
       "win_rate": "0.18518519",
       "profit_factor": "0.20991058",
@@ -486,25 +486,25 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-07-11T00:00:00Z",
+        "fill_end": "2026-07-12T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "validation",
-        "signal_end": "2026-07-10T00:00:00Z",
-        "signal_start": "2026-03-26T00:00:00Z",
+        "signal_end": "2026-07-11T00:00:00Z",
+        "signal_start": "2026-03-27T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4998.97360881",
-      "realized_pnl": "-1.02639119",
+      "equity": "4999.12639357",
+      "realized_pnl": "-0.87360643",
       "unrealized_pnl": "0",
-      "fees": "0.11452869",
+      "fees": "0.11545055",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
-      "max_drawdown": "1.84375091",
-      "max_drawdown_fraction": "0.00036870",
+      "max_drawdown": "1.88454715",
+      "max_drawdown_fraction": "0.00037684",
       "closed_trades": 1,
       "open_position": null,
       "open_positions": [],
@@ -515,9 +515,9 @@
           "losses": 1,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-1.02639119",
+          "realized_pnl": "-0.87360643",
           "gross_profit": "0.00000000",
-          "gross_loss": "1.02639119"
+          "gross_loss": "0.87360643"
         }
       },
       "by_market": {
@@ -527,9 +527,9 @@
           "losses": 1,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-1.02639119",
+          "realized_pnl": "-0.87360643",
           "gross_profit": "0.00000000",
-          "gross_loss": "1.02639119"
+          "gross_loss": "0.87360643"
         }
       }
     },
@@ -542,20 +542,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-07-11T00:00:00Z",
+        "fill_end": "2026-07-12T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "validation",
-        "signal_end": "2026-07-10T00:00:00Z",
-        "signal_start": "2026-03-26T00:00:00Z",
+        "signal_end": "2026-07-11T00:00:00Z",
+        "signal_start": "2026-03-27T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.22542280",
+      "equity": "4999.17524870",
       "realized_pnl": "-0.54418768",
-      "unrealized_pnl": "-0.23038952",
+      "unrealized_pnl": "-0.28056362",
       "fees": "0.29816308",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
@@ -606,50 +606,58 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-07-11T00:00:00Z",
+        "fill_end": "2026-07-12T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "validation",
-        "signal_end": "2026-07-10T00:00:00Z",
-        "signal_start": "2026-03-26T00:00:00Z",
+        "signal_end": "2026-07-11T00:00:00Z",
+        "signal_start": "2026-03-27T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4998.20525886",
-      "realized_pnl": "-1.79474114",
-      "unrealized_pnl": "0",
-      "fees": "1.43785513",
-      "win_rate": "0.25000000",
-      "profit_factor": "0.19628459",
-      "max_drawdown": "2.12684109",
-      "max_drawdown_fraction": "0.00042534",
-      "closed_trades": 12,
-      "open_position": null,
-      "open_positions": [],
+      "equity": "4998.99085207",
+      "realized_pnl": "-0.92923679",
+      "unrealized_pnl": "-0.07991114",
+      "fees": "1.37761496",
+      "win_rate": "0.45454545",
+      "profit_factor": "0.24434699",
+      "max_drawdown": "1.24993947",
+      "max_drawdown_fraction": "0.00024999",
+      "closed_trades": 11,
+      "open_position": "short PAXG",
+      "open_positions": [
+        {
+          "market": "metals",
+          "symbol": "PAXG",
+          "direction": "short",
+          "entry_notional": "9.99997733",
+          "opened_at": "2026-07-09T00:00:00Z"
+        }
+      ],
       "by_direction": {
-        "long": {
-          "closed_trades": 12,
-          "wins": 3,
-          "losses": 9,
-          "win_rate": "0.25000000",
-          "profit_factor": "0.19628459",
-          "realized_pnl": "-1.79474114",
-          "gross_profit": "0.43831439",
-          "gross_loss": "2.23305553"
+        "short": {
+          "closed_trades": 11,
+          "wins": 5,
+          "losses": 6,
+          "win_rate": "0.45454545",
+          "profit_factor": "0.24434699",
+          "realized_pnl": "-0.92923679",
+          "gross_profit": "0.30047682",
+          "gross_loss": "1.22971361"
         }
       },
       "by_market": {
         "metals": {
-          "closed_trades": 12,
-          "wins": 3,
-          "losses": 9,
-          "win_rate": "0.25000000",
-          "profit_factor": "0.19628459",
-          "realized_pnl": "-1.79474114",
-          "gross_profit": "0.43831439",
-          "gross_loss": "2.23305553"
+          "closed_trades": 11,
+          "wins": 5,
+          "losses": 6,
+          "win_rate": "0.45454545",
+          "profit_factor": "0.24434699",
+          "realized_pnl": "-0.92923679",
+          "gross_profit": "0.30047682",
+          "gross_loss": "1.22971361"
         }
       }
     }
@@ -664,25 +672,25 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:04.646011Z",
+      "recorded_at": "2026-10-27T02:22:50.613398Z",
       "window": {
-        "fill_end": "2026-10-26T22:00:00Z",
+        "fill_end": "2026-10-27T01:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-26T22:00:00Z",
-        "signal_start": "2026-10-23T21:00:00Z",
+        "signal_end": "2026-10-27T01:00:00Z",
+        "signal_start": "2026-10-23T22:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.38314399",
+      "equity": "4999.36120539",
       "realized_pnl": "-0.56182560",
-      "unrealized_pnl": "-0.05503041",
+      "unrealized_pnl": "-0.07696901",
       "fees": "0.41956572",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
-      "max_drawdown": "0.63081694",
-      "max_drawdown_fraction": "0.00012616",
+      "max_drawdown": "0.66970811",
+      "max_drawdown_fraction": "0.00013394",
       "closed_trades": 3,
       "open_position": "short SOL",
       "open_positions": [
@@ -738,25 +746,25 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-10-25T00:00:00Z",
+        "fill_end": "2026-10-26T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-25T00:00:00Z",
-        "signal_start": "2026-07-12T00:00:00Z",
+        "signal_end": "2026-10-26T00:00:00Z",
+        "signal_start": "2026-07-13T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "4999.64100870",
-      "realized_pnl": "-0.35899130",
+      "equity": "4999.70486161",
+      "realized_pnl": "-0.29513839",
       "unrealized_pnl": "0",
-      "fees": "0.11855692",
+      "fees": "0.11894257",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
-      "max_drawdown": "1.69563688",
-      "max_drawdown_fraction": "0.00033904",
+      "max_drawdown": "1.68980750",
+      "max_drawdown_fraction": "0.00033787",
       "closed_trades": 1,
       "open_position": null,
       "open_positions": [],
@@ -767,9 +775,9 @@
           "losses": 1,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-0.35899130",
+          "realized_pnl": "-0.29513839",
           "gross_profit": "0.00000000",
-          "gross_loss": "0.35899130"
+          "gross_loss": "0.29513839"
         }
       },
       "by_market": {
@@ -779,9 +787,9 @@
           "losses": 1,
           "win_rate": "0.00000000",
           "profit_factor": "0.00000000",
-          "realized_pnl": "-0.35899130",
+          "realized_pnl": "-0.29513839",
           "gross_profit": "0.00000000",
-          "gross_loss": "0.35899130"
+          "gross_loss": "0.29513839"
         }
       }
     },
@@ -794,20 +802,20 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-10-25T00:00:00Z",
+        "fill_end": "2026-10-26T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-25T00:00:00Z",
-        "signal_start": "2026-07-12T00:00:00Z",
+        "signal_end": "2026-10-26T00:00:00Z",
+        "signal_start": "2026-07-13T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
-      "equity": "5000.77606283",
+      "equity": "5000.76256393",
       "realized_pnl": "-0.14972192",
-      "unrealized_pnl": "0.92578475",
+      "unrealized_pnl": "0.91228585",
       "fees": "0.18016781",
       "win_rate": "0.00000000",
       "profit_factor": "0.00000000",
@@ -858,14 +866,14 @@
       "fill_model": "next_candle_open",
       "cash_era": "5000",
       "starting_cash": "5000",
-      "recorded_at": "2026-10-26T23:18:10.327806Z",
+      "recorded_at": "2026-10-27T02:22:55.980162Z",
       "window": {
-        "fill_end": "2026-10-25T00:00:00Z",
+        "fill_end": "2026-10-26T00:00:00Z",
         "gap_bars": 1,
         "parameters_fit_on_period": false,
         "period": "forward",
-        "signal_end": "2026-10-25T00:00:00Z",
-        "signal_start": "2026-07-12T00:00:00Z",
+        "signal_end": "2026-10-26T00:00:00Z",
+        "signal_start": "2026-07-13T00:00:00Z",
         "train_percent": 60,
         "validation_percent": 20
       },
@@ -907,26 +915,26 @@
     }
   ],
   "backtest_rollup": {
-    "closed_trades": 66,
-    "wins": 11,
-    "losses": 55,
-    "win_rate": "0.16666667",
-    "profit_factor": "0.37009203",
-    "realized_pnl": "-8.34255084",
+    "closed_trades": 65,
+    "wins": 13,
+    "losses": 52,
+    "win_rate": "0.20000000",
+    "profit_factor": "0.37024437",
+    "realized_pnl": "-7.61245600",
     "by_direction": {
       "short": {
-        "closed_trades": 43,
-        "wins": 7,
-        "win_rate": "0.16279070",
-        "profit_factor": "0.14245189",
-        "realized_pnl": "-6.92907705"
+        "closed_trades": 54,
+        "wins": 12,
+        "win_rate": "0.22222222",
+        "profit_factor": "0.15591099",
+        "realized_pnl": "-7.85831384"
       },
       "long": {
-        "closed_trades": 23,
-        "wins": 4,
-        "win_rate": "0.17391304",
-        "profit_factor": "0.72628188",
-        "realized_pnl": "-1.41347379"
+        "closed_trades": 11,
+        "wins": 1,
+        "win_rate": "0.09090909",
+        "profit_factor": "1.08849742",
+        "realized_pnl": "0.24585784"
       }
     },
     "by_market": {
@@ -938,11 +946,11 @@
         "realized_pnl": "-2.81646521"
       },
       "metals": {
-        "closed_trades": 51,
-        "wins": 10,
-        "win_rate": "0.19607843",
-        "profit_factor": "0.46704613",
-        "realized_pnl": "-5.52608563"
+        "closed_trades": 50,
+        "wins": 12,
+        "win_rate": "0.24000000",
+        "profit_factor": "0.47941309",
+        "realized_pnl": "-4.79599079"
       }
     },
     "by_strategy": {
@@ -957,8 +965,8 @@
         "closed_trades": 2,
         "wins": 1,
         "win_rate": "0.50000000",
-        "profit_factor": "3.22702277",
-        "realized_pnl": "2.28579655"
+        "profit_factor": "3.46150551",
+        "realized_pnl": "2.15038704"
       },
       "metals_sma_trend 1.0.0": {
         "closed_trades": 10,
@@ -968,11 +976,11 @@
         "realized_pnl": "-2.40334921"
       },
       "metals_gold_silver_ratio 1.0.0": {
-        "closed_trades": 39,
-        "wins": 8,
-        "win_rate": "0.20512821",
-        "profit_factor": "0.20544051",
-        "realized_pnl": "-5.40853297"
+        "closed_trades": 38,
+        "wins": 10,
+        "win_rate": "0.26315789",
+        "profit_factor": "0.21720722",
+        "realized_pnl": "-4.54302862"
       }
     }
   },
@@ -981,15 +989,15 @@
     "wins": 2,
     "losses": 16,
     "win_rate": "0.11111111",
-    "profit_factor": "0.10353518",
-    "realized_pnl": "-2.79741888",
+    "profit_factor": "0.10569802",
+    "realized_pnl": "-2.73356597",
     "by_direction": {
       "long": {
         "closed_trades": 16,
         "wins": 2,
         "win_rate": "0.12500000",
-        "profit_factor": "0.11601369",
-        "realized_pnl": "-2.46177580"
+        "profit_factor": "0.11873614",
+        "realized_pnl": "-2.39792289"
       },
       "short": {
         "closed_trades": 2,
@@ -1011,8 +1019,8 @@
         "closed_trades": 15,
         "wins": 2,
         "win_rate": "0.13333333",
-        "profit_factor": "0.12626910",
-        "realized_pnl": "-2.23559328"
+        "profit_factor": "0.12950086",
+        "realized_pnl": "-2.17174037"
       }
     },
     "by_strategy": {
@@ -1028,7 +1036,7 @@
         "wins": 0,
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
-        "realized_pnl": "-0.35899130"
+        "realized_pnl": "-0.29513839"
       },
       "metals_sma_trend 1.0.0": {
         "closed_trades": 1,
@@ -1089,25 +1097,25 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-03-25T00:00:00Z",
+          "fill_end": "2026-03-26T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "train",
-          "signal_end": "2026-03-24T00:00:00Z",
+          "signal_end": "2026-03-25T00:00:00Z",
           "signal_start": "2025-05-08T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "5003.31218774",
-        "realized_pnl": "3.31218774",
+        "equity": "5003.02399347",
+        "realized_pnl": "3.02399347",
         "unrealized_pnl": "0",
-        "fees": "0.14071733",
+        "fees": "0.13897772",
         "win_rate": "1.00000000",
         "profit_factor": null,
-        "max_drawdown": "3.24808912",
-        "max_drawdown_fraction": "0.00064878",
+        "max_drawdown": "3.45242625",
+        "max_drawdown_fraction": "0.00068959",
         "closed_trades": 1,
         "open_position": null,
         "open_positions": [],
@@ -1118,8 +1126,8 @@
             "losses": 0,
             "win_rate": "1.00000000",
             "profit_factor": null,
-            "realized_pnl": "3.31218774",
-            "gross_profit": "3.31218774",
+            "realized_pnl": "3.02399347",
+            "gross_profit": "3.02399347",
             "gross_loss": "0.00000000"
           }
         },
@@ -1130,8 +1138,8 @@
             "losses": 0,
             "win_rate": "1.00000000",
             "profit_factor": null,
-            "realized_pnl": "3.31218774",
-            "gross_profit": "3.31218774",
+            "realized_pnl": "3.02399347",
+            "gross_profit": "3.02399347",
             "gross_loss": "0.00000000"
           }
         }
@@ -1145,20 +1153,20 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-03-25T00:00:00Z",
+          "fill_end": "2026-03-26T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "train",
-          "signal_end": "2026-03-24T00:00:00Z",
+          "signal_end": "2026-03-25T00:00:00Z",
           "signal_start": "2025-05-08T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "4999.36640130",
+        "equity": "4999.55402481",
         "realized_pnl": "-1.85916153",
-        "unrealized_pnl": "1.22556283",
+        "unrealized_pnl": "1.41318634",
         "fees": "1.02530030",
         "win_rate": "0.12500000",
         "profit_factor": "0.06633499",
@@ -1209,20 +1217,20 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-03-25T00:00:00Z",
+          "fill_end": "2026-03-26T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "train",
-          "signal_end": "2026-03-24T00:00:00Z",
+          "signal_end": "2026-03-25T00:00:00Z",
           "signal_start": "2025-05-08T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "4996.33334652",
+        "equity": "4996.54856112",
         "realized_pnl": "-3.61379183",
-        "unrealized_pnl": "-0.05286165",
+        "unrealized_pnl": "0.16235295",
         "fees": "3.30215514",
         "win_rate": "0.18518519",
         "profit_factor": "0.20991058",
@@ -1273,25 +1281,25 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-07-11T00:00:00Z",
+          "fill_end": "2026-07-12T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "validation",
-          "signal_end": "2026-07-10T00:00:00Z",
-          "signal_start": "2026-03-26T00:00:00Z",
+          "signal_end": "2026-07-11T00:00:00Z",
+          "signal_start": "2026-03-27T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "4998.97360881",
-        "realized_pnl": "-1.02639119",
+        "equity": "4999.12639357",
+        "realized_pnl": "-0.87360643",
         "unrealized_pnl": "0",
-        "fees": "0.11452869",
+        "fees": "0.11545055",
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
-        "max_drawdown": "1.84375091",
-        "max_drawdown_fraction": "0.00036870",
+        "max_drawdown": "1.88454715",
+        "max_drawdown_fraction": "0.00037684",
         "closed_trades": 1,
         "open_position": null,
         "open_positions": [],
@@ -1302,9 +1310,9 @@
             "losses": 1,
             "win_rate": "0.00000000",
             "profit_factor": "0.00000000",
-            "realized_pnl": "-1.02639119",
+            "realized_pnl": "-0.87360643",
             "gross_profit": "0.00000000",
-            "gross_loss": "1.02639119"
+            "gross_loss": "0.87360643"
           }
         },
         "by_market": {
@@ -1314,9 +1322,9 @@
             "losses": 1,
             "win_rate": "0.00000000",
             "profit_factor": "0.00000000",
-            "realized_pnl": "-1.02639119",
+            "realized_pnl": "-0.87360643",
             "gross_profit": "0.00000000",
-            "gross_loss": "1.02639119"
+            "gross_loss": "0.87360643"
           }
         }
       },
@@ -1329,20 +1337,20 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-07-11T00:00:00Z",
+          "fill_end": "2026-07-12T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "validation",
-          "signal_end": "2026-07-10T00:00:00Z",
-          "signal_start": "2026-03-26T00:00:00Z",
+          "signal_end": "2026-07-11T00:00:00Z",
+          "signal_start": "2026-03-27T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "4999.22542280",
+        "equity": "4999.17524870",
         "realized_pnl": "-0.54418768",
-        "unrealized_pnl": "-0.23038952",
+        "unrealized_pnl": "-0.28056362",
         "fees": "0.29816308",
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
@@ -1393,50 +1401,58 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-07-11T00:00:00Z",
+          "fill_end": "2026-07-12T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "validation",
-          "signal_end": "2026-07-10T00:00:00Z",
-          "signal_start": "2026-03-26T00:00:00Z",
+          "signal_end": "2026-07-11T00:00:00Z",
+          "signal_start": "2026-03-27T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "4998.20525886",
-        "realized_pnl": "-1.79474114",
-        "unrealized_pnl": "0",
-        "fees": "1.43785513",
-        "win_rate": "0.25000000",
-        "profit_factor": "0.19628459",
-        "max_drawdown": "2.12684109",
-        "max_drawdown_fraction": "0.00042534",
-        "closed_trades": 12,
-        "open_position": null,
-        "open_positions": [],
+        "equity": "4998.99085207",
+        "realized_pnl": "-0.92923679",
+        "unrealized_pnl": "-0.07991114",
+        "fees": "1.37761496",
+        "win_rate": "0.45454545",
+        "profit_factor": "0.24434699",
+        "max_drawdown": "1.24993947",
+        "max_drawdown_fraction": "0.00024999",
+        "closed_trades": 11,
+        "open_position": "short PAXG",
+        "open_positions": [
+          {
+            "market": "metals",
+            "symbol": "PAXG",
+            "direction": "short",
+            "entry_notional": "9.99997733",
+            "opened_at": "2026-07-09T00:00:00Z"
+          }
+        ],
         "by_direction": {
-          "long": {
-            "closed_trades": 12,
-            "wins": 3,
-            "losses": 9,
-            "win_rate": "0.25000000",
-            "profit_factor": "0.19628459",
-            "realized_pnl": "-1.79474114",
-            "gross_profit": "0.43831439",
-            "gross_loss": "2.23305553"
+          "short": {
+            "closed_trades": 11,
+            "wins": 5,
+            "losses": 6,
+            "win_rate": "0.45454545",
+            "profit_factor": "0.24434699",
+            "realized_pnl": "-0.92923679",
+            "gross_profit": "0.30047682",
+            "gross_loss": "1.22971361"
           }
         },
         "by_market": {
           "metals": {
-            "closed_trades": 12,
-            "wins": 3,
-            "losses": 9,
-            "win_rate": "0.25000000",
-            "profit_factor": "0.19628459",
-            "realized_pnl": "-1.79474114",
-            "gross_profit": "0.43831439",
-            "gross_loss": "2.23305553"
+            "closed_trades": 11,
+            "wins": 5,
+            "losses": 6,
+            "win_rate": "0.45454545",
+            "profit_factor": "0.24434699",
+            "realized_pnl": "-0.92923679",
+            "gross_profit": "0.30047682",
+            "gross_loss": "1.22971361"
           }
         }
       },
@@ -1449,25 +1465,25 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-10-25T00:00:00Z",
+          "fill_end": "2026-10-26T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "forward",
-          "signal_end": "2026-10-25T00:00:00Z",
-          "signal_start": "2026-07-12T00:00:00Z",
+          "signal_end": "2026-10-26T00:00:00Z",
+          "signal_start": "2026-07-13T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "4999.64100870",
-        "realized_pnl": "-0.35899130",
+        "equity": "4999.70486161",
+        "realized_pnl": "-0.29513839",
         "unrealized_pnl": "0",
-        "fees": "0.11855692",
+        "fees": "0.11894257",
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
-        "max_drawdown": "1.69563688",
-        "max_drawdown_fraction": "0.00033904",
+        "max_drawdown": "1.68980750",
+        "max_drawdown_fraction": "0.00033787",
         "closed_trades": 1,
         "open_position": null,
         "open_positions": [],
@@ -1478,9 +1494,9 @@
             "losses": 1,
             "win_rate": "0.00000000",
             "profit_factor": "0.00000000",
-            "realized_pnl": "-0.35899130",
+            "realized_pnl": "-0.29513839",
             "gross_profit": "0.00000000",
-            "gross_loss": "0.35899130"
+            "gross_loss": "0.29513839"
           }
         },
         "by_market": {
@@ -1490,9 +1506,9 @@
             "losses": 1,
             "win_rate": "0.00000000",
             "profit_factor": "0.00000000",
-            "realized_pnl": "-0.35899130",
+            "realized_pnl": "-0.29513839",
             "gross_profit": "0.00000000",
-            "gross_loss": "0.35899130"
+            "gross_loss": "0.29513839"
           }
         }
       },
@@ -1505,20 +1521,20 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-10-25T00:00:00Z",
+          "fill_end": "2026-10-26T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "forward",
-          "signal_end": "2026-10-25T00:00:00Z",
-          "signal_start": "2026-07-12T00:00:00Z",
+          "signal_end": "2026-10-26T00:00:00Z",
+          "signal_start": "2026-07-13T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
-        "equity": "5000.77606283",
+        "equity": "5000.76256393",
         "realized_pnl": "-0.14972192",
-        "unrealized_pnl": "0.92578475",
+        "unrealized_pnl": "0.91228585",
         "fees": "0.18016781",
         "win_rate": "0.00000000",
         "profit_factor": "0.00000000",
@@ -1569,14 +1585,14 @@
         "fill_model": "next_candle_open",
         "cash_era": "5000",
         "starting_cash": "5000",
-        "recorded_at": "2026-10-26T23:18:10.327806Z",
+        "recorded_at": "2026-10-27T02:22:55.980162Z",
         "window": {
-          "fill_end": "2026-10-25T00:00:00Z",
+          "fill_end": "2026-10-26T00:00:00Z",
           "gap_bars": 1,
           "parameters_fit_on_period": false,
           "period": "forward",
-          "signal_end": "2026-10-25T00:00:00Z",
-          "signal_start": "2026-07-12T00:00:00Z",
+          "signal_end": "2026-10-26T00:00:00Z",
+          "signal_start": "2026-07-13T00:00:00Z",
           "train_percent": 60,
           "validation_percent": 20
         },
@@ -1619,9 +1635,9 @@
     ]
   },
   "last_successful_collection": {
-    "prices_fetched_at": "2026-10-26T23:18:10.172699Z",
+    "prices_fetched_at": "2026-10-27T02:22:55.882447Z",
     "pumpfun_fetched_at": "2026-10-26T23:56:57.594859Z",
-    "metals_fetched_at": "2026-10-26T23:18:10.172699Z"
+    "metals_fetched_at": "2026-10-27T02:22:55.882447Z"
   },
   "errors": {
     "count": 20,
@@ -1705,14 +1721,18 @@
     {
       "job": "pumpfun",
       "recorded_at": "2026-10-26T23:56:57.924266Z"
+    },
+    {
+      "job": "hourly",
+      "recorded_at": "2026-10-27T02:22:56.199252Z"
     }
   ],
   "gaps": [
     {
       "job": "hourly",
-      "from": "2026-10-25T23:56:58.060290Z",
+      "from": "2026-10-26T02:22:56.316146Z",
       "to": "2026-10-26T19:11:11.312644Z",
-      "hours": "19.24"
+      "hours": "16.80"
     },
     {
       "job": "hourly",
@@ -1721,16 +1741,28 @@
       "hours": "4.12"
     },
     {
+      "job": "hourly",
+      "from": "2026-10-26T23:18:10.681200Z",
+      "to": "2026-10-27T02:22:56.199252Z",
+      "hours": "3.08"
+    },
+    {
       "job": "pumpfun",
-      "from": "2026-10-25T23:56:58.060290Z",
+      "from": "2026-10-26T02:22:56.316146Z",
       "to": "2026-10-26T18:57:04.716289Z",
-      "hours": "19.00"
+      "hours": "16.57"
     },
     {
       "job": "pumpfun",
       "from": "2026-10-26T18:57:04.716289Z",
       "to": "2026-10-26T23:56:57.924266Z",
       "hours": "5.00"
+    },
+    {
+      "job": "pumpfun",
+      "from": "2026-10-26T23:56:57.924266Z",
+      "to": "2026-10-27T02:22:56.316146Z",
+      "hours": "2.43"
     }
   ]
 }
