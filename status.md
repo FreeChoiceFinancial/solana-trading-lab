@@ -32,7 +32,7 @@ Forward paper
 Rollup closed=18 win_rate=0.11111111 profit_factor=0.10569802 realized=-2.73356597 by_direction={'long': {'closed_trades': 16, 'wins': 2, 'win_rate': '0.12500000', 'profit_factor': '0.11873614', 'realized_pnl': '-2.39792289'}, 'short': {'closed_trades': 2, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.33564308'}} by_market={'crypto_spot': {'closed_trades': 3, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.56182560'}, 'metals': {'closed_trades': 15, 'wins': 2, 'win_rate': '0.13333333', 'profit_factor': '0.12950086', 'realized_pnl': '-2.17174037'}} by_strategy={'sma_crossover 1.1.0': {'closed_trades': 3, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.56182560'}, 'metals_buy_hold 1.0.0': {'closed_trades': 1, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.29513839'}, 'metals_sma_trend 1.0.0': {'closed_trades': 1, 'wins': 0, 'win_rate': '0.00000000', 'profit_factor': '0.00000000', 'realized_pnl': '-0.14972192'}, 'metals_gold_silver_ratio 1.0.0': {'closed_trades': 13, 'wins': 2, 'win_rate': '0.15384615', 'profit_factor': '0.15760372', 'realized_pnl': '-1.72688006'}}
 
 pump.fun
-- run=2026-10-26T23:56:57.765319Z equity=4999.52810048 realized=-0.47189952 unrealized=0 fees=0.00100780 open=None
+- run=2026-10-27T05:14:23.757661Z equity=4999.52810048 realized=-0.47189952 unrealized=0 fees=0.00100780 open=None
 
 Metals
 One metals slot on the shared 5000 USD account. Runs below are also inside backtest and forward.
@@ -47,20 +47,21 @@ One metals slot on the shared 5000 USD account. Runs below are also inside backt
 - metals_gold_silver_ratio 1.0.0 period=forward equity=4998.27311994 realized=-1.72688006 unrealized=0 open=None
 
 Schedule UTC: hourly 7,37 * * * *; pump.fun burst 23 */2 * * *; pump.fun backup 53 */2 * * *
-Completed runs in the last 24 hours: hourly 3 last 2026-10-27T02:22:56.199252Z; pump.fun 2 last 2026-10-26T23:56:57.924266Z
+Completed runs in the last 24 hours: hourly 3 last 2026-10-27T02:22:56.199252Z; pump.fun 3 last 2026-10-27T05:14:23.916839Z
 Gaps over 2 hours in the last 24 hours:
-- hourly 2026-10-26T02:22:56.316146Z to 2026-10-26T19:11:11.312644Z (16.80 hours)
+- hourly 2026-10-26T05:14:24.043479Z to 2026-10-26T19:11:11.312644Z (13.95 hours)
 - hourly 2026-10-26T19:11:11.312644Z to 2026-10-26T23:18:10.681200Z (4.12 hours)
 - hourly 2026-10-26T23:18:10.681200Z to 2026-10-27T02:22:56.199252Z (3.08 hours)
-- pumpfun 2026-10-26T02:22:56.316146Z to 2026-10-26T18:57:04.716289Z (16.57 hours)
+- hourly 2026-10-27T02:22:56.199252Z to 2026-10-27T05:14:24.043479Z (2.86 hours)
+- pumpfun 2026-10-26T05:14:24.043479Z to 2026-10-26T18:57:04.716289Z (13.71 hours)
 - pumpfun 2026-10-26T18:57:04.716289Z to 2026-10-26T23:56:57.924266Z (5.00 hours)
-- pumpfun 2026-10-26T23:56:57.924266Z to 2026-10-27T02:22:56.316146Z (2.43 hours)
+- pumpfun 2026-10-26T23:56:57.924266Z to 2026-10-27T05:14:23.916839Z (5.29 hours)
 Last price collection 2026-10-27T02:22:55.882447Z
-Last pump.fun collection 2026-10-26T23:56:57.594859Z
+Last pump.fun collection 2026-10-27T05:14:23.593864Z
 Last metals collection 2026-10-27T02:22:55.882447Z
-Stored errors 20
+Stored errors 24
+- 2026-10-27T05:14:23.603147Z pump_frontend: unexpected HTTP 200; body not ingested
+- 2026-10-27T05:14:23.603147Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-27T05:14:23.041Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
+- 2026-10-27T05:13:40.420678Z pump_frontend: unexpected HTTP 200; body not ingested
+- 2026-10-27T05:13:40.420678Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-27T05:13:39.806Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
 - 2026-10-26T23:56:57.602176Z pump_frontend: unexpected HTTP 200; body not ingested
-- 2026-10-26T23:56:57.602176Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-26T23:56:57.008Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
-- 2026-10-26T23:56:14.376169Z pump_frontend: unexpected HTTP 200; body not ingested
-- 2026-10-26T23:56:14.376169Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-26T23:56:13.767Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
-- 2026-10-26T18:57:04.423577Z pump_frontend: unexpected HTTP 200; body not ingested
