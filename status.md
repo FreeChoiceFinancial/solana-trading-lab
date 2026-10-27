@@ -14,7 +14,7 @@ Preserved paper results from the 300 USD account. Not recalculated at 5000 USD.
 
 Backtest (cash era 5000)
 - cash_era=5000 sma_crossover 1.1.0 period=train book=experiment equity=4997.45988848 realized=-2.54011152 unrealized=0 fees=1.44059472 win_rate=0.00000000 profit_factor=0.00000000 max_drawdown=2.72459007 open=None
-- cash_era=5000 sma_crossover 1.1.0 period=validation book=experiment equity=4999.85300019 realized=-0.27635369 unrealized=0.12935388 fees=0.41918510 win_rate=0.33333333 profit_factor=0.17550539 max_drawdown=0.38895362 open=short SOL
+- cash_era=5000 sma_crossover 1.1.0 period=validation book=experiment equity=4999.96806689 realized=-0.27635369 unrealized=0.24442058 fees=0.41918510 win_rate=0.33333333 profit_factor=0.17550539 max_drawdown=0.38895362 open=short SOL
 - cash_era=5000 metals_buy_hold 1.0.0 period=train book=experiment equity=5003.02399347 realized=3.02399347 unrealized=0 fees=0.13897772 win_rate=1.00000000 profit_factor=None max_drawdown=3.45242625 open=None
 - cash_era=5000 metals_sma_trend 1.0.0 period=train book=experiment equity=4999.55402481 realized=-1.85916153 unrealized=1.41318634 fees=1.02530030 win_rate=0.12500000 profit_factor=0.06633499 max_drawdown=1.99125115 open=short PAXG
 - cash_era=5000 metals_gold_silver_ratio 1.0.0 period=train book=experiment equity=4996.54856112 realized=-3.61379183 unrealized=0.16235295 fees=3.30215514 win_rate=0.18518519 profit_factor=0.20991058 max_drawdown=4.35039723 open=short PAXG
@@ -46,20 +46,20 @@ One metals slot on the shared 5000 USD account. Runs below are also inside backt
 - metals_gold_silver_ratio 1.0.0 period=forward equity=4998.27311994 realized=-1.72688006 unrealized=0 open=None
 
 Schedule UTC: hourly 7,37 * * * *; pump.fun burst 23 */2 * * *; pump.fun backup 53 */2 * * *
-Completed runs in the last 24 hours: hourly 5 last 2026-10-27T20:01:45.830987Z; pump.fun 5 last 2026-10-27T22:22:05.900286Z
+Completed runs in the last 24 hours: hourly 5 last 2026-10-27T23:43:35.361454Z; pump.fun 5 last 2026-10-27T22:22:05.900286Z
 Gaps over 2 hours in the last 24 hours:
-- hourly 2026-10-26T23:18:10.681200Z to 2026-10-27T02:22:56.199252Z (3.08 hours)
+- hourly 2026-10-26T23:43:35.489200Z to 2026-10-27T02:22:56.199252Z (2.66 hours)
 - hourly 2026-10-27T02:22:56.199252Z to 2026-10-27T08:20:14.367933Z (5.96 hours)
 - hourly 2026-10-27T08:20:14.367933Z to 2026-10-27T14:52:50.606655Z (6.54 hours)
 - hourly 2026-10-27T14:52:50.606655Z to 2026-10-27T20:01:45.830987Z (5.15 hours)
-- hourly 2026-10-27T20:01:45.830987Z to 2026-10-27T22:22:06.002989Z (2.34 hours)
+- hourly 2026-10-27T20:01:45.830987Z to 2026-10-27T23:43:35.361454Z (3.70 hours)
 - pumpfun 2026-10-26T23:56:57.924266Z to 2026-10-27T05:14:23.916839Z (5.29 hours)
 - pumpfun 2026-10-27T05:14:23.916839Z to 2026-10-27T12:22:27.172986Z (7.13 hours)
 - pumpfun 2026-10-27T12:22:27.172986Z to 2026-10-27T18:07:18.471553Z (5.75 hours)
 - pumpfun 2026-10-27T18:07:18.471553Z to 2026-10-27T22:22:05.900286Z (4.25 hours)
-Last price collection 2026-10-27T20:01:45.358128Z
+Last price collection 2026-10-27T23:43:34.851090Z
 Last pump.fun collection 2026-10-27T22:22:05.415898Z
-Last metals collection 2026-10-27T20:01:45.358128Z
+Last metals collection 2026-10-27T23:43:34.851090Z
 Stored errors 36
 - 2026-10-27T22:22:05.421878Z pump_frontend: unexpected HTTP 200; body not ingested
 - 2026-10-27T22:22:05.421878Z pump_developer_api: HTTP 401 from https://api.pump.fun/v1/users/search-v2?q=test: {"statusCode":401,"timestamp":"2026-10-27T22:22:04.789Z","path":"/users/search-v2?q=test","error":"API_KEY_REQUIRED","message":"Send Authorization: Bearer <key> or x-api-key: <key>"}
